@@ -122,7 +122,12 @@ export async function scanGame(
     // necessary (no quiet alternative was already winning comfortably).
     const sound = playedEval >= STILL_GOOD;
     const strong = evalLoss <= MAX_EVAL_LOSS;
-    const necessary = quietAlt < ALREADY_WINNING;
+    // "Already winning" has to mean *you could have won just as easily without
+    // the fireworks*, not merely "the eval was high". Comparing the absolute
+    // number alone threw away Morphy's 16.Qb8+ — mate in one — because a quiet
+    // move reached +2.54, four centipawns over the line. A sacrifice that beats
+    // every quiet alternative is, by definition, the move that won the game.
+    const necessary = quietAlt < ALREADY_WINNING || quietAlt < playedEval;
 
     opts.onCandidate?.({
       moveNumber: move.moveNumber,

@@ -19,3 +19,6 @@ scripts/shot-*.png
 # NOTE: public/engine/ is deliberately NOT ignored. The 40 MB Stockfish network
 # is a build input, it never changes, and its filename is its own SHA-256 prefix
 # so it's verifiable. This is why the repo is large.
+
+# Local Netlify folder
+.netlify

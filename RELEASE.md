@@ -134,10 +134,16 @@ Options, in the order worth trying:
 
 1. **Ship as-is.** The UI already warns "(~40 MB), then it's cached", and the
    engine only downloads when a scan is requested — not on page load.
-2. **Swap to a lite NNUE build (~6 MB).** Six times cheaper for a small loss of
-   playing strength that this application does not need. Re-run
-   `scripts/test-harness.mjs` afterwards: the thresholds were calibrated at depth
-   14 against *this* net.
+2. **Drop to classical evaluation.** `USE_NNUE = false` in `src/engine/engine.ts`
+   turns off the network entirely; delete `public/engine/*.nnue` and the site
+   becomes about 600 KB of engine instead of 40 MB. The cost is real: classical
+   evaluation is weakest at judging material imbalance, which is the only
+   question this detector asks. Re-run `scripts/test-harness.mjs` afterwards —
+   the thresholds are calibrated against whichever evaluation is in use — and
+   correct every "NNUE" claim in the README and UI.
+
+   There is **no cheap middle option**: the `stockfish` npm package ships only
+   the 40 MB SF16 network and an older 46 MB one. No lite net is available here.
 3. **Move the net to object storage** (Cloudflare R2 + Pages) if bandwidth becomes
    the constraint. Remember to add that origin to `connect-src` in both header
    configs, or the CSP will block it.

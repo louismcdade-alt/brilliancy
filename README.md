@@ -11,7 +11,7 @@ No backend. No login. Your games are analyzed locally — nothing leaves the pag
 | Piece | What it does |
 | --- | --- |
 | **Data** | The public [chess.com API](https://www.chess.com/news/view/published-data-api) (`api.chess.com/pub`) — profile, stats, and recent monthly game archives. CORS-enabled, so the browser calls it directly. |
-| **Engine** | Single-threaded [Stockfish 16 NNUE](https://github.com/nmrugg/stockfish.js) (WASM) running in a Web Worker. No `SharedArrayBuffer`/COOP-COEP headers required. |
+| **Engine** | Single-threaded [Stockfish 16 NNUE](https://github.com/nmrugg/stockfish.js) (WASM) in a Web Worker. No `SharedArrayBuffer`/COOP-COEP headers required. NNUE is switched on explicitly — this build defaults it *off*, and the classical evaluation it falls back to is weakest at exactly the material-imbalance judgement a sacrifice detector lives on. |
 | **Board** | Hand-rolled React board (no board library) so the brilliant-move highlight, arrow, and `!!` seal are fully under our control. |
 
 ### What counts as "brilliant"
@@ -51,8 +51,10 @@ npm run preview  # serve the production build
 ```
 
 > **Note:** the first scan downloads the Stockfish NNUE network (~40 MB) from
-> `public/engine/`, then the browser caches it. That file ships in the repo and
-> the build, which is why `dist/` and the install are large.
+> `public/engine/`, then the browser caches it permanently. It downloads when you
+> ask for a scan, not on page load. That file ships in the repo and the build,
+> which is why `dist/` and the install are large — see `USE_NNUE` in
+> [`src/engine/engine.ts`](src/engine/engine.ts) for the trade-off and how to opt out.
 
 ## Verification
 

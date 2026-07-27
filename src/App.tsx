@@ -394,8 +394,8 @@ export function App() {
                       </h3>
                       <p>
                         Runs a chess engine in your browser over every move you played. Nothing
-                        leaves this page. The first run downloads the engine (~40&nbsp;MB), then
-                        it's cached.
+                        leaves this page. The first scan downloads the engine and its
+                        neural network (~40&nbsp;MB); after that it's cached and instant.
                       </p>
                     </div>
                     <button
@@ -458,8 +458,11 @@ export function App() {
                   <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                     <span className="spinner" />
                     <strong style={{ color: "var(--text-hi)" }}>
+                      {/* On a cold cache this step is a 40 MB network download with
+                          no progress to report, so it must say what it's waiting
+                          on — otherwise it reads as a hang. */}
                       {engineWarming
-                        ? "Warming up the engine…"
+                        ? "Loading the engine — first time only, then it's cached…"
                         : `Analyzing game ${progress.done} of ${progress.total}`}
                     </strong>
                     <button className="btn btn-ghost" style={{ marginLeft: "auto" }} onClick={stopScan}>

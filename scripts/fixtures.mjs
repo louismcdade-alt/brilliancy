@@ -94,25 +94,13 @@ export const fixtures = [
     // rook-for-bishop-and-pawn, a net offer under one pawn — annotation tradition
     // gives it "!", not "!!". And 17...Bxc3 is a pure trade (bxc3 recaptures) —
     // the net-of-capture rule must keep it off the list.
-    expected: [],
-    // The legendary 23...Qg3!! — every capture of the queen loses. We don't flag
-    // it, and the reason is the already-winning rule working as designed rather
-    // than a threshold that needs nudging: Marshall is a clean piece up here, and
-    // at depth 14 the quiet queen retreats 23...Qb4 (+3.00), 23...Qa3 (+2.85) and
-    // 23...Qb2 (+2.67) win about as convincingly as Qg3 itself (+3.03). A move
-    // that improves a won position by 3 centipawns is not the move that won the
-    // game, however beautiful it is — and chess.com withholds !! on the same
-    // grounds. Note this fixture used to pass only because the sacrifice test was
-    // broken: with "what hangs after the move" rather than "what this move puts
-    // on offer", nearly every alternative looked like a sacrifice too, so the
-    // gate had nothing quiet left to compare against and never fired.
-    diverges: [
-      {
-        moveNumber: 23,
-        san: "Qg3",
-        why: "Black is already winning (+3) with quiet queen moves — the ALREADY_WINNING gate",
-      },
-    ],
+    expected: [{ moveNumber: 23, san: "Qg3" }],
+    // The legendary 23...Qg3!! — every capture of the queen loses. This was
+    // briefly demoted while the "necessary" gate compared only absolute evals:
+    // Marshall is a piece up, so quiet queen retreats also read as winning and
+    // the gate fired. That was the gate being wrong, not the annotation. It now
+    // also asks whether the sacrifice BEATS the best quiet alternative, and
+    // Qg3 does — which is the whole reason it's the famous move and Qb4 isn't.
   },
   {
     name: "Scholar's mate — no sacrifice (negative control)",

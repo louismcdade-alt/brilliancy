@@ -24,6 +24,19 @@ export interface PvLine {
 const ENGINE_URL = "/engine/stockfish-nnue-16-single.js";
 const MATE_CP = 100000;
 
+/**
+ * Whether to run the NNUE network rather than Stockfish's classical evaluation.
+ *
+ * This build defaults `Use NNUE` to false, which is a trap: the project ships a
+ * 40 MB network, calls itself "Stockfish 16 NNUE" everywhere, and then evaluates
+ * every position with the hand-crafted classical eval instead — the net is never
+ * so much as requested. Whichever way this flag is set, set it deliberately, and
+ * re-run scripts/test-harness.mjs afterwards: the detector's thresholds are
+ * calibrated against whichever evaluation is actually in use.
+ */
+const USE_NNUE = true;
+const NNUE_FILE = "nn-5af11540bbfe.nnue";
+
 function mateToCp(m: number): number {
   return m > 0 ? MATE_CP - m * 10 : -MATE_CP - m * 10;
 }
@@ -102,8 +115,19 @@ class Engine {
         .then(() => {
           this.send("setoption name Hash value 64");
           this.send("setoption name UCI_AnalyseMode value true");
+          // This build ships with `Use NNUE` defaulting to FALSE, so without this
+          // line Stockfish runs its hand-crafted classical evaluation and the
+          // 40 MB network sitting in /engine is never even requested. Turning it
+          // on costs that download once per visitor, and buys the evaluation the
+          // whole detector is calibrated against.
+          if (USE_NNUE) {
+            this.send("setoption name Use NNUE value true");
+            this.send("setoption name EvalFile value " + NNUE_FILE);
+          }
           this.send("isready");
-          return this.waitFor((l) => l.includes("readyok"));
+          // Loading the net is a 40 MB fetch, so this readyok can be slow on a
+          // cold cache — well past the default 20s.
+          return this.waitFor((l) => l.includes("readyok"), USE_NNUE ? 180000 : 20000);
         })
         .then(() => resolve())
         .catch(reject);

@@ -1,0 +1,70 @@
+louismcdade: scanned 396 games at depth 14
+
+15...Nxd3+  offers n@d3 (3)  eval=444  loss=-4
+    https://www.chess.com/game/live/172078598998
+    r2qk1nr/p1p3pp/1p2bp2/4p3/1nP1P2B/2PP1N1P/5PP1/3QKB1R b Kkq - 0 15
+28...R8f3+  offers r@f3 (4)  eval=99970  loss=-10
+    https://www.chess.com/game/live/171473275764
+    5r1k/ppp3pp/7q/4p3/3nP3/3K4/1PP3PP/5r2 b - - 15 28
+20...a1=Q  offers q@a1 (4)  eval=595  loss=-12
+    https://www.chess.com/game/live/171329245690
+    r3r1k1/pb2bppp/2p5/q2n4/2R5/1P1BBQPN/p4P1P/5RK1 b - - 0 20
+19.Bb6+  offers b@b6 (3.2)  eval=1025  loss=37
+    https://www.chess.com/game/live/170905472716
+    Q2r1b1r/1pk1n1pp/2p1q3/8/8/4BN2/P1P2PPP/R4RK1 w - - 2 19
+41.Qf6+  offers q@f6 (4)  eval=99990  loss=-10
+    https://www.chess.com/game/live/170344245882
+    3Q4/p2R3p/1r5k/1p4p1/1b6/5R2/bPP1B1PP/2K5 w - - 2 41
+16...Qxc3  offers q@c3 (4.8)  eval=326  loss=-102
+    https://www.chess.com/game/live/169869209718
+    rn2k1r1/pp3p1p/2p1p3/3p4/BqP1n3/1PB2N2/P2PQbPP/1R1K3R b q - 2 16
+31...Rc5+  offers b@d2 (3.2)  eval=651  loss=1  [discovered]
+    https://www.chess.com/game/live/169869209718
+    2kr4/pp1n1R1p/2p5/3r4/B7/1P6/P1Kb4/1R6 b - - 0 31
+12...g6  offers n@h6 (2.2)  eval=63  loss=22  [discovered]
+    https://www.chess.com/game/live/169135347664
+    rnb1kb1r/ppp3pp/4p2n/4N2Q/2BqpB2/8/P2N2PP/2R1K2R b Kkq - 1 12
+6...Bxf2+  offers b@f2 (3.2)  eval=68  loss=38
+    https://www.chess.com/game/live/168334603690
+    r1bq1knr/ppp3pp/2np4/2b1p2B/4P3/1QP5/PP1P1PPP/RNB1K1NR b KQ - 2 6
+26...Ne5+  offers n@e5 (3)  eval=567  loss=-25
+    https://www.chess.com/game/live/167769830480
+    2kr4/1pp3p1/p1n4p/1N5R/3P4  …125/396 scanned, 9 flagged
+...Bd6  offers b@d5 (3.2)  eval=120  loss=80  [discovered]
+    https://www.chess.com/game/live/167673613410
+    r2qkb1r/ppp4p/2n2p2/3b2p1/4p3/1PP1P1B1/P5PP/RN1QKB1R b KQkq - 0 12
+11.Nxd5  offers n@d5 (2)  eval=86  loss=5
+    https://www.chess.com/game/live/166907239486
+    rnbq1bkr/pp4pp/2p5/2np1Q2/2B3P1/2N2P2/PPP4P/R1B1K1NR w KQ - 0 11
+21.Nxc7+  offers n@c7 (3)  eval=89  loss=80
+    https://www.chess.com/game/live/123984651203
+    2r2b2/2p3r1/p1npk3/1p1N2p1/3p2P1/5N2/PP1P1P1P/R1B2RK1 w - - 0 21
+31...Be3+  offers b@e3 (3.2)  eval=99950  loss=-98720
+    https://www.chess.com/game/live/123030583107
+    1k3r2/p5pp/8/2PN4/1B6/2P5/r4b1P/2K2b2 b - - 1 31
+23.Nxb6  offers n@b6 (2)  eval=676  loss=22
+    https://www.chess.com/game/live/78155551321
+    N1bkr3/p2p1ppp/1p6/B1p5/5bB1/8/PPP2PPP/R3R1K1 w - - 0 23
+29.Kd2  offers r@a1 (5)  eval=617  loss=-18  [discovered]
+    https://www.chess.com/game/live/75729696237
+    6k1/pp3ppp/3p4/8/5P2/1P2R3/P3B3/R2K2q1 w - - 3 29
+12...Nxd5  offers n@d5 (3)  eval=25  loss=66
+    https://www.chess.com/game/live/75090176179
+    3rk2r/pppqnppp/8/3Pn3/1b6/2N3N1/PP3PPP/R1BQ1RK1 b k - 0 12
+23...Nd4+  offers n@d4 (3)  eval=596  loss=19
+    https://www.chess.com/game/live/72012130191
+    7r/pQ3pk1/2n5/8/1b2b1P1/1Pp1P2P/P1PnK3/3R1B2 b - - 0 23
+36...Rxh4  offers r@h4 (5)  eval=99990  loss=-10
+    https://www.chess.com/game/live/71922350989
+    2k2b2/p1p5/1p2p1p1/5bKn/3r3P/5P2/8/8 b - - 0 36
+18.gxh8=Q+  offers q@h8 (4)  eval=247  loss=29
+    https://www.chess.com/game/live/69169474795
+    1nb3kr/1r1p2P1/7p/pBp4q/2P4P/N2P4/PP1K2P1/R1B2R2 w - - 0 18
+39.Kc2  offers r@e1 (5)  eval=99930  loss=-10  [discovered]
+    https://www.chess.com/game/live/69023093493
+    5k2/2B3p1/1R2Bp2/q6p/p6P/b1KQ1P2/8/4R3 w - - 0 39
+23.c8=Q  offers q@c8 (4)  eval=99960  loss=-20
+    https://www.chess.com/game/live/59328109305
+    1Q5r/2P3bp/8/3pppPk/1P1P2n1/4P1PN/3B3P/4KB1R w K - 0 23
+
+22 flagged

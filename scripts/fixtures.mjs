@@ -174,4 +174,32 @@ export const fixtures = [
     // to be over-firing.
     expected: [],
   },
+  {
+    name: "louismcdade vs zetekkkk — NO brilliancy (chess.com labelled)",
+    pgn:
+      "1. e4 e5 2. Nf3 Qf6 3. d4 d5 4. dxe5 Qb6 5. exd5 Bg4 6. Be3 Qxb2 7. Nbd2 Qc3 " +
+      "8. Bb5+ Bd7 9. Bxd7+ Nxd7 10. O-O Ne7 11. Qb1 O-O-O 12. e6 fxe6 13. dxe6 Ne5 " +
+      "14. Qb5 Nxf3+ 15. Nxf3 c6 16. Qc5 Qf6 17. Qxa7 Qxe6 18. Qa8+ Kc7 19. Bb6+ Kxb6 " +
+      "20. Qxd8+ Kc5 21. Qd4+ Kb5 22. Rab1+ Ka6 23. Qb6# 1-0",
+    userColor: "w",
+    // Zero brilliancies. We flag 19.Bb6+ — a real bishop offer that drags the king
+    // out and mates — but the position is already +10.25. Material is level; it's
+    // the evaluation that's overwhelming, and chess.com still withholds the !!.
+    expected: [],
+  },
+  {
+    name: "louismcdade vs hrkirat29 — NO brilliancy (chess.com labelled)",
+    pgn:
+      "1. e4 e5 2. d4 Nc6 3. c3 d5 4. Nd2 exd4 5. cxd4 Nxd4 6. Ndf3 Nxf3+ 7. Qxf3 Bc5 " +
+      "8. exd5 Nf6 9. Bc4 O-O 10. Nh3 Re8+ 11. Be2 Nxd5 12. O-O c6 13. Bg5 Be7 " +
+      "14. Be3 b5 15. Rac1 Bb7 16. a3 b4 17. Rc4 bxa3 18. b3 a2 19. Bd3 Qa5 20. g3 a1=Q " +
+      "21. Rxa1 Qxa1+ 22. Kg2 Nxe3+ 23. Qxe3 c5+ 24. f3 Bxf3+ 25. Kxf3 Qf6+ 26. Nf4 Bd6 " +
+      "27. Qd2 Rad8 28. Kg2 Bxf4 29. gxf4 Rxd3 30. Qxd3 Qg6+ 31. Qxg6 fxg6 32. Rxc5 Re2+ " +
+      "33. Kf3 Rxh2 34. b4 h6 35. Rc8+ Kh7 36. Ra8 Ra2 37. b5 g5 38. b6 gxf4 39. b7 g5 " +
+      "40. b8=Q g4+ 41. Kxf4 Rg2 42. Qb7+ Kg6 43. Qxg2 h5 44. Qc6+ Kf7 45. Rxa7+ Kf8 " +
+      "46. Qc8# 1-0",
+    userColor: "b",
+    // Zero brilliancies. We flag 20...a1=Q, promoting into a capture at +5.95.
+    expected: [],
+  },
 ];

@@ -110,4 +110,68 @@ export const fixtures = [
     // nothing is "hanging" — the detector must not call it a sacrifice.
     expected: [],
   },
+  // ── Real chess.com labels ────────────────────────────────────────────────
+  // Everything above is a classical game labelled from annotation tradition and
+  // our own judgement. These four are different, and more valuable: the
+  // `expected` lists come from chess.com's own Game Review on LouisMcdade's
+  // account, which is the exact label this project exists to approximate.
+  //
+  // They are also where the detector is weakest. The classical fixtures score
+  // 100%; these four exposed three false positives at once. That gap is what
+  // overfitting looks like — famous sacrifices are not the distribution real
+  // club games are drawn from.
+  {
+    name: "louismcdade vs inchara05 — 6...Bxf2+!! (chess.com labelled)",
+    pgn: "1. e4 e5 2. Bc4 Bc5 3. c3 d6 4. Qb3 Nc6 5. Bxf7+ Kf8 6. Bh5 Bxf2+ 1-0",
+    userColor: "b",
+    // Game Review stars this at -0.76 on its White-oriented eval bar, i.e. Black
+    // is BETTER by ~0.7 after the offer. Note chess.com gave White's 5.Bxf7+ only
+    // a "Best" star, not a !!, in the same game.
+    expected: [{ moveNumber: 6, san: "Bxf2+" }],
+  },
+  {
+    name: "louismcdade vs kamagar1910 — 24.Ne6!! (chess.com labelled)",
+    pgn:
+      "1. e4 e5 2. Nf3 d6 3. Bc4 Nf6 4. d3 Bg4 5. O-O d5 6. Bb3 c6 7. Nxe5 Bxd1 " +
+      "8. Rxd1 Bc5 9. d4 Bxd4 10. Rxd4 Nxe4 11. Ba4 b5 12. Bb3 Nd7 13. Nxc6 Qf6 " +
+      "14. Be3 O-O 15. Rxd5 Rac8 16. Nd4 Rc5 17. Rxd7 a5 18. Nc3 Nd6 19. Rxd6 Qe6 " +
+      "20. Rc6 Qf6 21. Rd6 Qxd6 22. Ne4 Qc7 23. Nxc5 Qxc5 24. Ne6 Qd6 25. Bc5 Qd2 " +
+      "26. Bxf8 Qd7 27. Re1 Qd2 28. Kf1 Qh6 29. Rd1 Qxe6 30. Ba3 1-0",
+    userColor: "w",
+    // Exactly ONE brilliancy in the game per Game Review: 24.Ne6. We also flagged
+    // 19.Rxd6, which chess.com does not star — a false positive to fix, not to
+    // argue with.
+    expected: [{ moveNumber: 24, san: "Ne6" }],
+  },
+  {
+    name: "louismcdade vs tyo6k — NO brilliancy (chess.com labelled)",
+    pgn:
+      "1. e4 e5 2. Qf3 Nf6 3. Nc3 d5 4. Qd3 dxe4 5. Nxe4 Nxe4 6. Qxe4 Bd6 " +
+      "7. Qg4 Bxg4 8. d4 O-O 9. Bg5 f6 10. Be3 exd4 11. Nf3 dxe3 12. fxe3 Be5 " +
+      "13. Bc4+ Be6 14. Bxe6+ Kh8 15. Nxe5 fxe5 16. e4 Qf6 17. Rf1 Qxf1+ " +
+      "18. Kd2 Qxa1 19. Kc3 Qxa2 20. Kb4 Qxe6 21. Kc3 Nc6 22. Kd3 Rad8+ " +
+      "23. Ke3 Qh6+ 24. Ke2 Rd7 25. Ke1 Rdf7 26. Kd1 Rf1+ 27. Ke2 Nd4+ " +
+      "28. Kd3 R8f3+ 29. Kc4 Qc6+ 30. Kb4 Qb5# 0-1",
+    userColor: "b",
+    // Game Review: zero brilliancies. We flag 28...R8f3+, a rook offer that forces
+    // mate — but by then White is a bare king plus pawns against queen, two rooks
+    // and a knight. chess.com withholds !! when you're this far ahead, and this is
+    // the case that shows the "necessary" gate is too permissive.
+    expected: [],
+  },
+  {
+    name: "louismcdade vs eldstinto — NO brilliancy (chess.com labelled)",
+    pgn:
+      "1. d4 e6 2. e4 d5 3. Nf3 dxe4 4. Ne5 Nh6 5. f3 f5 6. fxe4 fxe4 7. Bc4 Qd6 " +
+      "8. Bf4 Qb4+ 9. c3 Qxb2 10. Nd2 Qxc3 11. Rc1 Qxd4 12. Qh5+ g6 13. Nxg6 hxg6 " +
+      "14. Qe5 Qxe5 15. Bxe5 Nc6 16. Bxh8 e5 17. Nxe4 Bf5 18. Nf6+ Kd8 19. Rd1+ Nd4 " +
+      "20. Bd5 Bb4+ 21. Kf2 Ng4+ 22. Kg3 Ne2+ 23. Kf3 Ke7 24. Nxg4 Rxh8 25. Kxe2 " +
+      "Bxg4+ 26. Bf3 Bxf3+ 27. Kxf3 Rf8+ 28. Ke4 Rf4+ 29. Kxe5 Bd6+ 30. Kd5 c6# 0-1",
+    userColor: "b",
+    // Game Review: zero brilliancies. We flag 12...g6 — a pawn move leaving the
+    // knight on h6 to be taken. This is the "discovered" sacrifice branch, where
+    // the offered piece isn't the one that moved, and it's the branch most likely
+    // to be over-firing.
+    expected: [],
+  },
 ];

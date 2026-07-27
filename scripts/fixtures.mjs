@@ -25,6 +25,22 @@
  *     mating *capture* isn't mistaken for a sac).
  * Broaden from here with real chess.com games whose `!!` you can verify in Game Review.
  */
+import { chesscomLabels } from "./labels-louismcdade.mjs";
+
+/**
+ * chess.com's own labels, as harness fixtures.
+ *
+ * Only the games where we know WHICH move was starred are scoreable: the
+ * zero-count games (nothing starred, so anything we flag is a false positive)
+ * and the two confirmed in full Game Review. Games where the summary reported a
+ * star but not its location are carried in labels-louismcdade.mjs and left out
+ * here — scoring them would mean assuming the star sits on the move we flagged,
+ * which is the thing under test.
+ */
+const realLabels = chesscomLabels
+  .filter((g) => g.expected !== null)
+  .map((g) => ({ name: g.name, pgn: g.pgn, userColor: g.userColor, expected: g.expected }));
+
 export const fixtures = [
   {
     name: "Légal's Mate — 5.Nxe5!! (queen offer)",
@@ -110,96 +126,5 @@ export const fixtures = [
     // nothing is "hanging" — the detector must not call it a sacrifice.
     expected: [],
   },
-  // ── Real chess.com labels ────────────────────────────────────────────────
-  // Everything above is a classical game labelled from annotation tradition and
-  // our own judgement. These four are different, and more valuable: the
-  // `expected` lists come from chess.com's own Game Review on LouisMcdade's
-  // account, which is the exact label this project exists to approximate.
-  //
-  // They are also where the detector is weakest. The classical fixtures score
-  // 100%; these four exposed three false positives at once. That gap is what
-  // overfitting looks like — famous sacrifices are not the distribution real
-  // club games are drawn from.
-  {
-    name: "louismcdade vs inchara05 — 6...Bxf2+!! (chess.com labelled)",
-    pgn: "1. e4 e5 2. Bc4 Bc5 3. c3 d6 4. Qb3 Nc6 5. Bxf7+ Kf8 6. Bh5 Bxf2+ 1-0",
-    userColor: "b",
-    // Game Review stars this at -0.76 on its White-oriented eval bar, i.e. Black
-    // is BETTER by ~0.7 after the offer. Note chess.com gave White's 5.Bxf7+ only
-    // a "Best" star, not a !!, in the same game.
-    expected: [{ moveNumber: 6, san: "Bxf2+" }],
-  },
-  {
-    name: "louismcdade vs kamagar1910 — 24.Ne6!! (chess.com labelled)",
-    pgn:
-      "1. e4 e5 2. Nf3 d6 3. Bc4 Nf6 4. d3 Bg4 5. O-O d5 6. Bb3 c6 7. Nxe5 Bxd1 " +
-      "8. Rxd1 Bc5 9. d4 Bxd4 10. Rxd4 Nxe4 11. Ba4 b5 12. Bb3 Nd7 13. Nxc6 Qf6 " +
-      "14. Be3 O-O 15. Rxd5 Rac8 16. Nd4 Rc5 17. Rxd7 a5 18. Nc3 Nd6 19. Rxd6 Qe6 " +
-      "20. Rc6 Qf6 21. Rd6 Qxd6 22. Ne4 Qc7 23. Nxc5 Qxc5 24. Ne6 Qd6 25. Bc5 Qd2 " +
-      "26. Bxf8 Qd7 27. Re1 Qd2 28. Kf1 Qh6 29. Rd1 Qxe6 30. Ba3 1-0",
-    userColor: "w",
-    // Exactly ONE brilliancy in the game per Game Review: 24.Ne6. We also flagged
-    // 19.Rxd6, which chess.com does not star — a false positive to fix, not to
-    // argue with.
-    expected: [{ moveNumber: 24, san: "Ne6" }],
-  },
-  {
-    name: "louismcdade vs tyo6k — NO brilliancy (chess.com labelled)",
-    pgn:
-      "1. e4 e5 2. Qf3 Nf6 3. Nc3 d5 4. Qd3 dxe4 5. Nxe4 Nxe4 6. Qxe4 Bd6 " +
-      "7. Qg4 Bxg4 8. d4 O-O 9. Bg5 f6 10. Be3 exd4 11. Nf3 dxe3 12. fxe3 Be5 " +
-      "13. Bc4+ Be6 14. Bxe6+ Kh8 15. Nxe5 fxe5 16. e4 Qf6 17. Rf1 Qxf1+ " +
-      "18. Kd2 Qxa1 19. Kc3 Qxa2 20. Kb4 Qxe6 21. Kc3 Nc6 22. Kd3 Rad8+ " +
-      "23. Ke3 Qh6+ 24. Ke2 Rd7 25. Ke1 Rdf7 26. Kd1 Rf1+ 27. Ke2 Nd4+ " +
-      "28. Kd3 R8f3+ 29. Kc4 Qc6+ 30. Kb4 Qb5# 0-1",
-    userColor: "b",
-    // Game Review: zero brilliancies. We flag 28...R8f3+, a rook offer that forces
-    // mate — but by then White is a bare king plus pawns against queen, two rooks
-    // and a knight. chess.com withholds !! when you're this far ahead, and this is
-    // the case that shows the "necessary" gate is too permissive.
-    expected: [],
-  },
-  {
-    name: "louismcdade vs eldstinto — NO brilliancy (chess.com labelled)",
-    pgn:
-      "1. d4 e6 2. e4 d5 3. Nf3 dxe4 4. Ne5 Nh6 5. f3 f5 6. fxe4 fxe4 7. Bc4 Qd6 " +
-      "8. Bf4 Qb4+ 9. c3 Qxb2 10. Nd2 Qxc3 11. Rc1 Qxd4 12. Qh5+ g6 13. Nxg6 hxg6 " +
-      "14. Qe5 Qxe5 15. Bxe5 Nc6 16. Bxh8 e5 17. Nxe4 Bf5 18. Nf6+ Kd8 19. Rd1+ Nd4 " +
-      "20. Bd5 Bb4+ 21. Kf2 Ng4+ 22. Kg3 Ne2+ 23. Kf3 Ke7 24. Nxg4 Rxh8 25. Kxe2 " +
-      "Bxg4+ 26. Bf3 Bxf3+ 27. Kxf3 Rf8+ 28. Ke4 Rf4+ 29. Kxe5 Bd6+ 30. Kd5 c6# 0-1",
-    userColor: "b",
-    // Game Review: zero brilliancies. We flag 12...g6 — a pawn move leaving the
-    // knight on h6 to be taken. This is the "discovered" sacrifice branch, where
-    // the offered piece isn't the one that moved, and it's the branch most likely
-    // to be over-firing.
-    expected: [],
-  },
-  {
-    name: "louismcdade vs zetekkkk — NO brilliancy (chess.com labelled)",
-    pgn:
-      "1. e4 e5 2. Nf3 Qf6 3. d4 d5 4. dxe5 Qb6 5. exd5 Bg4 6. Be3 Qxb2 7. Nbd2 Qc3 " +
-      "8. Bb5+ Bd7 9. Bxd7+ Nxd7 10. O-O Ne7 11. Qb1 O-O-O 12. e6 fxe6 13. dxe6 Ne5 " +
-      "14. Qb5 Nxf3+ 15. Nxf3 c6 16. Qc5 Qf6 17. Qxa7 Qxe6 18. Qa8+ Kc7 19. Bb6+ Kxb6 " +
-      "20. Qxd8+ Kc5 21. Qd4+ Kb5 22. Rab1+ Ka6 23. Qb6# 1-0",
-    userColor: "w",
-    // Zero brilliancies. We flag 19.Bb6+ — a real bishop offer that drags the king
-    // out and mates — but the position is already +10.25. Material is level; it's
-    // the evaluation that's overwhelming, and chess.com still withholds the !!.
-    expected: [],
-  },
-  {
-    name: "louismcdade vs hrkirat29 — NO brilliancy (chess.com labelled)",
-    pgn:
-      "1. e4 e5 2. d4 Nc6 3. c3 d5 4. Nd2 exd4 5. cxd4 Nxd4 6. Ndf3 Nxf3+ 7. Qxf3 Bc5 " +
-      "8. exd5 Nf6 9. Bc4 O-O 10. Nh3 Re8+ 11. Be2 Nxd5 12. O-O c6 13. Bg5 Be7 " +
-      "14. Be3 b5 15. Rac1 Bb7 16. a3 b4 17. Rc4 bxa3 18. b3 a2 19. Bd3 Qa5 20. g3 a1=Q " +
-      "21. Rxa1 Qxa1+ 22. Kg2 Nxe3+ 23. Qxe3 c5+ 24. f3 Bxf3+ 25. Kxf3 Qf6+ 26. Nf4 Bd6 " +
-      "27. Qd2 Rad8 28. Kg2 Bxf4 29. gxf4 Rxd3 30. Qxd3 Qg6+ 31. Qxg6 fxg6 32. Rxc5 Re2+ " +
-      "33. Kf3 Rxh2 34. b4 h6 35. Rc8+ Kh7 36. Ra8 Ra2 37. b5 g5 38. b6 gxf4 39. b7 g5 " +
-      "40. b8=Q g4+ 41. Kxf4 Rg2 42. Qb7+ Kg6 43. Qxg2 h5 44. Qc6+ Kf7 45. Rxa7+ Kf8 " +
-      "46. Qc8# 1-0",
-    userColor: "b",
-    // Zero brilliancies. We flag 20...a1=Q, promoting into a capture at +5.95.
-    expected: [],
-  },
+  ...realLabels,
 ];

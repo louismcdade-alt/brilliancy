@@ -1,0 +1,19 @@
+# Normalise line endings in the repo to LF regardless of who checks out.
+# Without this, a Windows checkout rewrites every text file to CRLF and the next
+# person on macOS or Linux sees the whole project as modified.
+* text=auto eol=lf
+
+# Binary — never touch these, and don't try to diff them.
+*.wasm   binary
+*.nnue   binary
+*.woff2  binary
+*.png    binary
+*.jpg    binary
+*.ico    binary
+
+# The Stockfish network is 40 MB of weights. Marking it as generated keeps it out
+# of language statistics and collapses it in pull-request diffs.
+public/engine/*.nnue linguist-generated=true
+public/engine/*.wasm linguist-generated=true
+public/engine/*.js   linguist-vendored=true
+public/pieces/*.svg  linguist-vendored=true

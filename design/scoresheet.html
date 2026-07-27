@@ -1,0 +1,513 @@
+<title>Brilliancy — scoresheet direction</title>
+
+<style>
+  /* ── Tokens ───────────────────────────────────────────────────────────────
+     Two inks, both from real pens: ballpoint blue is what the player wrote,
+     red is what the annotator added. Red appears on the !! and nowhere else,
+     which is the whole point of the product. The ruling is cool blue-green,
+     so warm stock never sits on warm accent. */
+  :root {
+    --stock:    #F2EEE4;
+    --carbon:   #E6E0D0;
+    --rule:     #9FB6C0;
+    --rule-2:   #C4D2D8;
+    --ink:      #22201C;
+    --ink-soft: #6B6558;
+    --pen:      #23407E;
+    --mark:     #BC2E24;
+    --desk:     #DAD3C4;
+    --shadow:   rgba(48, 42, 30, 0.16);
+
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Mono", "Segoe UI Mono", Menlo, Consolas, monospace;
+  }
+
+  /* The same sheet on a dark desk under the arbiter's lamp — the stock dims
+     rather than inverting, and both pens stay legible on it. */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --stock:    #262119;
+      --carbon:   #1F1B15;
+      --rule:     #4A5A62;
+      --rule-2:   #38454B;
+      --ink:      #E9E3D5;
+      --ink-soft: #9C9382;
+      --pen:      #8AA6DC;
+      --mark:     #E2604F;
+      --desk:     #14120E;
+      --shadow:   rgba(0, 0, 0, 0.5);
+    }
+  }
+  :root[data-theme="dark"] {
+    --stock:    #262119;
+    --carbon:   #1F1B15;
+    --rule:     #4A5A62;
+    --rule-2:   #38454B;
+    --ink:      #E9E3D5;
+    --ink-soft: #9C9382;
+    --pen:      #8AA6DC;
+    --mark:     #E2604F;
+    --desk:     #14120E;
+    --shadow:   rgba(0, 0, 0, 0.5);
+  }
+  :root[data-theme="light"] {
+    --stock:    #F2EEE4;
+    --carbon:   #E6E0D0;
+    --rule:     #9FB6C0;
+    --rule-2:   #C4D2D8;
+    --ink:      #22201C;
+    --ink-soft: #6B6558;
+    --pen:      #23407E;
+    --mark:     #BC2E24;
+    --desk:     #DAD3C4;
+    --shadow:   rgba(48, 42, 30, 0.16);
+  }
+
+  body {
+    background: var(--desk);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 940px;
+    margin: 0 auto;
+    padding: 40px 20px 72px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  /* ── Masthead: set like the pre-printed head of a federation form ───────── */
+  .masthead {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    flex-wrap: wrap;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 10px;
+  }
+  .masthead-name {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+  .masthead-rule { flex: 1; min-width: 20px; }
+  .masthead-note {
+    font-size: 12.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .lede {
+    max-width: 60ch;
+    font-size: 17px;
+  }
+  .lede em { color: var(--mark); font-style: italic; }
+
+  /* ── The sheet ─────────────────────────────────────────────────────────── */
+  .sheet {
+    background: var(--stock);
+    box-shadow: 0 1px 0 var(--rule-2), 0 14px 30px -18px var(--shadow);
+    padding: 0 0 22px;
+    position: relative;
+  }
+  /* torn from a pad */
+  .sheet::before {
+    content: "";
+    display: block;
+    height: 10px;
+    background-image: radial-gradient(circle at 6px 0, transparent 3px, var(--stock) 3.4px);
+    background-size: 12px 10px;
+    background-position: 0 -5px;
+    background-color: transparent;
+  }
+  .sheet-tilt-a { transform: rotate(-0.35deg); }
+  .sheet-tilt-b { transform: rotate(0.4deg); }
+
+  .sheet-inner { padding: 0 26px; }
+
+  /* pre-printed header block */
+  .form-head {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0;
+    border: 1px solid var(--rule);
+    border-bottom-width: 2px;
+  }
+  .field {
+    padding: 7px 10px 8px;
+    border-right: 1px solid var(--rule-2);
+    min-width: 0;
+  }
+  .field:last-child { border-right: none; }
+  .field-label {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 2px;
+  }
+  /* everything the player filled in is written, not printed */
+  .field-value {
+    font-family: var(--mono);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--pen);
+    overflow-wrap: anywhere;
+  }
+  .field-value.is-result { color: var(--ink); }
+
+  .sheet-body {
+    display: grid;
+    grid-template-columns: minmax(280px, 1.1fr) minmax(220px, 0.9fr);
+    gap: 28px;
+    margin-top: 18px;
+  }
+  @media (max-width: 700px) {
+    .sheet-body { grid-template-columns: 1fr; }
+  }
+
+  /* ── Ruled move table ──────────────────────────────────────────────────── */
+  .moves {
+    width: 100%;
+    border-collapse: collapse;
+    font-variant-numeric: tabular-nums;
+  }
+  .moves thead th {
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    font-weight: 600;
+    text-align: left;
+    padding: 0 8px 5px;
+    border-bottom: 1.5px solid var(--rule);
+  }
+  .moves tbody tr { border-bottom: 1px solid var(--rule-2); }
+  .moves tbody tr:nth-child(even) { background: color-mix(in srgb, var(--carbon) 45%, transparent); }
+  .moves td {
+    padding: 4px 8px;
+    font-family: var(--mono);
+    font-size: 14.5px;
+    font-weight: 600;
+    color: var(--pen);
+  }
+  .moves .no {
+    width: 2.6em;
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+  }
+  .moves .cell { position: relative; }
+
+  /* ── Signature: the red pen circle, and !! in the margin ───────────────── */
+  .circled { position: relative; display: inline-block; padding: 1px 4px; }
+  .circle-svg {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 74px;
+    height: 34px;
+    transform: translate(-50%, -50%) rotate(-2deg);
+    overflow: visible;
+    pointer-events: none;
+  }
+  .circle-svg path {
+    fill: none;
+    stroke: var(--mark);
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-dasharray: 300;
+    stroke-dashoffset: 300;
+    animation: ink 900ms cubic-bezier(0.5, 0, 0.2, 1) 350ms forwards;
+  }
+  @keyframes ink { to { stroke-dashoffset: 0; } }
+
+  .bangs {
+    color: var(--mark);
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 700;
+    font-size: 19px;
+    letter-spacing: -0.02em;
+    display: inline-block;
+    transform: rotate(-7deg);
+    margin-left: 12px;
+    vertical-align: -1px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .circle-svg path { animation: none; stroke-dashoffset: 0; }
+  }
+
+  /* ── Annotation column: printed diagram + the editor's note ────────────── */
+  .annotation { display: flex; flex-direction: column; gap: 12px; }
+
+  .diagram {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    width: 100%;
+    max-width: 244px;
+    aspect-ratio: 1;
+    border: 1.5px solid var(--ink);
+  }
+  .sq {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(15px, 3.4vw, 21px);
+    line-height: 1;
+    color: var(--ink);
+    position: relative;
+  }
+  .sq.dark { background: color-mix(in srgb, var(--rule) 34%, transparent); }
+  /* the square the piece was left on, ringed like the move in the table */
+  .sq.offered::after {
+    content: "";
+    position: absolute;
+    inset: 9%;
+    border: 1.6px solid var(--mark);
+    border-radius: 50%;
+  }
+  .sq.played::after {
+    content: "";
+    position: absolute;
+    inset: 12%;
+    border: 1.4px dashed var(--pen);
+  }
+
+  .caption {
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    max-width: 34ch;
+  }
+  .caption b { color: var(--ink); font-weight: 600; }
+  .caption .ev {
+    font-family: var(--mono);
+    font-weight: 600;
+    color: var(--pen);
+  }
+
+  .verdict {
+    border-top: 1.5px solid var(--rule);
+    padding-top: 10px;
+    font-size: 14.5px;
+  }
+  .verdict-term {
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    display: block;
+  }
+
+  /* ── Secondary sheets ──────────────────────────────────────────────────── */
+  .stack {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 22px;
+  }
+  .chit { padding-bottom: 16px; }
+  .chit .sheet-inner { padding: 0 18px; }
+  .chit-move {
+    font-family: var(--mono);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--pen);
+    margin-top: 12px;
+  }
+  .chit-what { font-size: 13.5px; color: var(--ink-soft); margin-top: 2px; }
+  .chit-foot {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 12px;
+    padding-top: 8px;
+    border-top: 1px solid var(--rule-2);
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+  .chit-foot .ev { font-family: var(--mono); color: var(--pen); font-weight: 600; }
+
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 6px;
+    margin-bottom: -18px;
+  }
+
+  .footnote {
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    max-width: 62ch;
+    border-top: 2px solid var(--ink);
+    padding-top: 12px;
+  }
+</style>
+
+<div class="page">
+
+  <div class="masthead">
+    <span class="masthead-name">Brilliancy</span>
+    <span class="masthead-rule"></span>
+    <span class="masthead-note">Scoresheet direction · mockup</span>
+  </div>
+
+  <p class="lede">
+    Every move you play gets written down. Almost none of them get
+    <em>circled</em>. This finds the ones that should be.
+  </p>
+
+  <!-- Lead sheet: the thesis. One real game, one circled move. -->
+  <div class="sheet sheet-tilt-a">
+    <div class="sheet-inner">
+      <div class="form-head">
+        <div class="field">
+          <span class="field-label">Event</span>
+          <span class="field-value">chess.com rapid</span>
+        </div>
+        <div class="field">
+          <span class="field-label">Date</span>
+          <span class="field-value">2026-05-23</span>
+        </div>
+        <div class="field">
+          <span class="field-label">White</span>
+          <span class="field-value">eldstinto · 367</span>
+        </div>
+        <div class="field">
+          <span class="field-label">Black</span>
+          <span class="field-value">LouisMcdade · 360</span>
+        </div>
+        <div class="field">
+          <span class="field-label">Result</span>
+          <span class="field-value is-result">0 – 1</span>
+        </div>
+      </div>
+
+      <div class="sheet-body">
+        <table class="moves">
+          <thead>
+            <tr><th class="no">#</th><th>White</th><th>Black</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="no">8</td><td>Bf4</td><td>Qb4+</td></tr>
+            <tr><td class="no">9</td><td>c3</td><td>Qxb2</td></tr>
+            <tr><td class="no">10</td><td>Nd2</td><td>Qxc3</td></tr>
+            <tr><td class="no">11</td><td>Rc1</td><td>Qxd4</td></tr>
+            <tr>
+              <td class="no">12</td>
+              <td>Qh5+</td>
+              <td class="cell">
+                <span class="circled">g6<svg class="circle-svg" viewBox="0 0 126 48" aria-hidden="true"><path d="M16 25 C16 11, 44 5, 68 6 C95 7, 118 12, 118 26 C118 39, 90 45, 62 44 C34 43, 16 38, 15 25 C14 17, 22 10, 34 7"/></svg></span>
+                <span class="bangs">!!</span>
+              </td>
+            </tr>
+            <tr><td class="no">13</td><td>Nxg6</td><td>hxg6</td></tr>
+            <tr><td class="no">14</td><td>Qe5</td><td>Qxe5</td></tr>
+            <tr><td class="no">15</td><td>Bxe5</td><td>Nc6</td></tr>
+            <tr><td class="no">16</td><td>Bxh8</td><td>e5</td></tr>
+          </tbody>
+        </table>
+
+        <div class="annotation">
+          <div class="diagram" id="diagram" role="img"
+               aria-label="Position after 12...g6, Black knight left en prise on h6"></div>
+          <p class="caption">
+            The pawn steps to g6 and leaves the knight on <b>h6</b> to be taken.
+            Nobody wants it: <span class="ev">+0.3</span> after, and every other
+            move is worse.
+          </p>
+          <div class="verdict">
+            <span class="verdict-term">Why it's marked</span>
+            The move offers material it didn't have to, the engine still prefers
+            Black, and no quiet alternative was already winning.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">Also circled · 392 games searched</div>
+
+  <div class="stack">
+    <div class="sheet chit sheet-tilt-b">
+      <div class="sheet-inner">
+        <div class="chit-move">Qxc3<span class="bangs">!!</span></div>
+        <div class="chit-what">Queen offered on c3</div>
+        <div class="chit-foot"><span>vs ibrahimmbaaayeh</span><span class="ev">+1.6</span></div>
+      </div>
+    </div>
+    <div class="sheet chit sheet-tilt-a">
+      <div class="sheet-inner">
+        <div class="chit-move">Bxf2+<span class="bangs">!!</span></div>
+        <div class="chit-what">Bishop offered on f2</div>
+        <div class="chit-foot"><span>vs inchara05</span><span class="ev">+0.3</span></div>
+      </div>
+    </div>
+    <div class="sheet chit sheet-tilt-b">
+      <div class="sheet-inner">
+        <div class="chit-move">Ne6<span class="bangs">!!</span></div>
+        <div class="chit-what">Knight offered on e6</div>
+        <div class="chit-foot"><span>vs kamagar1910</span><span class="ev">+1.1</span></div>
+      </div>
+    </div>
+  </div>
+
+  <p class="footnote">
+    Mockup only — the live site is unchanged. Positions and evaluations are real,
+    from LouisMcdade's chess.com archive, found by Stockfish running locally.
+    Brilliancy approximates chess.com's <b>!!</b> and isn't affiliated with them.
+  </p>
+
+</div>
+
+<script>
+  // Printed-bulletin diagram: outline glyphs for White, solid for Black, exactly
+  // as a tournament bulletin prints them. Built from the real FEN after 12...g6.
+  (function () {
+    var FEN = "rnb1kb1r/ppp4p/4p1pn/4N2Q/2BqpB2/8/P2N2PP/2R1K2R";
+    var GLYPH = {
+      K: "♔", Q: "♕", R: "♖", B: "♗", N: "♘", P: "♙",
+      k: "♚", q: "♛", r: "♜", b: "♝", n: "♞", p: "♟"
+    };
+    var FILES = "abcdefgh";
+    var host = document.getElementById("diagram");
+    if (!host) return;
+
+    var ranks = FEN.split("/");
+    // Black is to move and the sheet is Black's, so read the board from Black's side.
+    for (var r = 0; r < 8; r++) {
+      var row = ranks[7 - r];
+      var rankNo = r + 1;
+      var cells = [];
+      for (var i = 0; i < row.length; i++) {
+        var ch = row[i];
+        if (/\d/.test(ch)) {
+          for (var k = 0; k < +ch; k++) cells.push(null);
+        } else {
+          cells.push(ch);
+        }
+      }
+      for (var f = 7; f >= 0; f--) {
+        var sq = document.createElement("div");
+        var name = FILES[f] + rankNo;
+        sq.className = "sq" + ((f + rankNo) % 2 === 0 ? " dark" : "");
+        if (name === "h6") sq.className += " offered";
+        if (name === "g6") sq.className += " played";
+        sq.textContent = cells[f] ? GLYPH[cells[f]] : "";
+        host.appendChild(sq);
+      }
+    }
+  })();
+</script>

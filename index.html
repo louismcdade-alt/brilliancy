@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90' font-family='Georgia,serif' font-style='italic' font-weight='bold' fill='%23BC2E24'%3E!!%3C/text%3E%3C/svg%3E" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Find the brilliant moves hidden in your chess.com games — sound sacrifices detected by a chess engine, plus your stats."
+    />
+    <title>!! — Your chess.com brilliancies</title>
+
+    <!-- Fonts are SELF-HOSTED, deliberately. Two voices, taken from the object:
+         a text serif for everything a scoresheet has PRINTED on it, and a mono
+         for everything the player WROTE.
+
+         They used to come from Google Fonts, which meant every visitor's IP and
+         User-Agent reached Google before a single move was analysed — awkward for
+         a page that promises nothing leaves it, and the practice German courts
+         have found to breach GDPR. Serving them ourselves also drops two DNS
+         lookups and a render-blocking round trip. @font-face lives in index.css. -->
+    <link rel="preload" href="/fonts/newsreader-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

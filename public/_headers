@@ -1,0 +1,41 @@
+# Security headers for Netlify (and Cloudflare Pages). Vercel reads vercel.json
+# instead — keep the two in step if you change anything here.
+#
+# The Content-Security-Policy is deliberately tight, because this site has an
+# unusually small legitimate surface: it talks to exactly one API, loads no
+# third-party scripts, and hosts its own fonts.
+#
+#   script-src 'self' 'wasm-unsafe-eval'
+#       'wasm-unsafe-eval' is required — Stockfish is a WebAssembly build and
+#       cannot compile without it. It permits WASM compilation ONLY; it does not
+#       re-enable eval() or inline script.
+#   connect-src  the chess.com API, and nothing else. If a dependency were ever
+#       compromised, this is what stops it exfiltrating anything.
+#   img-src      chess.com's avatar CDN, plus data: for the share card canvas.
+#   frame-ancestors 'none'  — the site is never framed, so clickjacking is out.
+#
+# Deliberately absent: unsafe-inline anywhere, and any font/script CDN.
+
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self' blob:; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://images.chesscomfiles.com; connect-src 'self' https://api.chess.com; form-action 'none'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: no-referrer
+  Permissions-Policy: geolocation=(), microphone=(), camera=(), payment=(), usb=(), interest-cohort=()
+  Cross-Origin-Opener-Policy: same-origin
+  X-Frame-Options: DENY
+
+# The engine is ~40 MB and immutable — its filename contains its own hash, so it
+# can be cached hard. Getting this wrong is the difference between a one-time
+# download and a 40 MB hit on every visit.
+/engine/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/pieces/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Vite fingerprints these, so they're safe to pin too.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable

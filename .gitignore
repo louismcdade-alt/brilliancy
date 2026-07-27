@@ -1,0 +1,21 @@
+node_modules
+dist
+dist-ssr
+*.local
+.DS_Store
+.vite
+
+# Screenshot output from scripts/shots.mjs — regenerate, don't version.
+scripts/shot-*.png
+
+# Local Obsidian UI state that happens to sit in this folder. It's window
+# layouts and machine paths, not project config.
+.obsidian
+
+# Per-machine Claude Code permissions. .claude/launch.json IS committed — it's
+# how anyone else gets `npm run dev` wired to the preview tooling.
+.claude/settings.local.json
+
+# NOTE: public/engine/ is deliberately NOT ignored. The 40 MB Stockfish network
+# is a build input, it never changes, and its filename is its own SHA-256 prefix
+# so it's verifiable. This is why the repo is large.

@@ -33,25 +33,37 @@ const page = await browser.newPage();
 page.on("pageerror", (e) => console.log("PAGEERROR:", e.message));
 await page.goto("http://localhost:5173/", { waitUntil: "networkidle" });
 
-const out = await page.evaluate(
-  async ({ user, limit, depth }) => {
+// Fetch the game list once, then scan ONE GAME PER page.evaluate call.
+//
+// The first version of this did all N games inside a single evaluate. That is
+// fine for 40 games and fragile for 400: the whole run lives or dies on one
+// long-lived call, node buffers stdout until it exits, and when a 400-game sweep
+// died silently it left a zero-byte file and nothing to debug. Driving the loop
+// from node instead means output streams as it goes, a crash costs one game, and
+// progress is visible while it runs.
+const games = await page.evaluate(
+  async ({ user, limit }) => {
     const api = await import("/src/api/chesscom.ts");
-    const bril = await import("/src/engine/brilliancy.ts");
+    const list = await api.fetchRecentGames(user, limit);
+    return list.map((g) => ({ id: g.id, url: g.url, userColor: g.userColor, pgn: g.pgn }));
+  },
+  { user: USER, limit: LIMIT },
+);
 
-    const games = await api.fetchRecentGames(user, limit);
-    const rows = [];
-    for (const g of games) {
-      let found;
-      try {
-        found = await bril.scanGame(g, { depth });
-      } catch (e) {
-        rows.push({ err: String(e), url: g.url });
-        continue;
-      }
-      for (const b of found) {
-        rows.push({
-          url: g.url,
-          color: g.userColor,
+console.log(`${USER}: scanning ${games.length} games at depth ${DEPTH}
+`);
+
+let flagged = 0;
+let failed = 0;
+for (let i = 0; i < games.length; i++) {
+  const g = games[i];
+  let rows;
+  try {
+    rows = await page.evaluate(
+      async ({ game, depth }) => {
+        const bril = await import("/src/engine/brilliancy.ts");
+        const found = await bril.scanGame(game, { depth });
+        return found.map((b) => ({
           moveNumber: b.moveNumber,
           san: b.san,
           sacPiece: b.sacPiece,
@@ -61,30 +73,39 @@ const out = await page.evaluate(
           evalAfter: b.evalAfter,
           evalLoss: b.evalLoss,
           fenBefore: b.fenBefore,
-        });
-      }
-    }
-    return { count: games.length, rows };
-  },
-  { user: USER, limit: LIMIT, depth: DEPTH },
-);
-
-console.log(`${USER}: scanned ${out.count} games at depth ${DEPTH}\n`);
-for (const r of out.rows) {
-  if (r.err) {
-    console.log("ERR", r.url, r.err);
+        }));
+      },
+      {
+        game: {
+          ...g,
+          timeClass: "blitz", timeControl: "", rated: true, endTime: 0,
+          result: "win", resultReason: "", oppUsername: "opponent",
+        },
+        depth: DEPTH,
+      },
+    );
+  } catch (e) {
+    failed++;
+    console.log(`ERR ${g.url} — ${String(e).split(/\r?\n/)[0]}`);
     continue;
   }
-  // Worth calling out: the piece offered isn't the piece that moved. Legitimate
-  // (a move can leave something else en prise) but it's also the shape that used
-  // to produce nonsense, so it stays visible in the output.
-  const indirect = r.sacSquare && r.sacSquare !== r.movedTo ? "  [discovered]" : "";
-  console.log(
-    `${r.moveNumber}${r.color === "w" ? "." : "..."}${r.san}  offers ${r.sacPiece ?? "?"}@${r.sacSquare ?? "?"} (${r.sacrifice})  eval=${r.evalAfter}  loss=${r.evalLoss}${indirect}`,
-  );
-  console.log(`    ${r.url}`);
-  console.log(`    ${r.fenBefore}`);
+
+  for (const r of rows) {
+    flagged++;
+    const indirect = r.sacSquare && r.sacSquare !== r.movedTo ? "  [discovered]" : "";
+    console.log(
+      `${r.moveNumber}${g.userColor === "w" ? "." : "..."}${r.san}  offers ${r.sacPiece ?? "?"}@${r.sacSquare ?? "?"} (${r.sacrifice})  eval=${r.evalAfter}  loss=${r.evalLoss}${indirect}`,
+    );
+    console.log(`    ${g.url}`);
+    console.log(`    ${r.fenBefore}`);
+  }
+
+  if ((i + 1) % 25 === 0) {
+    console.error(`  …${i + 1}/${games.length} scanned, ${flagged} flagged`);
+  }
 }
-console.log(`\n${out.rows.length} flagged`);
+
+console.log(`
+${flagged} flagged across ${games.length} games${failed ? ` (${failed} failed)` : ""}`);
 
 await browser.close();

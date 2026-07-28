@@ -17,31 +17,53 @@ const USER = "louismcdade";
 // gameId -> brilliancies chess.com reports for LouisMcdade's side.
 // "review" = confirmed in full Game Review (authoritative about WHICH move).
 // "summary" = post-game highlights (exact only when the count is 0).
+//
+// `half` is the fit/test split, and it is written down HERE, by hand, on purpose.
+// A split computed at runtime is a split that silently re-rolls every time the
+// set grows — and a re-rollable split is one you can keep re-rolling until the
+// numbers look good, which defeats the entire point of holding data back. Frozen
+// in source, any change to it shows up in a diff and has to be argued for.
+//
+// The assignment rule was: order the 14 exact-negative games by chess.com game id
+// (which is chronological, and knows nothing about what the detector flags) and
+// alternate fit/test down the list. Interleaving by date rather than splitting at
+// a date also keeps the halves from differing by rating or era.
+//
+// The two Game-Review-confirmed POSITIVES are not split. Two examples cannot be
+// halved into anything that measures recall; instead both sit in the guard set
+// with the classical fixtures, where their only job is to fail loudly if a new
+// rule kills a known brilliancy.
 const LABELS = {
-  // — confirmed by full Game Review —
-  "168334603690": { n: 1, src: "review", move: "6...Bxf2+" },
-  "169999249810": { n: 1, src: "review", move: "24.Ne6" },
-  // — summary, zero: exact and complete —
-  "171473275764": { n: 0, src: "summary" },
-  "169135347664": { n: 0, src: "summary" },
-  "170905472716": { n: 0, src: "summary" },
-  "171329245690": { n: 0, src: "summary" },
-  "71922350989": { n: 0, src: "summary" },
-  "59328109305": { n: 0, src: "summary" },
-  "123030583107": { n: 0, src: "summary" },
-  "69023093493": { n: 0, src: "summary" },
-  "78155551321": { n: 0, src: "summary" },
-  "75729696237": { n: 0, src: "summary" },
-  "167769830480": { n: 0, src: "summary" },
-  "69169474795": { n: 0, src: "summary" },
-  "123984651203": { n: 0, src: "summary" },
-  "75090176179": { n: 0, src: "summary" },
+  // — confirmed by full Game Review — guard set, never used for fitting —
+  "168334603690": { n: 1, src: "review", move: "6...Bxf2+", half: "guard" },
+  "169999249810": { n: 1, src: "review", move: "24.Ne6", half: "guard" },
+  // Resolved in Game Review 2026-07-28. This one was worth a whole review on its
+  // own: we flagged TWO moves and chess.com stars exactly one, so a single
+  // lookup produced a confirmed positive AND a confirmed false positive.
+  // 16...Qxc3 is starred (direct offer). 31...Rc5+ is not (discovered offer) —
+  // consistent with the discovered pattern, though Légal's Mate already showed
+  // that pattern can't be promoted to a rule.
+  "169869209718": { n: 1, src: "review", move: "16...Qxc3", half: "guard" },
+  // — summary, zero: exact and complete. Ordered by id; fit/test alternating. —
+  "59328109305": { n: 0, src: "summary", half: "fit" },
+  "69023093493": { n: 0, src: "summary", half: "test" },
+  "69169474795": { n: 0, src: "summary", half: "fit" },
+  "71922350989": { n: 0, src: "summary", half: "test" },
+  "75090176179": { n: 0, src: "summary", half: "fit" },
+  "75729696237": { n: 0, src: "summary", half: "test" },
+  "78155551321": { n: 0, src: "summary", half: "fit" },
+  "123030583107": { n: 0, src: "summary", half: "test" },
+  "123984651203": { n: 0, src: "summary", half: "fit" },
+  "167769830480": { n: 0, src: "summary", half: "test" },
+  "169135347664": { n: 0, src: "summary", half: "fit" },
+  "170905472716": { n: 0, src: "summary", half: "test" },
+  "171329245690": { n: 0, src: "summary", half: "fit" },
+  "171473275764": { n: 0, src: "summary", half: "test" },
   // — summary, one: a star exists, but not necessarily on the move we flag —
-  "172078598998": { n: 1, src: "summary", guess: "15...Nxd3+" },
-  "170344245882": { n: 1, src: "summary", guess: "41.Qf6+" },
-  "169869209718": { n: 1, src: "summary", note: "we flag TWO here — at least one is wrong" },
-  "72012130191": { n: 1, src: "summary", guess: "23...Nd4+" },
-  "166907239486": { n: 1, src: "summary", guess: "11.Nxd5" },
+  "172078598998": { n: 1, src: "summary", guess: "15...Nxd3+", half: "unscored" },
+  "170344245882": { n: 1, src: "summary", guess: "41.Qf6+", half: "unscored" },
+  "72012130191": { n: 1, src: "summary", guess: "23...Nd4+", half: "unscored" },
+  "166907239486": { n: 1, src: "summary", guess: "11.Nxd5", half: "unscored" },
 };
 
 
@@ -118,6 +140,16 @@ let out = `/**
  * therefore recorded but NOT turned into positive fixtures: claiming the star is
  * on the move we happened to flag would be assuming what we're trying to test.
  *
+ * \`half\` is the fit/test split — see the note above LABELS in make-labels.mjs
+ * for how it was assigned and why it is frozen in source rather than computed.
+ *
+ *   fit       may be looked at freely when inventing a rule.
+ *   test      held back. Look at it to REPORT a number, not to choose one.
+ *   guard     confirmed positives; never fitted on, only used to catch a rule
+ *             that destroys a known brilliancy.
+ *   unscored  a star exists but its location is unknown, so the game cannot be
+ *             scored either way.
+ *
  * Generated by scripts/make-labels.mjs. Edit LABELS there, not this file.
  */
 export const chesscomLabels = [
@@ -137,6 +169,7 @@ for (const [id, lab] of Object.entries(LABELS)) {
     userColor: "${g.userColor}",
     count: ${lab.n},
     source: "${lab.src}",
+    half: "${lab.half}",
     // ${note}
     expected: ${expected(lab)},${lab.n > 0 && lab.src !== "review" ? " // unknown which move — not scoreable as a positive" : ""}
     pgn:

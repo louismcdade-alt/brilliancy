@@ -62,17 +62,26 @@ for (let i = 0; i < games.length; i++) {
     rows = await page.evaluate(
       async ({ game, depth }) => {
         const bril = await import("/src/engine/brilliancy.ts");
-        const found = await bril.scanGame(game, { depth });
+        // rejectShapes:[] on purpose. This script exists to show what is
+        // out there before the rules trim it — a diagnostic that only prints what
+        // already survives every gate can't tell you what a gate is costing you.
+        // The shape is printed instead, so the trimmed ones stay visible.
+        const shapes = new Map();
+        const found = await bril.scanGame(game, {
+          depth,
+          rejectShapes: [],
+          onCandidate: (c) => shapes.set(`${c.moveNumber} ${c.san}`, c.shape),
+        });
         return found.map((b) => ({
           moveNumber: b.moveNumber,
           san: b.san,
           sacPiece: b.sacPiece,
           sacSquare: b.sacSquare,
-          movedTo: b.to,
           sacrifice: b.sacrifice,
           evalAfter: b.evalAfter,
           evalLoss: b.evalLoss,
           fenBefore: b.fenBefore,
+          shape: shapes.get(`${b.moveNumber} ${b.san}`) ?? "direct",
         }));
       },
       {
@@ -92,7 +101,11 @@ for (let i = 0; i < games.length; i++) {
 
   for (const r of rows) {
     flagged++;
-    const indirect = r.sacSquare && r.sacSquare !== r.movedTo ? "  [discovered]" : "";
+    // The shape comes from the detector, not from re-deriving it here. This line
+    // used to compute "discovered" itself from sacSquare !== movedTo, which was
+    // the same rule spelled a second time — and it had no idea promotions were a
+    // category at all.
+    const indirect = r.shape === "direct" ? "" : `  [${r.shape}, CUT]`;
     console.log(
       `${r.moveNumber}${g.userColor === "w" ? "." : "..."}${r.san}  offers ${r.sacPiece ?? "?"}@${r.sacSquare ?? "?"} (${r.sacrifice})  eval=${r.evalAfter}  loss=${r.evalLoss}${indirect}`,
     );

@@ -87,4 +87,6 @@ export interface ReplayMove {
   moveNumber: number;
   /** Piece type captured by this move ("p", "n", …), if any. */
   captured?: string;
+  /** Piece promoted TO ("q", "n", …), if this move was a promotion. */
+  promotion?: string;
 }

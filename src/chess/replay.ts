@@ -19,6 +19,7 @@ export function parseGame(pgn: string): ReplayMove[] {
     fenAfter: m.after,
     moveNumber: Math.floor(i / 2) + 1,
     captured: m.captured,
+    promotion: m.promotion,
   }));
 }
 

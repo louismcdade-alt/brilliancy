@@ -28,8 +28,16 @@ the public API**, so we approximate it. A move is flagged when all three hold:
    (you're not losing after the sacrifice).
 3. **Strong** — the move is the engine's best or close to it. You don't get
    credit for a sacrifice that also throws the game away.
-4. **Necessary** — no *quiet* alternative was already winning comfortably. If you
-   were winning anyway, the fireworks weren't what won it.
+4. **Necessary** — the sacrifice must beat the best *quiet* alternative (one that
+   doesn't itself offer material) by a real margin, currently 50cp. Not "were you
+   winning anyway" but "did the fireworks actually win it". Alternatives that are
+   themselves sacrifices don't count — in Levitsky–Marshall the second-best move
+   to `23...Qg3!!` is another winning tactic, and demoting a brilliancy because a
+   *different* tactic also won misreads the rule.
+5. **Not a promotion** — the offered piece must have existed before the move. A
+   queen you made this turn and hung on the promotion square isn't material you
+   gave up; you're down nothing you had. chess.com starred none of the three in
+   our labelled set.
 
 Two details do most of the work. Using *legal* captures (not just "is this square
 attacked") rejects illusory sacrifices — a piece that only looks hanging because
@@ -40,6 +48,34 @@ credited with sacrificing it, which is how a king move once got billed as a
 5-pawn sacrifice. See [`src/engine/brilliancy.ts`](src/engine/brilliancy.ts).
 
 It's an approximation, not chess.com's exact algorithm — that's stated in the UI.
+
+### How well does it work?
+
+Measured, not asserted. Against 17 of Louis's games where chess.com's own label
+is known, plus six classical games: **75% precision, 90% recall**. It finds
+nearly everything chess.com stars, and flags roughly one extra move for every
+three real ones.
+
+The labelled games are split into a **fit** half and a held-back **test** half
+(plus a **guard** set of confirmed positives and classical games), so a rule that
+merely describes the data it was invented on can be told apart from one that
+generalises. `node scripts/test-harness.mjs` prints all three, and reports every
+rule's effect on the held-out half specifically.
+
+That split has already earned itself twice:
+
+- The `necessary` gate became a **margin** (`NECESSARY_MARGIN` in
+  [`brilliancy.ts`](src/engine/brilliancy.ts)) rather than a threshold, cutting
+  held-out false positives **7 → 2** and precision from 43% to 75%. The old rule
+  passed one sacrifice on a **three-centipawn** edge over just playing quietly.
+- A rule that looked *three-for-three* in the labels — discovered sacrifices are
+  never brilliant — turned out to cut Légal's Mate, the textbook discovered
+  sacrifice. The guard set caught it on the first run. See the note above
+  `REJECT_SHAPES`.
+
+Still unexplained: `24.Ne6`, confirmed starred by chess.com, sits at a −102cp
+margin — worse than moves chess.com declined to star. Margin is a strong signal,
+not the whole definition.
 
 ## Run it
 

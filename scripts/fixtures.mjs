@@ -39,13 +39,32 @@ import { chesscomLabels } from "./labels-louismcdade.mjs";
  */
 const realLabels = chesscomLabels
   .filter((g) => g.expected !== null)
-  .map((g) => ({ name: g.name, pgn: g.pgn, userColor: g.userColor, expected: g.expected }));
+  .map((g) => ({
+    name: g.name,
+    pgn: g.pgn,
+    userColor: g.userColor,
+    expected: g.expected,
+    half: g.half,
+  }));
 
+/**
+ * The classical games are `guard`, not `fit`. They are annotation tradition, not
+ * chess.com labels, so they can't measure agreement with the thing we're trying
+ * to approximate — but they are exactly the right tripwire for a rule that
+ * quietly stops recognising a famous sacrifice.
+ */
 export const fixtures = [
   {
     name: "Légal's Mate — 5.Nxe5!! (queen offer)",
     pgn: "1. e4 e5 2. Bc4 d6 3. Nf3 Bg4 4. Nc3 g6 5. Nxe5 Bxd1 6. Bxf7+ Ke7 7. Nd5#",
     userColor: "w",
+    half: "guard",
+    // Keep this one. It is the counterexample that killed the "discovered
+    // sacrifices are never brilliant" rule, which had looked 3-for-3 in the
+    // chess.com labels. 5.Nxe5 vacates f3 and unmasks the queen on d1, so the
+    // offered square (d1) is not the move's destination (e5) — structurally
+    // identical to the three unstarred king shuffles it was meant to reject.
+    // Any future shape rule has to let this through.
     expected: [{ moveNumber: 5, san: "Nxe5" }],
   },
   {
@@ -55,6 +74,7 @@ export const fixtures = [
       "7. Qb3 Qe7 8. Nc3 c6 9. Bg5 b5 10. Nxb5 cxb5 11. Bxb5+ Nbd7 12. O-O-O Rd8 " +
       "13. Rxd7 Rxd7 14. Rd1 Qe6 15. Bxd7+ Nxd7 16. Qb8+ Nxb8 17. Rd8#",
     userColor: "w",
+    half: "guard",
     // Three genuine sound sacrifices in the combination, each one *necessary*
     // (white is materially down, so no quiet alternative wins): the knight on b5,
     // the exchange on d7, and the mating queen offer. Note 15.Bxd7+ is deliberately
@@ -72,6 +92,7 @@ export const fixtures = [
       "1. e4 c6 2. d4 d5 3. Nc3 dxe4 4. Nxe4 Nf6 5. Qd3 e5 6. dxe5 Qa5+ " +
       "7. Bd2 Qxe5 8. O-O-O Nxe4 9. Qd8+ Kxd8 10. Bg5+ Kc7 11. Bd8#",
     userColor: "w",
+    half: "guard",
     // ONE brilliancy: 9.Qd8+!! forces Kxd8 and mates. The quiet alternative
     // (9.Qxe4) merely restores material equality, so the "already winning" gate
     // must NOT demote it. 10.Bg5+ is double check — the bishop can't legally be
@@ -92,6 +113,7 @@ export const fixtures = [
       "7. Nxe4 b6 8. Ne5 O-O 9. Bd3 Bb7 10. Qh5 Qe7 11. Qxh7+ Kxh7 12. Nxf6+ Kh6 " +
       "13. Neg4+ Kg5 14. h4+ Kf4 15. g3+ Kf3 16. Be2+ Kg2 17. Rh2+ Kg1 18. Kd2#",
     userColor: "w",
+    half: "guard",
     // One brilliancy: the queen sac that drags the king from g8 to g1. Every
     // later check (12.Nxf6+ double check, 13.Neg4+, 16.Be2+, 17.Rh2+) leaves a
     // piece "attacked" only by illegal captures — good coverage for the
@@ -106,6 +128,7 @@ export const fixtures = [
       "13. Bh3 Rae8 14. Qd2 Bb4 15. Bxf6 Rxf6 16. Rad1 Qc5 17. Qe2 Bxc3 " +
       "18. bxc3 Qxc3 19. Rxd5 Nd4 20. Qh5 Ref8 21. Re5 Rh6 22. Qg5 Rxh3 23. Rc5 Qg3",
     userColor: "b",
+    half: "guard",
     // 22...Rxh3 is deliberately NOT labeled: it captures a bishop and concedes
     // rook-for-bishop-and-pawn, a net offer under one pawn — annotation tradition
     // gives it "!", not "!!". And 17...Bxc3 is a pure trade (bxc3 recaptures) —
@@ -122,6 +145,7 @@ export const fixtures = [
     name: "Scholar's mate — no sacrifice (negative control)",
     pgn: "1. e4 e5 2. Bc4 Nc6 3. Qh5 Nf6 4. Qxf7#",
     userColor: "w",
+    half: "guard",
     // Qxf7# is a capture *and* mate, but after it Black has no legal reply, so
     // nothing is "hanging" — the detector must not call it a sacrifice.
     expected: [],

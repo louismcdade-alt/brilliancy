@@ -39,15 +39,39 @@ await page.goto("http://localhost:5173/", { waitUntil: "networkidle" });
 /** Games to explain: either a fixture, or games pulled from a chess.com account. */
 let targets = [];
 const fixtureName = arg("fixture");
+const half = arg("half");
 const user = arg("user");
 
-if (fixtureName) {
+// `--half fit` exists because --fixture matches on the game NAME, and names are
+// not unique: two of Louis's labelled games are both "vs ybbbb235", one in the
+// fit half and one in the test half. Reading the wrong one while inventing a rule
+// silently spends the holdout, and you would never know you had done it. Select
+// by half and that can't happen by accident.
+if (half) {
+  const fx = fixtures.filter((f) => (f.half ?? "guard") === half);
+  if (!fx.length) {
+    console.error(`No fixtures in half "${half}". Try fit | test | guard.`);
+    process.exit(1);
+  }
+  if (half === "test") {
+    console.error(
+      "⚠  This is the HELD-OUT half. Fine for reporting a result you already\n" +
+        "   committed to; not fine for deciding what the rule should be.\n",
+    );
+  }
+  targets = fx.map((f) => ({ name: `[${half}] ${f.name}`, pgn: f.pgn, userColor: f.userColor, url: "" }));
+} else if (fixtureName) {
   const fx = fixtures.filter((f) => f.name.toLowerCase().includes(fixtureName.toLowerCase()));
   if (!fx.length) {
     console.error(`No fixture matching "${fixtureName}".`);
     process.exit(1);
   }
-  targets = fx.map((f) => ({ name: f.name, pgn: f.pgn, userColor: f.userColor, url: "" }));
+  targets = fx.map((f) => ({
+    name: `[${f.half ?? "guard"}] ${f.name}`,
+    pgn: f.pgn,
+    userColor: f.userColor,
+    url: "",
+  }));
 } else if (user && arg("url")) {
   // One specific game. chess.com has no get-game-by-id endpoint, so walk the
   // monthly archives newest-first until it turns up — one cheap request per
@@ -113,7 +137,13 @@ for (const t of targets) {
         endTime: 0, userColor, result: "win", resultReason: "", oppUsername: "opponent",
       };
       const seen = [];
-      await mod.scanGame(game, { depth, onCandidate: (c) => seen.push(c) });
+      // Shape gate off: this tool reports on candidates, and a candidate the rule
+      // would cut is precisely the one you're here to look at.
+      await mod.scanGame(game, {
+        depth,
+        rejectShapes: [],
+        onCandidate: (c) => seen.push(c),
+      });
       return seen;
     },
     { pgn: t.pgn, userColor: t.userColor, depth: DEPTH },
@@ -125,7 +155,14 @@ for (const t of targets) {
     continue;
   }
   for (const c of rows) {
-    const verdict = c.rejectedBy ? `REJECTED by ${c.rejectedBy}` : "BRILLIANT";
+    // Shape is a separate axis from the eval gates: a move can clear all three
+    // and still be dropped for being a discovered or promoted offer, and when
+    // chasing a false negative you need to see which of the two happened.
+    const verdict = c.rejectedBy
+      ? `REJECTED by ${c.rejectedBy}`
+      : c.shape !== "direct"
+        ? `CUT (${c.shape} offer)`
+        : "BRILLIANT";
     const alt = c.quietAlt === null || !isFinite(c.quietAlt) ? "none" : `${c.quietAlt}cp`;
     console.log(
       `    ${String(c.moveNumber).padStart(3)}.${c.san.padEnd(8)} ${verdict.padEnd(22)}` +

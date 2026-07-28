@@ -411,6 +411,24 @@ button {
   margin: 0;
 }
 
+/* Off-screen but still in the accessibility tree and still indexed. Used to
+   spell out what the `!!` glyph MEANS: a screen reader on the bare headline
+   announces "Find your exclamation mark exclamation mark", which is nonsense,
+   and a search engine sees a headline with no words in it. Both problems have
+   the same fix. Not a display:none — that would remove it from both. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* the only red above the fold */
 .hero h1 .hero-bangs {
   font-family: var(--font-display);

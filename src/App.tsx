@@ -278,8 +278,17 @@ export function App() {
             <div className="wrap hero-grid">
               <div>
                 <p className="hero-eyebrow">Sound sacrifices, found by an engine</p>
+                {/* The visible headline is the glyph, because the glyph is the
+                    logo. But "Find your !!" is a headline with no words in it:
+                    a screen reader says "exclamation mark exclamation mark" and
+                    a search engine sees nothing at all. The hidden span carries
+                    the meaning for both. */}
                 <h1>
-                  Find your <span className="hero-bangs">!!</span>
+                  Find your{" "}
+                  <span className="hero-bangs" aria-hidden="true">
+                    !!
+                  </span>
+                  <span className="sr-only">brilliant moves — Brilliancy for chess.com</span>
                 </h1>
                 <p className="hero-lede">
                   Drop in any chess.com username. We pull your recent games and run a chess engine

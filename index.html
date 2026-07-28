@@ -4,11 +4,56 @@
     <meta charset="UTF-8" />
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90' font-family='Georgia,serif' font-style='italic' font-weight='bold' fill='%23BC2E24'%3E!!%3C/text%3E%3C/svg%3E" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- The title leads with the BRAND, not the glyph. It used to read
+         "!! — Your chess.com brilliancies", which contains neither the word
+         "Brilliancy" nor a standalone "chess" — so a search for "brilliancy
+         chess" had nothing to match. The `!!` is the logo; it is not a search
+         term anyone can type. -->
+    <title>Brilliancy — find the brilliant moves in your chess.com games</title>
     <meta
       name="description"
-      content="Find the brilliant moves hidden in your chess.com games — sound sacrifices detected by a chess engine, plus your stats."
+      content="Brilliancy finds the brilliant moves (!!) hidden in your chess.com games — sound sacrifices, spotted by a chess engine that runs in your browser. No login, no backend, nothing leaves the page."
     />
-    <title>!! — Your chess.com brilliancies</title>
+    <link rel="canonical" href="https://brilliancy-chess.netlify.app/" />
+    <meta name="application-name" content="Brilliancy" />
+    <meta name="theme-color" content="#f2eee4" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#262119" media="(prefers-color-scheme: dark)" />
+
+    <!-- Open Graph / Twitter. These don't affect ranking directly, but a branded
+         query only ever gets found if people share the link, and an unfurled
+         card is shared far more than a bare URL. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Brilliancy" />
+    <meta property="og:title" content="Brilliancy — find the brilliant moves in your chess.com games" />
+    <meta
+      property="og:description"
+      content="Type any chess.com username. A chess engine runs in your browser and surfaces your brilliant moves — the sound sacrifices — next to your ratings and record."
+    />
+    <meta property="og:url" content="https://brilliancy-chess.netlify.app/" />
+    <meta property="og:image" content="https://brilliancy-chess.netlify.app/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Brilliancy — a chess scoresheet with a brilliant move circled in red pen." />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- JSON-LD tells Google that "Brilliancy" is the NAME of a thing, which is
+         what a branded query needs. It is a data block, not executable script,
+         so `script-src 'self'` does not block it. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Brilliancy",
+        "alternateName": "Brilliancy Chess",
+        "url": "https://brilliancy-chess.netlify.app/",
+        "applicationCategory": "GameApplication",
+        "operatingSystem": "Any (runs in a web browser)",
+        "description": "Finds the brilliant moves in your chess.com games by running a chess engine locally in the browser.",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "GBP" },
+        "isAccessibleForFree": true
+      }
+    </script>
 
     <!-- Fonts are SELF-HOSTED, deliberately. Two voices, taken from the object:
          a text serif for everything a scoresheet has PRINTED on it, and a mono

@@ -1,0 +1,12 @@
+# Brilliancy — https://brilliancy-chess.netlify.app
+#
+# Everything here is public and safe to index. The only thing worth keeping
+# crawlers out of is the 40 MB engine directory: it is a WebAssembly binary and
+# a neural network file, they are useless in an index, and a crawler that
+# fetches them repeatedly eats the free-tier bandwidth budget for no return.
+
+User-agent: *
+Allow: /
+Disallow: /engine/
+
+Sitemap: https://brilliancy-chess.netlify.app/sitemap.xml

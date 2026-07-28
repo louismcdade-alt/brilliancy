@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  A one-page site, so this is a one-URL sitemap. It exists less to help Google
+  find the page (it is the root) than to give Search Console something concrete
+  to submit and report indexing status against.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://brilliancy-chess.netlify.app/</loc>
+    <lastmod>2026-07-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>

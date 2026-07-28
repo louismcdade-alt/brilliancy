@@ -44,6 +44,19 @@ const LABELS = {
   // consistent with the discovered pattern, though Légal's Mate already showed
   // that pattern can't be promoted to a rule.
   "169869209718": { n: 1, src: "review", move: "16...Qxc3", half: "guard" },
+  // — INFERRED, 2026-07-29 — the count is a real reading, the LOCATION is deduced.
+  //
+  // Each of these games has a summary count of 1 and several candidates, so the
+  // count alone doesn't say which move. What settles them is that every other
+  // candidate leaves Louis LOSING (-3.07 to -5.25), and chess.com's own criteria
+  // require a brilliant move not to be losing. That rules them out and leaves one
+  // move standing.
+  //
+  // Tagged `inferred` rather than `review` on purpose: this is an argument, not a
+  // reading, and it leans on our own evaluation. If either is ever contradicted
+  // by a real Game Review, this is the line to delete.
+  "72012130191": { n: 1, src: "inferred", move: "23...Nd4+", half: "guard" },
+  "72369273649": { n: 1, src: "inferred", move: "23.Bc3", half: "guard" },
   // — summary, zero: exact and complete. Ordered by id; fit/test alternating. —
   "59328109305": { n: 0, src: "summary", half: "fit" },
   "69023093493": { n: 0, src: "summary", half: "test" },
@@ -61,8 +74,12 @@ const LABELS = {
   "171473275764": { n: 0, src: "summary", half: "test" },
   // — summary, one: a star exists, but not necessarily on the move we flag —
   "172078598998": { n: 1, src: "summary", guess: "15...Nxd3+", half: "unscored" },
-  "170344245882": { n: 1, src: "summary", guess: "41.Qf6+", half: "unscored" },
-  "72012130191": { n: 1, src: "summary", guess: "23...Nd4+", half: "unscored" },
+  // Was recorded as 1 (guessing 41.Qf6+). Re-read on 2026-07-29: the summary
+  // shows NO brilliancy. The first reading was wrong, so this becomes an exact
+  // negative — three candidates, all confirmed not starred.
+  // New zero-count games are appended to the halves alternately (fit first) so
+  // the frozen assignments of existing games never shift underneath a result.
+  "170344245882": { n: 0, src: "summary", half: "fit" },
   "166907239486": { n: 1, src: "summary", guess: "11.Nxd5", half: "unscored" },
 };
 
@@ -72,7 +89,10 @@ const LABELS = {
 // 1 tells us a star exists but not where, so it stays null.
 const expected = (lab) => {
   if (lab.n === 0) return "[]";
-  if (lab.src === "review" && lab.move) {
+  // `inferred` counts alongside `review`: the count was read, and the location
+  // follows because every other candidate in the game was losing. A `guess` on a
+  // `summary` row is NOT the same thing and stays unscored.
+  if ((lab.src === "review" || lab.src === "inferred") && lab.move) {
     const m = lab.move.match(/^(\d+)\.+(.+)$/);
     return `[{ moveNumber: ${m[1]}, san: "${m[2]}" }]`;
   }

@@ -72,6 +72,43 @@ export const chesscomLabels = [
       "Kxb5 Rb7+ 45. Ka6 Rd6+ 46. Ka5 Ra7+ 47. Kb5 Rd5+ 48. Rc5 Rxc5+ 0-1",
   },
   {
+    id: "72012130191",
+    url: "https://www.chess.com/game/live/72012130191",
+    name: "vs ybbbb235 — 1 brilliancy (chess.com)",
+    userColor: "b",
+    count: 1,
+    source: "inferred",
+    half: "guard",
+    // chess.com: 1 brilliancy (inferred). Confirmed move: 23...Nd4+.
+    expected: [{ moveNumber: 23, san: "Nd4+" }], // unknown which move — not scoreable as a positive
+    pgn:
+      "1. d4 d5 2. Nc3 Nc6 3. Nf3 Nf6 4. b3 e6 5. g3 Bb4 6. Bd2 e5 7. dxe5 d4 8. g4 " +
+      "Nxg4 9. Rg1 h5 10. h3 Ngxe5 11. e3 dxc3 12. Bc1 Qg5 13. Rxg5 h4 14. Rxg7 Kf8 " +
+      "15. Rg3 hxg3 16. fxg3 Bf5 17. g4 Be4 18. Qd7 Nxf3+ 19. Ke2 Rd8 20. Qxc7 Rd2+ " +
+      "21. Bxd2 Nxd2 22. Rd1 Kg7 23. Qxb7 Nd4+ 24. Ke1 Bxb7 25. exd4 Re8+ 26. Be2 " +
+      "Nf3+ 27. Kf2 Be4 28. a3 Bxa3 29. Ra1 Bb2 30. Rxa7 Nxd4 31. Bb5 Rb8 32. Ba4 " +
+      "Nxc2 33. g5 Nd4 34. Ke3 c2 35. Kxe4 Ne2 36. b4 c1=Q 37. Kd3 Nf4+ 38. Ke4 Nxh3 " +
+      "39. Rxf7+ Kxf7 40. Kf3 Rxb4 41. Bc6 Qxc6+ 42. Kg3 Ng1 43. Kh2 Qc2+ 44. Kxg1 " +
+      "Rd4 45. g6+ Kxg6 46. Kf1 Rd1# 0-1",
+  },
+  {
+    id: "72369273649",
+    url: "https://www.chess.com/game/live/72369273649",
+    name: "vs alxgy1503 — 1 brilliancy (chess.com)",
+    userColor: "w",
+    count: 1,
+    source: "inferred",
+    half: "guard",
+    // chess.com: 1 brilliancy (inferred). Confirmed move: 23.Bc3.
+    expected: [{ moveNumber: 23, san: "Bc3" }], // unknown which move — not scoreable as a positive
+    pgn:
+      "1. e4 e5 2. Nf3 Nf6 3. Bc4 Bc5 4. d4 d5 5. dxc5 dxc4 6. Qxd8+ Kxd8 7. Nxe5 Rf8 " +
+      "8. Nxc4 Nxe4 9. Bg5+ f6 10. Bh4 g5 11. Bg3 Re8 12. O-O Be6 13. b3 f5 14. Rd1+ " +
+      "Nd7 15. Be5 b5 16. Bf6+ Kc8 17. c6 Nb8 18. Be5 bxc4 19. bxc4 Bxc4 20. Na3 Be2 " +
+      "21. Re1 Bc4 22. Nxc4 Nxc6 23. Bc3 Nxc3 24. Rxe8+ Kb7 25. Re3 Nd5 26. Rb1+ Kc8 " +
+      "27. Re8+ Nd8 28. Rb5 Nf6 29. Re7 c6 30. Nd6# 1-0",
+  },
+  {
     id: "59328109305",
     url: "https://www.chess.com/game/live/59328109305",
     name: "vs ibrahimbaayeh — no brilliancy (chess.com)",
@@ -354,13 +391,13 @@ export const chesscomLabels = [
   {
     id: "170344245882",
     url: "https://www.chess.com/game/live/170344245882",
-    name: "vs ibrahimmbaaayeh — 1 brilliancy (chess.com)",
+    name: "vs ibrahimmbaaayeh — no brilliancy (chess.com)",
     userColor: "w",
-    count: 1,
+    count: 0,
     source: "summary",
-    half: "unscored",
-    // chess.com: 1 brilliancy (summary). We flag 41.Qf6+; unconfirmed which move chess.com starred.
-    expected: null, // unknown which move — not scoreable as a positive
+    half: "fit",
+    // chess.com: zero brilliancies for this side. Exact — anything we flag here is a false positive.
+    expected: [],
     pgn:
       "1. e4 e5 2. Qh5 Qf6 3. d3 Nh6 4. Bxh6 gxh6 5. Nc3 Nc6 6. O-O-O Rg8 7. Nf3 d6 " +
       "8. d4 exd4 9. Nxd4 Bg4 10. Qb5 Bc8 11. Nxc6 Rg5 12. Ne5+ c6 13. Qa4 Rb8 14. " +
@@ -369,26 +406,6 @@ export const chesscomLabels = [
       "Bd3+ Kxe3 27. Rde1+ Kf4 28. Rhf1+ Kg4 29. Qd4+ Kh5 30. Be2+ Kg6 31. Qe4+ Kh6 " +
       "32. Rf6+ Kg7 33. Qxc6 Bxd6 34. Rf3 Bb4 35. Qc7 Rb6 36. Qe5+ f6 37. Qxf6+ Kg8 " +
       "38. Qd8+ Kg7 39. Rd1 Bxa2 40. Rd7+ Kh6 41. Qf6+ Kh5 42. Rh3# 1-0",
-  },
-  {
-    id: "72012130191",
-    url: "https://www.chess.com/game/live/72012130191",
-    name: "vs ybbbb235 — 1 brilliancy (chess.com)",
-    userColor: "b",
-    count: 1,
-    source: "summary",
-    half: "unscored",
-    // chess.com: 1 brilliancy (summary). We flag 23...Nd4+; unconfirmed which move chess.com starred.
-    expected: null, // unknown which move — not scoreable as a positive
-    pgn:
-      "1. d4 d5 2. Nc3 Nc6 3. Nf3 Nf6 4. b3 e6 5. g3 Bb4 6. Bd2 e5 7. dxe5 d4 8. g4 " +
-      "Nxg4 9. Rg1 h5 10. h3 Ngxe5 11. e3 dxc3 12. Bc1 Qg5 13. Rxg5 h4 14. Rxg7 Kf8 " +
-      "15. Rg3 hxg3 16. fxg3 Bf5 17. g4 Be4 18. Qd7 Nxf3+ 19. Ke2 Rd8 20. Qxc7 Rd2+ " +
-      "21. Bxd2 Nxd2 22. Rd1 Kg7 23. Qxb7 Nd4+ 24. Ke1 Bxb7 25. exd4 Re8+ 26. Be2 " +
-      "Nf3+ 27. Kf2 Be4 28. a3 Bxa3 29. Ra1 Bb2 30. Rxa7 Nxd4 31. Bb5 Rb8 32. Ba4 " +
-      "Nxc2 33. g5 Nd4 34. Ke3 c2 35. Kxe4 Ne2 36. b4 c1=Q 37. Kd3 Nf4+ 38. Ke4 Nxh3 " +
-      "39. Rxf7+ Kxf7 40. Kf3 Rxb4 41. Bc6 Qxc6+ 42. Kg3 Ng1 43. Kh2 Qc2+ 44. Kxg1 " +
-      "Rd4 45. g6+ Kxg6 46. Kf1 Rd1# 0-1",
   },
   {
     id: "166907239486",

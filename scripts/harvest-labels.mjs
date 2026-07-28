@@ -50,7 +50,16 @@ const gameId = (url) => String(url).split("/").pop();
 const knownCounts = new Map(Object.entries(COUNTS).map(([id, n]) => [id, { count: n, source: "summary" }]));
 /** Games where we know WHICH move was starred — these give a positive directly. */
 const knownMove = new Map();
+/** Games where the two sources disagree about the count. Never silently merged. */
+const conflicts = [];
 for (const g of chesscomLabels) {
+  const fromCounts = knownCounts.get(g.id);
+  // A disagreement means one of the two readings is wrong, and picking the
+  // "richer" source silently would bake a bad label into the dataset for good.
+  // Labels are the scarce resource here; a wrong one is worse than a missing one.
+  if (fromCounts && fromCounts.count !== g.count) {
+    conflicts.push({ id: g.id, counts: fromCounts.count, labels: g.count, source: g.source });
+  }
   knownCounts.set(g.id, { count: g.count, source: g.source });
   if (g.expected?.length) knownMove.set(g.id, new Set(g.expected.map((m) => `${m.moveNumber} ${m.san}`)));
 }
@@ -199,6 +208,15 @@ console.log(`unlabelled: ${totalCandidates - rows.length} candidates across ${un
 
 if (pos < 20) {
   console.log(`⚠  ${pos} positives. Fitting anything below ~20 will describe the sample, not the rule.\n`);
+}
+
+if (conflicts.length) {
+  console.log(`── ⚠ COUNT CONFLICTS — resolve before trusting these games ──`);
+  for (const c of conflicts) {
+    console.log(`   https://www.chess.com/game/live/${c.id}`);
+    console.log(`     harvest-counts.mjs says ${c.counts}, labels-louismcdade.mjs says ${c.labels} (${c.source})`);
+  }
+  console.log(`   Using the labels-louismcdade value. Recheck the summary and fix one.\n`);
 }
 
 if (preFilterMisses.length) {

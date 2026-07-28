@@ -24,6 +24,14 @@
  *   node scripts/harvest-labels.mjs louismcdade 250
  */
 export const COUNTS = {
-  // "172078598998": 1,
-  // "123456789012": 0,
+  // Collected 2026-07-29 from the post-game summaries, in checklist order.
+  "72012130191": 1,
+  "170344245882": 0, // ⚠ conflicts with labels-louismcdade.mjs, which records 1
+  "172078598998": 1,
+  "73055868147": 0,
+  "68820772835": 0,
+  "172022142658": 0,
+  "73657360419": 0,
+  "72369273649": 1,
+  "69798477321": 0,
 };

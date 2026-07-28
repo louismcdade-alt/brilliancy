@@ -57,6 +57,12 @@ const LABELS = {
   // by a real Game Review, this is the line to delete.
   "72012130191": { n: 1, src: "inferred", move: "23...Nd4+", half: "guard" },
   "72369273649": { n: 1, src: "inferred", move: "23.Bc3", half: "guard" },
+  // Count 1 with exactly ONE candidate, so the star is that move — provided the
+  // star is among our candidates at all. That proviso is real: if chess.com
+  // starred something our sacrifice pre-filter never considered, this candidate
+  // is a negative AND we have a pre-filter miss. At 83% recall the assumption is
+  // usually safe, which is why this is `inferred` and not `review`.
+  "73742490905": { n: 1, src: "inferred", move: "31...Nxf4+", half: "guard" },
   // — summary, zero: exact and complete. Ordered by id; fit/test alternating. —
   "59328109305": { n: 0, src: "summary", half: "fit" },
   "69023093493": { n: 0, src: "summary", half: "test" },
@@ -72,6 +78,21 @@ const LABELS = {
   "170905472716": { n: 0, src: "summary", half: "test" },
   "171329245690": { n: 0, src: "summary", half: "fit" },
   "171473275764": { n: 0, src: "summary", half: "test" },
+  // — batch collected 2026-07-29, all exact zeros. Appended in id order and
+  //   alternated (test first, since fit was one ahead), so no existing game's
+  //   half is disturbed. Final balance: 14 fit / 13 test.
+  "69076347829": { n: 0, src: "summary", half: "test" },
+  "71533522913": { n: 0, src: "summary", half: "fit" },
+  "73056434083": { n: 0, src: "summary", half: "test" },
+  "123010260621": { n: 0, src: "summary", half: "fit" },
+  "123260503855": { n: 0, src: "summary", half: "test" },
+  "123448874857": { n: 0, src: "summary", half: "fit" },
+  "125086814631": { n: 0, src: "summary", half: "test" },
+  "166904355742": { n: 0, src: "summary", half: "fit" },
+  "166905127436": { n: 0, src: "summary", half: "test" },
+  "167779992358": { n: 0, src: "summary", half: "fit" },
+  "169264876272": { n: 0, src: "summary", half: "test" },
+  "169872260446": { n: 0, src: "summary", half: "fit" },
   // — summary, one: a star exists, but not necessarily on the move we flag —
   "172078598998": { n: 1, src: "summary", guess: "15...Nxd3+", half: "unscored" },
   // Was recorded as 1 (guessing 41.Qf6+). Re-read on 2026-07-29: the summary

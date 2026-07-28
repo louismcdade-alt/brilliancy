@@ -109,6 +109,23 @@ export const chesscomLabels = [
       "27. Re8+ Nd8 28. Rb5 Nf6 29. Re7 c6 30. Nd6# 1-0",
   },
   {
+    id: "73742490905",
+    url: "https://www.chess.com/game/live/73742490905",
+    name: "vs thiccmo — 1 brilliancy (chess.com)",
+    userColor: "b",
+    count: 1,
+    source: "inferred",
+    half: "guard",
+    // chess.com: 1 brilliancy (inferred). Confirmed move: 31...Nxf4+.
+    expected: [{ moveNumber: 31, san: "Nxf4+" }], // unknown which move — not scoreable as a positive
+    pgn:
+      "1. e4 e5 2. Nf3 Nc6 3. Nc3 d5 4. Bc4 dxc4 5. O-O Bg4 6. d3 cxd3 7. Qxd3 Nb4 8. " +
+      "Qb5+ c6 9. Qxe5+ Be7 10. Bg5 f6 11. Qf4 fxg5 12. Qxg4 Nxc2 13. Rad1 Qb6 14. " +
+      "Qd7+ Kf7 15. Ne5+ Kf8 16. Qf5+ Nf6 17. Qxf6+ gxf6 18. Nd7+ Kf7 19. Nxb6 axb6 " +
+      "20. Rd2 Nb4 21. a3 Na6 22. b4 c5 23. b5 Nc7 24. f4 g4 25. e5 f5 26. Re1 Rhd8 " +
+      "27. e6+ Nxe6 28. Nd5 Bh4 29. Re5 Rxa3 30. g3 Ra1+ 31. Kg2 Nxf4+ 32. gxf4 1-0",
+  },
+  {
     id: "59328109305",
     url: "https://www.chess.com/game/live/59328109305",
     name: "vs ibrahimbaayeh — no brilliancy (chess.com)",
@@ -369,6 +386,224 @@ export const chesscomLabels = [
       "Bxe6+ Kh8 15. Nxe5 fxe5 16. e4 Qf6 17. Rf1 Qxf1+ 18. Kd2 Qxa1 19. Kc3 Qxa2 20. " +
       "Kb4 Qxe6 21. Kc3 Nc6 22. Kd3 Rad8+ 23. Ke3 Qh6+ 24. Ke2 Rd7 25. Ke1 Rdf7 26. " +
       "Kd1 Rf1+ 27. Ke2 Nd4+ 28. Kd3 R8f3+ 29. Kc4 Qc6+ 30. Kb4 Qb5# 0-1",
+  },
+  {
+    id: "69076347829",
+    url: "https://www.chess.com/game/live/69076347829",
+    name: "vs evaforeva5 — no brilliancy (chess.com)",
+    userColor: "b",
+    count: 0,
+    source: "summary",
+    half: "test",
+    // chess.com: zero brilliancies for this side. Exact — anything we flag here is a false positive.
+    expected: [],
+    pgn:
+      "1. d3 e5 2. c3 Nf6 3. h3 d5 4. g4 g6 5. e3 h5 6. Nf3 Nfd7 7. Nh4 c6 8. Na3 Na6 " +
+      "9. b4 b5 10. Rb1 Nb6 11. Rh2 Be7 12. Bg2 Bxh4 13. Bh1 Rf8 14. Qf3 f5 15. Qd1 " +
+      "fxg4 16. Rg2 Nd7 17. e4 dxe4 18. dxe4 Nf6 19. Bh6 Rh8 20. Bg7 Rh7 21. Rb3 Rxg7 " +
+      "22. Rh2 Qxd1+ 23. Kxd1 gxh3 24. Rxh3 Bxh3 25. c4 bxc4 26. Rxh3 Bxf2 27. Nxc4 " +
+      "Nxb4 28. Rh2 Nxa2 29. Rxf2 Nc3+ 30. Ke1 Nfxe4 31. Bxe4 Nxe4 32. Nxe5 Nxf2 33. " +
+      "Kxf2 Ke7 34. Nd3 Rd8 35. Ne1 Rf7+ 36. Ke2 c5 37. Nc2 c4 38. Ne3 Rc8 39. Nd1 h4 " +
+      "40. Ke1 h3 41. Nf2 h2 42. Ke2 c3 43. Ke3 c2 44. Kd3 c1=Q 45. Kd4 Qe1 46. Nd3 " +
+      "Qh4+ 47. Kd5 h1=Q+ 48. Ke5 Qh5+ 49. Kd4 Rf4+ 50. Ke3 Ra4 51. Nb2 Ra2 52. Nd3 " +
+      "Q1d5 53. Kf4 Qxd3 1/2-1/2",
+  },
+  {
+    id: "71533522913",
+    url: "https://www.chess.com/game/live/71533522913",
+    name: "vs Pedro_z_la — no brilliancy (chess.com)",
+    userColor: "b",
+    count: 0,
+    source: "summary",
+    half: "fit",
+    // chess.com: zero brilliancies for this side. Exact — anything we flag here is a false positive.
+    expected: [],
+    pgn:
+      "1. e4 e5 2. d4 d6 3. d5 Nf6 4. Bb5+ c6 5. Ba4 b5 6. Bb3 Nxe4 7. dxc6 Nxc6 8. " +
+      "Qf3 Qa5+ 9. Bd2 Nxd2 10. Qxf7+ Kd8 11. Nxd2 Nb4 12. O-O-O Nxa2+ 13. Bxa2 Qxa2 " +
+      "14. Nb1 Qxf7 15. Nf3 Qf4+ 16. Nfd2 Bb7 17. g3 Qxf2 18. Rhf1 Qxh2 19. g4 Rc8 " +
+      "20. Rf7 Bd5 21. Nc3 Bxf7 22. Nxb5 a6 23. Nxd6 Rc7 24. Nxf7+ Rxf7 25. Nf3+ Qd2+ " +
+      "26. Nxd2 Bb4 27. Nc4+ Rd7 28. Nxe5 Rxd1+ 29. Kxd1 Re8 30. Nc6+ Kc7 31. Nxb4 " +
+      "Re4 32. Nd5+ Kd6 33. Nc7 Rxg4 34. Nxa6 Rg1+ 35. Kd2 Rg3 36. Nb8 h5 37. Na6 h4 " +
+      "38. Ke2 h3 39. Kf2 Rg4 40. Nb4 h2 41. Kf3 Rxb4 42. Kg2 Rh4 43. c4 h1=Q+ 44. " +
+      "Kg3 Qh3+ 45. Kf2 Qb3 46. c5+ Kxc5 47. Kg2 Rd4 48. Kf2 Rd3 49. Ke2 Rh3 50. Kf2 " +
+      "Qxb2+ 51. Kg1 Rc3 52. Kf1 Rc1# 0-1",
+  },
+  {
+    id: "73056434083",
+    url: "https://www.chess.com/game/live/73056434083",
+    name: "vs evaswifeandshanice — no brilliancy (chess.com)",
+    userColor: "b",
+    count: 0,
+    source: "summary",
+    half: "test",
+    // chess.com: zero brilliancies for this side. Exact — anything we flag here is a false positive.
+    expected: [],
+    pgn:
+      "1. e4 e5 2. f3 Qh4+ 3. g3 Qd8 4. Nh3 Nf6 5. Qe2 d5 6. exd5 Nxd5 7. Ng5 f6 8. " +
+      "a4 fxg5 9. c3 c6 10. a5 Na6 11. g4 Bc5 12. Na3 O-O 13. d3 Ne3 14. Rg1 Nc2+ 15. " +
+      "Qxc2 Bxg1 16. Kd2 Rxf3 17. Bh3 Rxh3 18. Qa4 Rxh2+ 19. Kd1 Qf6 20. Ra2 Qf1# 0-1",
+  },
+  {
+    id: "123010260621",
+    url: "https://www.chess.com/game/live/123010260621",
+    name: "vs ibrahimmbaaayeh — no brilliancy (chess.com)",
+    userColor: "b",
+    count: 0,
+    source: "summary",
+    half: "fit",
+    // chess.com: zero brilliancies for this side. Exact — anything we flag here is a false positive.
+    expected: [],
+    pgn:
+      "1. e4 e5 2. Nf3 Nc6 3. d4 Nf6 4. dxe5 Nxe4 5. Bd3 Bb4+ 6. Ke2 d5 7. Bg5 f6 8. " +
+      "a3 Ba5 9. Nc3 fxg5 10. Nxe4 dxe4 11. Bxe4 Qxd1+ 12. Kxd1 Bg4 13. h3 Bxf3+ 14. " +
+      "gxf3 O-O-O+ 15. Ke2 Rd2+ 16. Ke1 Nd4 17. Rd1 Rxd1+ 18. Kxd1 Rd8 19. b4 Bb6 20. " +
+      "c3 Nb3+ 21. Kc2 Na1+ 22. Kb1 Nb3 23. Bxh7 Nd2+ 24. Kc1 Nxf3 25. Rg1 Nxg1 26. " +
+      "Bf5+ Kb8 27. a4 Bxf2 28. a5 b6 29. e6 Ne2+ 30. Kc2 bxa5 31. e7 Re8 32. Kd2 Nf4 " +
+      "33. bxa5 Rxe7 34. Kd1 Re1+ 35. Kc2 Re2+ 36. Kb3 Re5 37. Bc2 Rb5+ 38. Ka4 Rb2 " +
+      "39. Be4 Ra2+ 40. Kb5 Be1 41. Kc5 Rh2 42. Kc6 Rxh3 43. Bf5 Rxc3+ 44. Kb5 g6 45. " +
+      "Kb4 gxf5 46. a6 g4 47. Kb5 g3 48. Ka5 g2 49. Ka4 g1=Q 50. Kb4 Qc5+ 51. Ka4 " +
+      "Rc4+ 52. Kb3 Qb4+ 53. Ka2 Qa4+ 54. Kb2 Qxa6 0-1",
+  },
+  {
+    id: "123260503855",
+    url: "https://www.chess.com/game/live/123260503855",
+    name: "vs ibrahimmbaaayeh — no brilliancy (chess.com)",
+    userColor: "b",
+    count: 0,
+    source: "summary",
+    half: "test",
+    // chess.com: zero brilliancies for this side. Exact — anything we flag here is a false positive.
+    expected: [],
+    pgn:
+      "1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. Rf1 Nf6 5. Nc3 d6 6. Ng5 Bg4 7. f3 Bh5 8. g4 " +
+      "Bg6 9. Qe2 Nd4 10. Qe3 Nxc2+ 11. Kd1 Nxe3+ 12. dxe3 h6 13. Nh3 O-O 14. Nf2 Bb4 " +
+      "15. Nd3 Bxc3 16. bxc3 Qd7 17. Bb2 Qa4+ 18. Kc1 Qxc4 19. Rd1 h5 20. gxh5 Bxh5 " +
+      "21. Ba3 Bxf3 22. Kc2 Bxd1+ 23. Kxd1 Qxc3 24. Rc1 Qxa3 25. Kd2 Nxe4+ 26. Ke2 " +
+      "Qxc1 27. Nxc1 Rae8 28. Kf3 Ng5+ 29. Kg4 f6 30. Kh5 f5 31. Ne2 Ne4 32. Kh4 Rf6 " +
+      "33. Kh5 Rh6# 0-1",
+  },
+  {
+    id: "123448874857",
+    url: "https://www.chess.com/game/live/123448874857",
+    name: "vs ibrahimmbaaayeh — no brilliancy (chess.com)",
+    userColor: "b",
+    count: 0,
+    source: "summary",
+    half: "fit",
+    // chess.com: zero brilliancies for this side. Exact — anything we flag here is a false positive.
+    expected: [],
+    pgn:
+      "1. e4 e6 2. d3 e5 3. Nf3 Bb4+ 4. c3 Ba5 5. Be2 Nc6 6. O-O Nf6 7. Nbd2 O-O 8. " +
+      "Nc4 d5 9. Ncxe5 Ng4 10. b4 Bb6 11. d4 dxe4 12. Qd2 exf3 13. Bxf3 Ngxe5 14. Qf4 " +
+      "Nxf3+ 15. gxf3 Bh3 16. Re1 Re8 17. Re4 f6 18. d5 g5 19. Qg4 Bxg4 20. c4 Nd4 " +
+      "21. fxg4 Rxe4 22. Bd2 Rxg4+ 23. Kf1 Nc2 24. f3 Nxa1 25. fxg4 Qe8 26. Be1 Nc2 " +
+      "27. c5 Qxe1+ 28. Kg2 Ne3+ 29. Kf3 Qc3 30. Ke4 Qxb4+ 31. Kxe3 Bxc5+ 32. Kf3 Re8 " +
+      "33. Kg3 Re3+ 34. Kf2 Qb2+ 35. Kf1 Qe2+ 36. Kg1 Rg3+ 37. Kh1 Qe1# 0-1",
+  },
+  {
+    id: "125086814631",
+    url: "https://www.chess.com/game/live/125086814631",
+    name: "vs ibrahimmbaaayeh — no brilliancy (chess.com)",
+    userColor: "w",
+    count: 0,
+    source: "summary",
+    half: "test",
+    // chess.com: zero brilliancies for this side. Exact — anything we flag here is a false positive.
+    expected: [],
+    pgn:
+      "1. e4 e5 2. Bc4 d5 3. Bxd5 Nf6 4. c4 c6 5. Bxf7+ Kxf7 6. Nf3 Nxe4 7. Nxe5+ Ke6 " +
+      "8. d4 Nd6 9. d5+ Kxe5 10. Qe2+ Kf6 11. Qf3+ Ke7 12. Bg5+ Kd7 13. Bxd8 Kxd8 14. " +
+      "O-O Nxc4 15. b3 cxd5 16. bxc4 dxc4 17. Rd1+ Bd7 18. Nc3 Nc6 19. Nd5 Be6 20. " +
+      "Ne3+ Ke8 21. Rac1 Nb4 22. Qxb7 Rd8 23. Qxa7 Nxa2 24. Rc2 Nb4 25. Rc3 Nc6 26. " +
+      "Qc7 Rd7 27. Rxd7 Bxd7 28. Nf5 g6 29. Nd6+ Ke7 30. Nc8+ Kf7 31. Qxd7+ Kf6 32. " +
+      "Qxc6+ Kg5 33. Rxc4 Ba3 34. Qb5+ Kh6 35. Qe5 Rd8 36. Rh4# 1-0",
+  },
+  {
+    id: "166904355742",
+    url: "https://www.chess.com/game/live/166904355742",
+    name: "vs chiqvitita — no brilliancy (chess.com)",
+    userColor: "w",
+    count: 0,
+    source: "summary",
+    half: "fit",
+    // chess.com: zero brilliancies for this side. Exact — anything we flag here is a false positive.
+    expected: [],
+    pgn:
+      "1. e4 d5 2. Nc3 e6 3. exd5 e5 4. Nf3 f6 5. d4 Bb4 6. a3 Ba5 7. b4 Bb6 8. dxe5 " +
+      "f5 9. Bg5 Ne7 10. Bb5+ Bd7 11. Qe2 a6 12. Bxd7+ Qxd7 13. e6 Qd6 14. O-O-O h6 " +
+      "15. Bh4 c6 16. Rhe1 c5 17. Ne5 a5 18. Qh5+ Kf8 19. Bxe7+ Qxe7 20. Qxf5+ Kg8 " +
+      "21. Ng6 Qe8 22. Nxh8 Kxh8 23. Nb5 g6 24. Qf6+ Kh7 25. Nd6 Qg8 26. Qe7+ Kh8 27. " +
+      "Nf7+ Kh7 28. Ng5+ Kh8 29. Qxb7 hxg5 30. Qxa8 Bc7 31. e7 cxb4 32. e8=Q bxa3 33. " +
+      "Kb1 Kh7 34. Re7+ Kh8 35. Rxc7 Qxe8 36. Rd3 Qf7 37. Qxb8+ Kh7 38. Rh3+ Kg7 39. " +
+      "Qh8# 1-0",
+  },
+  {
+    id: "166905127436",
+    url: "https://www.chess.com/game/live/166905127436",
+    name: "vs kamagar1910 — no brilliancy (chess.com)",
+    userColor: "w",
+    count: 0,
+    source: "summary",
+    half: "test",
+    // chess.com: zero brilliancies for this side. Exact — anything we flag here is a false positive.
+    expected: [],
+    pgn:
+      "1. d4 d5 2. Nf3 e6 3. Bg5 f6 4. Bh4 Nd7 5. e3 Bb4+ 6. c3 Ba5 7. Na3 Nh6 8. Bb5 " +
+      "c6 9. Bd3 Nf5 10. e4 Nd6 11. exd5 cxd5 12. Qa4 b6 13. b4 h5 14. bxa5 b5 15. " +
+      "Nxb5 Rb8 16. Nxd6+ Kf8 17. Nxc8 Rxc8 18. Rc1 f5 19. Bg3 g6 20. Bd6+ Kf7 21. " +
+      "Ng5+ Kg7 22. Nxe6+ Kf6 23. Nxd8 Rcxd8 24. O-O Rde8 25. Qxd7 Re7 26. Qxe7# 1-0",
+  },
+  {
+    id: "167779992358",
+    url: "https://www.chess.com/game/live/167779992358",
+    name: "vs Hizzel45 — no brilliancy (chess.com)",
+    userColor: "b",
+    count: 0,
+    source: "summary",
+    half: "fit",
+    // chess.com: zero brilliancies for this side. Exact — anything we flag here is a false positive.
+    expected: [],
+    pgn:
+      "1. e4 e5 2. Qh5 g6 3. Qxe5+ Be7 4. Qxh8 Bf6 5. Qxg8+ Ke7 6. Qxh7 Qh8 7. Qxg6 " +
+      "fxg6 8. b3 Bxa1 9. Nc3 Bxc3 10. dxc3 Qxc3+ 11. Kd1 Qd4+ 12. Bd2 d6 13. Be2 Nc6 " +
+      "14. c3 Qxe4 15. Nf3 Bg4 16. Ng5 Bxe2+ 17. Ke1 Qb1+ 18. Kxe2 Qxh1 19. Ne4 Rf8 " +
+      "20. Be1 Qxg2 21. a4 Qxe4+ 22. Kd2 Qd5+ 23. Kc2 Nd4+ 24. Kb2 Qxb3+ 25. Kc1 Ne2+ " +
+      "26. Kd2 Nxc3 27. Ke3 Nd5+ 28. Ke2 Nc3+ 29. Ke3 Qe6+ 30. Kd3 Qxe1 31. Kc4 0-1",
+  },
+  {
+    id: "169264876272",
+    url: "https://www.chess.com/game/live/169264876272",
+    name: "vs Afiful2134 — no brilliancy (chess.com)",
+    userColor: "w",
+    count: 0,
+    source: "summary",
+    half: "test",
+    // chess.com: zero brilliancies for this side. Exact — anything we flag here is a false positive.
+    expected: [],
+    pgn:
+      "1. e4 e5 2. Nf3 Nf6 3. Bc4 Nxe4 4. d3 Nd6 5. O-O b5 6. Bb3 Nf5 7. Nxe5 d6 8. " +
+      "Nxf7 Qf6 9. Nxh8 Nd4 10. Re1+ Be6 11. Na3 d5 12. Nxb5 Nxb5 13. Ba4 c6 14. Bd2 " +
+      "Bc5 15. Be3 Nd4 16. Bxd4 Bxd4 17. Rf1 Qf4 18. Qh5+ g6 19. Nxg6 hxg6 20. Qxg6+ " +
+      "Bf7 21. Bxc6+ Nxc6 22. Qxc6+ Kf8 23. Qxa8+ Be8 24. Rae1 Be5 25. Qxd5 Qxh2# 0-1",
+  },
+  {
+    id: "169872260446",
+    url: "https://www.chess.com/game/live/169872260446",
+    name: "vs ibrahimmbaaayeh — no brilliancy (chess.com)",
+    userColor: "w",
+    count: 0,
+    source: "summary",
+    half: "fit",
+    // chess.com: zero brilliancies for this side. Exact — anything we flag here is a false positive.
+    expected: [],
+    pgn:
+      "1. e4 e5 2. Nf3 f6 3. Bc4 Ne7 4. O-O g5 5. d3 d5 6. Bb5+ Kf7 7. Nxg5+ fxg5 8. " +
+      "Bxg5 Kg6 9. Bh4 Bh6 10. Nc3 a6 11. Ba4 dxe4 12. Nxe4 Bf5 13. Bf6 Bxe4 14. Bxh8 " +
+      "Qxh8 15. Qg4+ Bg5 16. Qxe4+ Kf6 17. Rae1 Nf5 18. Qxb7 Bd2 19. Qxa8 Nd4 20. Rd1 " +
+      "Bf4 21. Bd7 Ne2+ 22. Kh1 Ke7 23. Bg4 Nd4 24. Qd5 Nxc2 25. Qe6+ Kf8 26. Qc8+ " +
+      "Kg7 27. Qxc7+ Kf6 28. Qxc2 Kg5 29. g3 Kxg4 30. Rc1 Qf6 31. Qe2+ Kh3 32. Qh5+ " +
+      "Qh4 33. Qxh4# 1-0",
   },
   {
     id: "172078598998",

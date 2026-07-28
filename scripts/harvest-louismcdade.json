@@ -1,0 +1,8641 @@
+{
+ "user": "louismcdade",
+ "depth": 14,
+ "scannedAt": "2026-07-28T22:38:31.365Z",
+ "games": [
+  {
+   "id": "172205500992",
+   "url": "https://www.chess.com/game/live/172205500992",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "172200000854",
+   "url": "https://www.chess.com/game/live/172200000854",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "172123173044",
+   "url": "https://www.chess.com/game/live/172123173044",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 27,
+     "san": "Re1",
+     "sacrifice": 5,
+     "sacSquare": "e1",
+     "playedEval": 2233,
+     "evalLoss": 97727,
+     "quietAlt": 99960,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "172123062344",
+   "url": "https://www.chess.com/game/live/172123062344",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 12,
+     "san": "Bxf4",
+     "sacrifice": 2.2,
+     "sacSquare": "f4",
+     "playedEval": -287,
+     "evalLoss": 88,
+     "quietAlt": -199,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "172078598998",
+   "url": "https://www.chess.com/game/live/172078598998",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 15,
+     "san": "Nxd3+",
+     "sacrifice": 3,
+     "sacSquare": "d3",
+     "playedEval": 444,
+     "evalLoss": -4,
+     "quietAlt": 436,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "necessary"
+    },
+    {
+     "moveNumber": 21,
+     "san": "Rxb5",
+     "sacrifice": 5,
+     "sacSquare": "b5",
+     "playedEval": 624,
+     "evalLoss": 124,
+     "quietAlt": 748,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "172077969194",
+   "url": "https://www.chess.com/game/live/172077969194",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 9,
+     "san": "Qxc5",
+     "sacrifice": 9,
+     "sacSquare": "c5",
+     "playedEval": -587,
+     "evalLoss": 1199,
+     "quietAlt": 612,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 14,
+     "san": "Qb6+",
+     "sacrifice": 9,
+     "sacSquare": "b6",
+     "playedEval": -260,
+     "evalLoss": 1326,
+     "quietAlt": 1066,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 23,
+     "san": "Rxf6",
+     "sacrifice": 5,
+     "sacSquare": "f6",
+     "playedEval": -368,
+     "evalLoss": 799,
+     "quietAlt": 431,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 34,
+     "san": "Bf1",
+     "sacrifice": 3.2,
+     "sacSquare": "f1",
+     "playedEval": -99990,
+     "evalLoss": 0,
+     "quietAlt": null,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "172058750248",
+   "url": "https://www.chess.com/game/live/172058750248",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "172030079298",
+   "url": "https://www.chess.com/game/live/172030079298",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 7,
+     "san": "Nc5",
+     "sacrifice": 3,
+     "sacSquare": "c5",
+     "playedEval": -230,
+     "evalLoss": 547,
+     "quietAlt": 317,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 22,
+     "san": "Nc4",
+     "sacrifice": 2,
+     "sacSquare": "c4",
+     "playedEval": 480,
+     "evalLoss": 223,
+     "quietAlt": 703,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "172029895986",
+   "url": "https://www.chess.com/game/live/172029895986",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "172022959596",
+   "url": "https://www.chess.com/game/live/172022959596",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 12,
+     "san": "Qxb2",
+     "sacrifice": 3,
+     "sacSquare": "h6",
+     "playedEval": -483,
+     "evalLoss": 249,
+     "quietAlt": -234,
+     "shape": "discovered",
+     "accepted": false,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 13,
+     "san": "Nf5",
+     "sacrifice": 2,
+     "sacSquare": "f5",
+     "playedEval": -713,
+     "evalLoss": 228,
+     "quietAlt": -485,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 14,
+     "san": "Rg8",
+     "sacrifice": 5,
+     "sacSquare": "g8",
+     "playedEval": -1224,
+     "evalLoss": 550,
+     "quietAlt": -674,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 18,
+     "san": "Qd1+",
+     "sacrifice": 7.2,
+     "sacSquare": "d1",
+     "playedEval": -806,
+     "evalLoss": 707,
+     "quietAlt": -99,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 29,
+     "san": "Rxf2",
+     "sacrifice": 5,
+     "sacSquare": "f2",
+     "playedEval": -3571,
+     "evalLoss": 2861,
+     "quietAlt": -710,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 31,
+     "san": "b1=Q",
+     "sacrifice": 9,
+     "sacSquare": "b1",
+     "playedEval": -99910,
+     "evalLoss": 95839,
+     "quietAlt": -4071,
+     "shape": "promotion",
+     "accepted": false,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "172022527796",
+   "url": "https://www.chess.com/game/live/172022527796",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "172022142658",
+   "url": "https://www.chess.com/game/live/172022142658",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 21,
+     "san": "cxb2",
+     "sacrifice": 2.2,
+     "sacSquare": "d2",
+     "playedEval": 788,
+     "evalLoss": 10,
+     "quietAlt": 794,
+     "shape": "discovered",
+     "accepted": false,
+     "rejectedBy": "necessary"
+    },
+    {
+     "moveNumber": 36,
+     "san": "Qf1+",
+     "sacrifice": 5,
+     "sacSquare": "e4",
+     "playedEval": 540,
+     "evalLoss": 99440,
+     "quietAlt": 99980,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "188911492",
+   "url": "https://www.chess.com/game/daily/188911492",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "999606908",
+   "url": "https://www.chess.com/game/daily/999606908",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "171939840332",
+   "url": "https://www.chess.com/game/live/171939840332",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "171939678892",
+   "url": "https://www.chess.com/game/live/171939678892",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 18,
+     "san": "O-O-O",
+     "sacrifice": 3.2,
+     "sacSquare": "e7",
+     "playedEval": -536,
+     "evalLoss": 44,
+     "quietAlt": -492,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 20,
+     "san": "d4",
+     "sacrifice": 3.2,
+     "sacSquare": "b5",
+     "playedEval": -595,
+     "evalLoss": 63,
+     "quietAlt": -532,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "171939352044",
+   "url": "https://www.chess.com/game/live/171939352044",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 20,
+     "san": "Nxe4",
+     "sacrifice": 3,
+     "sacSquare": "e4",
+     "playedEval": 549,
+     "evalLoss": 165,
+     "quietAlt": 714,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "strong"
+    },
+    {
+     "moveNumber": 24,
+     "san": "Qxd4+",
+     "sacrifice": 9,
+     "sacSquare": "d4",
+     "playedEval": -12,
+     "evalLoss": 745,
+     "quietAlt": 733,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "171939215870",
+   "url": "https://www.chess.com/game/live/171939215870",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "171824288780",
+   "url": "https://www.chess.com/game/live/171824288780",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 31,
+     "san": "Be4+",
+     "sacrifice": 3.2,
+     "sacSquare": "e4",
+     "playedEval": 99920,
+     "evalLoss": 70,
+     "quietAlt": 99990,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "necessary"
+    }
+   ]
+  },
+  {
+   "id": "171692666540",
+   "url": "https://www.chess.com/game/live/171692666540",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "171606750472",
+   "url": "https://www.chess.com/game/live/171606750472",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "171481966160",
+   "url": "https://www.chess.com/game/live/171481966160",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "171481503412",
+   "url": "https://www.chess.com/game/live/171481503412",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 19,
+     "san": "Nc5",
+     "sacrifice": 3.2,
+     "sacSquare": "a1",
+     "playedEval": -99990,
+     "evalLoss": 100055,
+     "quietAlt": 65,
+     "shape": "discovered",
+     "accepted": false,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 21,
+     "san": "Bd6+",
+     "sacrifice": 2.2,
+     "sacSquare": "d6",
+     "playedEval": -471,
+     "evalLoss": 329,
+     "quietAlt": -142,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 22,
+     "san": "Be6",
+     "sacrifice": 2.2,
+     "sacSquare": "e6",
+     "playedEval": -599,
+     "evalLoss": 166,
+     "quietAlt": -433,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "171481030380",
+   "url": "https://www.chess.com/game/live/171481030380",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "171473514828",
+   "url": "https://www.chess.com/game/live/171473514828",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "171473473892",
+   "url": "https://www.chess.com/game/live/171473473892",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "171473275764",
+   "url": "https://www.chess.com/game/live/171473275764",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 13,
+     "san": "Be6",
+     "sacrifice": 3.2,
+     "sacSquare": "e6",
+     "playedEval": 697,
+     "evalLoss": 144,
+     "quietAlt": 841,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    },
+    {
+     "moveNumber": 19,
+     "san": "Qxa2",
+     "sacrifice": 9,
+     "sacSquare": "a2",
+     "playedEval": 929,
+     "evalLoss": 295,
+     "quietAlt": 1224,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    },
+    {
+     "moveNumber": 28,
+     "san": "R8f3+",
+     "sacrifice": 4,
+     "sacSquare": "f3",
+     "playedEval": 99970,
+     "evalLoss": -10,
+     "quietAlt": 99960,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "necessary"
+    }
+   ]
+  },
+  {
+   "id": "171473128928",
+   "url": "https://www.chess.com/game/live/171473128928",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "171473007958",
+   "url": "https://www.chess.com/game/live/171473007958",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 15,
+     "san": "Nf4",
+     "sacrifice": 3,
+     "sacSquare": "f4",
+     "playedEval": 720,
+     "evalLoss": 105,
+     "quietAlt": 825,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "necessary"
+    }
+   ]
+  },
+  {
+   "id": "171472933016",
+   "url": "https://www.chess.com/game/live/171472933016",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "171472648902",
+   "url": "https://www.chess.com/game/live/171472648902",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "171422983466",
+   "url": "https://www.chess.com/game/live/171422983466",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "171329245690",
+   "url": "https://www.chess.com/game/live/171329245690",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 20,
+     "san": "a1=Q",
+     "sacrifice": 4,
+     "sacSquare": "a1",
+     "playedEval": 595,
+     "evalLoss": -12,
+     "quietAlt": 490,
+     "shape": "promotion",
+     "accepted": true,
+     "rejectedBy": null
+    },
+    {
+     "moveNumber": 24,
+     "san": "Bxf3+",
+     "sacrifice": 3.2,
+     "sacSquare": "f3",
+     "playedEval": 407,
+     "evalLoss": 237,
+     "quietAlt": 644,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "171306858678",
+   "url": "https://www.chess.com/game/live/171306858678",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 7,
+     "san": "Bg5",
+     "sacrifice": 3.2,
+     "sacSquare": "g5",
+     "playedEval": -517,
+     "evalLoss": 832,
+     "quietAlt": 315,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "171306706718",
+   "url": "https://www.chess.com/game/live/171306706718",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "171284275068",
+   "url": "https://www.chess.com/game/live/171284275068",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 12,
+     "san": "Qa6",
+     "sacrifice": 9,
+     "sacSquare": "a6",
+     "playedEval": -1188,
+     "evalLoss": 786,
+     "quietAlt": -402,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "171263649150",
+   "url": "https://www.chess.com/game/live/171263649150",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "171234554872",
+   "url": "https://www.chess.com/game/live/171234554872",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "170969951088",
+   "url": "https://www.chess.com/game/live/170969951088",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 21,
+     "san": "Qe1+",
+     "sacrifice": 7,
+     "sacSquare": "e1",
+     "playedEval": 582,
+     "evalLoss": 99398,
+     "quietAlt": 99980,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "170906132706",
+   "url": "https://www.chess.com/game/live/170906132706",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "170905472716",
+   "url": "https://www.chess.com/game/live/170905472716",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 19,
+     "san": "Bb6+",
+     "sacrifice": 3.2,
+     "sacSquare": "b6",
+     "playedEval": 1025,
+     "evalLoss": 37,
+     "quietAlt": 685,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": null
+    }
+   ]
+  },
+  {
+   "id": "170904828276",
+   "url": "https://www.chess.com/game/live/170904828276",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "170904738150",
+   "url": "https://www.chess.com/game/live/170904738150",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 11,
+     "san": "Nb4",
+     "sacrifice": 3,
+     "sacSquare": "b4",
+     "playedEval": 158,
+     "evalLoss": 511,
+     "quietAlt": 669,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "strong"
+    },
+    {
+     "moveNumber": 14,
+     "san": "Qxh4+",
+     "sacrifice": 9,
+     "sacSquare": "h4",
+     "playedEval": -636,
+     "evalLoss": 680,
+     "quietAlt": 44,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "170856580384",
+   "url": "https://www.chess.com/game/live/170856580384",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "170856419618",
+   "url": "https://www.chess.com/game/live/170856419618",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "170490565406",
+   "url": "https://www.chess.com/game/live/170490565406",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 8,
+     "san": "b6",
+     "sacrifice": 3,
+     "sacSquare": "c6",
+     "playedEval": -377,
+     "evalLoss": 344,
+     "quietAlt": -33,
+     "shape": "discovered",
+     "accepted": false,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 11,
+     "san": "Nxd4",
+     "sacrifice": 3,
+     "sacSquare": "d4",
+     "playedEval": -475,
+     "evalLoss": 548,
+     "quietAlt": 73,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 15,
+     "san": "Qxa4",
+     "sacrifice": 3.2,
+     "sacSquare": "c3",
+     "playedEval": 116,
+     "evalLoss": 400,
+     "quietAlt": 516,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "170475898568",
+   "url": "https://www.chess.com/game/live/170475898568",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "170440080480",
+   "url": "https://www.chess.com/game/live/170440080480",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "170344245882",
+   "url": "https://www.chess.com/game/live/170344245882",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 9,
+     "san": "Nxd4",
+     "sacrifice": 3,
+     "sacSquare": "d4",
+     "playedEval": -323,
+     "evalLoss": 410,
+     "quietAlt": 87,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 26,
+     "san": "Bd3+",
+     "sacrifice": 3,
+     "sacSquare": "e3",
+     "playedEval": 99980,
+     "evalLoss": 10,
+     "quietAlt": 99990,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "necessary"
+    },
+    {
+     "moveNumber": 41,
+     "san": "Qf6+",
+     "sacrifice": 4,
+     "sacSquare": "f6",
+     "playedEval": 99990,
+     "evalLoss": -10,
+     "quietAlt": 99980,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "necessary"
+    }
+   ]
+  },
+  {
+   "id": "170344131036",
+   "url": "https://www.chess.com/game/live/170344131036",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 15,
+     "san": "Qxb2",
+     "sacrifice": 9,
+     "sacSquare": "b2",
+     "playedEval": -99990,
+     "evalLoss": 100546,
+     "quietAlt": 556,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "170235808902",
+   "url": "https://www.chess.com/game/live/170235808902",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "170235297396",
+   "url": "https://www.chess.com/game/live/170235297396",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "170228025112",
+   "url": "https://www.chess.com/game/live/170228025112",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "170150169022",
+   "url": "https://www.chess.com/game/live/170150169022",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "170139951948",
+   "url": "https://www.chess.com/game/live/170139951948",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "170131267798",
+   "url": "https://www.chess.com/game/live/170131267798",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 33,
+     "san": "a4",
+     "sacrifice": 3.2,
+     "sacSquare": "b4",
+     "playedEval": -522,
+     "evalLoss": 629,
+     "quietAlt": 107,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "170131162390",
+   "url": "https://www.chess.com/game/live/170131162390",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 6,
+     "san": "Ng5",
+     "sacrifice": 5.8,
+     "sacSquare": "d1",
+     "playedEval": -213,
+     "evalLoss": 476,
+     "quietAlt": -92,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "170113845192",
+   "url": "https://www.chess.com/game/live/170113845192",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "169999249810",
+   "url": "https://www.chess.com/game/live/169999249810",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 7,
+     "san": "Nxe5",
+     "sacrifice": 5.8,
+     "sacSquare": "d1",
+     "playedEval": -530,
+     "evalLoss": 675,
+     "quietAlt": 145,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 19,
+     "san": "Rxd6",
+     "sacrifice": 2,
+     "sacSquare": "d6",
+     "playedEval": 342,
+     "evalLoss": 113,
+     "quietAlt": 455,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "necessary"
+    },
+    {
+     "moveNumber": 20,
+     "san": "Rc6",
+     "sacrifice": 3,
+     "sacSquare": "c6",
+     "playedEval": 688,
+     "evalLoss": 506,
+     "quietAlt": 1194,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    },
+    {
+     "moveNumber": 21,
+     "san": "Rd6",
+     "sacrifice": 5,
+     "sacSquare": "d6",
+     "playedEval": 347,
+     "evalLoss": 592,
+     "quietAlt": 939,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    },
+    {
+     "moveNumber": 24,
+     "san": "Ne6",
+     "sacrifice": 2,
+     "sacSquare": "e6",
+     "playedEval": 256,
+     "evalLoss": 102,
+     "quietAlt": 358,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "necessary"
+    }
+   ]
+  },
+  {
+   "id": "169999100420",
+   "url": "https://www.chess.com/game/live/169999100420",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "169872260446",
+   "url": "https://www.chess.com/game/live/169872260446",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 21,
+     "san": "Bd7",
+     "sacrifice": 3.2,
+     "sacSquare": "d7",
+     "playedEval": 680,
+     "evalLoss": 37,
+     "quietAlt": 717,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "necessary"
+    }
+   ]
+  },
+  {
+   "id": "169872223458",
+   "url": "https://www.chess.com/game/live/169872223458",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "169872190682",
+   "url": "https://www.chess.com/game/live/169872190682",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "169871491742",
+   "url": "https://www.chess.com/game/live/169871491742",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 24,
+     "san": "Be8+",
+     "sacrifice": 3.2,
+     "sacSquare": "e8",
+     "playedEval": -420,
+     "evalLoss": 595,
+     "quietAlt": 175,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 25,
+     "san": "Bf7+",
+     "sacrifice": 3.2,
+     "sacSquare": "f7",
+     "playedEval": -341,
+     "evalLoss": 257,
+     "quietAlt": -84,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "169871362382",
+   "url": "https://www.chess.com/game/live/169871362382",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "169869209718",
+   "url": "https://www.chess.com/game/live/169869209718",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 13,
+     "san": "Qc3",
+     "sacrifice": 8,
+     "sacSquare": "c3",
+     "playedEval": -318,
+     "evalLoss": 681,
+     "quietAlt": 363,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 16,
+     "san": "Qxc3",
+     "sacrifice": 4.8,
+     "sacSquare": "c3",
+     "playedEval": 326,
+     "evalLoss": -102,
+     "quietAlt": 88,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": null
+    },
+    {
+     "moveNumber": 31,
+     "san": "Rc5+",
+     "sacrifice": 3.2,
+     "sacSquare": "d2",
+     "playedEval": 651,
+     "evalLoss": 1,
+     "quietAlt": 648,
+     "shape": "discovered",
+     "accepted": false,
+     "rejectedBy": "necessary"
+    }
+   ]
+  },
+  {
+   "id": "169869022166",
+   "url": "https://www.chess.com/game/live/169869022166",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 6,
+     "san": "Ng4",
+     "sacrifice": 3,
+     "sacSquare": "g4",
+     "playedEval": -306,
+     "evalLoss": 403,
+     "quietAlt": 97,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "169868958306",
+   "url": "https://www.chess.com/game/live/169868958306",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "169868929406",
+   "url": "https://www.chess.com/game/live/169868929406",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 2,
+     "san": "e5",
+     "sacrifice": 5.8,
+     "sacSquare": "d8",
+     "playedEval": -632,
+     "evalLoss": 643,
+     "quietAlt": 11,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "169764621600",
+   "url": "https://www.chess.com/game/live/169764621600",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 13,
+     "san": "Qxa1",
+     "sacrifice": 4,
+     "sacSquare": "a1",
+     "playedEval": -442,
+     "evalLoss": 706,
+     "quietAlt": 264,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 39,
+     "san": "Nf2",
+     "sacrifice": 5,
+     "sacSquare": "e1",
+     "playedEval": -651,
+     "evalLoss": 123,
+     "quietAlt": -582,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 51,
+     "san": "Na2+",
+     "sacrifice": 3,
+     "sacSquare": "a2",
+     "playedEval": 369,
+     "evalLoss": 95,
+     "quietAlt": 464,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "necessary"
+    }
+   ]
+  },
+  {
+   "id": "169764092024",
+   "url": "https://www.chess.com/game/live/169764092024",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 6,
+     "san": "Ng5",
+     "sacrifice": 5.8,
+     "sacSquare": "d1",
+     "playedEval": -483,
+     "evalLoss": 555,
+     "quietAlt": 72,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 37,
+     "san": "Rxg6+",
+     "sacrifice": 5,
+     "sacSquare": "g6",
+     "playedEval": -1057,
+     "evalLoss": 96,
+     "quietAlt": null,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "169707657412",
+   "url": "https://www.chess.com/game/live/169707657412",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 11,
+     "san": "d5",
+     "sacrifice": 3,
+     "sacSquare": "c5",
+     "playedEval": -12,
+     "evalLoss": 302,
+     "quietAlt": 290,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "169707649106",
+   "url": "https://www.chess.com/game/live/169707649106",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "169666987558",
+   "url": "https://www.chess.com/game/live/169666987558",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "169666970980",
+   "url": "https://www.chess.com/game/live/169666970980",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "169566118076",
+   "url": "https://www.chess.com/game/live/169566118076",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 14,
+     "san": "Bd7",
+     "sacrifice": 3.2,
+     "sacSquare": "d7",
+     "playedEval": 595,
+     "evalLoss": 135,
+     "quietAlt": 730,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "169566105386",
+   "url": "https://www.chess.com/game/live/169566105386",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "169566086070",
+   "url": "https://www.chess.com/game/live/169566086070",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "169551697602",
+   "url": "https://www.chess.com/game/live/169551697602",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "169332261018",
+   "url": "https://www.chess.com/game/live/169332261018",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 10,
+     "san": "Qxd4",
+     "sacrifice": 9,
+     "sacSquare": "d4",
+     "playedEval": -656,
+     "evalLoss": 686,
+     "quietAlt": 18,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 31,
+     "san": "Be5",
+     "sacrifice": 2.2,
+     "sacSquare": "e5",
+     "playedEval": -99920,
+     "evalLoss": 99289,
+     "quietAlt": -631,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 35,
+     "san": "Nf3",
+     "sacrifice": 3,
+     "sacSquare": "f3",
+     "playedEval": -99970,
+     "evalLoss": 30,
+     "quietAlt": -99940,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 36,
+     "san": "Bd4",
+     "sacrifice": 3.2,
+     "sacSquare": "d4",
+     "playedEval": -99980,
+     "evalLoss": 20,
+     "quietAlt": -99960,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "169289092040",
+   "url": "https://www.chess.com/game/live/169289092040",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "169288940540",
+   "url": "https://www.chess.com/game/live/169288940540",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 13,
+     "san": "Ng3+",
+     "sacrifice": 3,
+     "sacSquare": "g3",
+     "playedEval": -312,
+     "evalLoss": 626,
+     "quietAlt": 314,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "169264876272",
+   "url": "https://www.chess.com/game/live/169264876272",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 12,
+     "san": "Nxb5",
+     "sacrifice": 3,
+     "sacSquare": "b5",
+     "playedEval": 716,
+     "evalLoss": 55,
+     "quietAlt": 766,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "necessary"
+    },
+    {
+     "moveNumber": 19,
+     "san": "Nxg6",
+     "sacrifice": 2,
+     "sacSquare": "g6",
+     "playedEval": 262,
+     "evalLoss": 309,
+     "quietAlt": 571,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "169225600994",
+   "url": "https://www.chess.com/game/live/169225600994",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "169189553800",
+   "url": "https://www.chess.com/game/live/169189553800",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 7,
+     "san": "Nxg6+",
+     "sacrifice": 3.2,
+     "sacSquare": "f7",
+     "playedEval": 20,
+     "evalLoss": 335,
+     "quietAlt": 192,
+     "shape": "discovered",
+     "accepted": false,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "169145578396",
+   "url": "https://www.chess.com/game/live/169145578396",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "169135347664",
+   "url": "https://www.chess.com/game/live/169135347664",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 12,
+     "san": "g6",
+     "sacrifice": 2.2,
+     "sacSquare": "h6",
+     "playedEval": 63,
+     "evalLoss": 22,
+     "quietAlt": -310,
+     "shape": "discovered",
+     "accepted": false,
+     "rejectedBy": null
+    }
+   ]
+  },
+  {
+   "id": "169001367082",
+   "url": "https://www.chess.com/game/live/169001367082",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 8,
+     "san": "Nb4",
+     "sacrifice": 3,
+     "sacSquare": "b4",
+     "playedEval": -535,
+     "evalLoss": 241,
+     "quietAlt": -294,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 15,
+     "san": "Qb1",
+     "sacrifice": 9,
+     "sacSquare": "b1",
+     "playedEval": -1274,
+     "evalLoss": 643,
+     "quietAlt": -631,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "168928466426",
+   "url": "https://www.chess.com/game/live/168928466426",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "168894160802",
+   "url": "https://www.chess.com/game/live/168894160802",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "168892527956",
+   "url": "https://www.chess.com/game/live/168892527956",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "168892492274",
+   "url": "https://www.chess.com/game/live/168892492274",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "168880935172",
+   "url": "https://www.chess.com/game/live/168880935172",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 16,
+     "san": "Bxf2+",
+     "sacrifice": 3.2,
+     "sacSquare": "f2",
+     "playedEval": 110,
+     "evalLoss": 338,
+     "quietAlt": 448,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    },
+    {
+     "moveNumber": 17,
+     "san": "Nc2",
+     "sacrifice": 3,
+     "sacSquare": "c2",
+     "playedEval": -99990,
+     "evalLoss": 100077,
+     "quietAlt": 87,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "168855505510",
+   "url": "https://www.chess.com/game/live/168855505510",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 11,
+     "san": "Nf6+",
+     "sacrifice": 3,
+     "sacSquare": "f6",
+     "playedEval": -80,
+     "evalLoss": 824,
+     "quietAlt": 744,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 12,
+     "san": "Qxd4",
+     "sacrifice": 3.2,
+     "sacSquare": "b5",
+     "playedEval": -117,
+     "evalLoss": -37,
+     "quietAlt": -154,
+     "shape": "discovered",
+     "accepted": false,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 14,
+     "san": "Bg5+",
+     "sacrifice": 3.2,
+     "sacSquare": "g5",
+     "playedEval": 146,
+     "evalLoss": 168,
+     "quietAlt": 314,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    },
+    {
+     "moveNumber": 17,
+     "san": "Bd5+",
+     "sacrifice": 3.2,
+     "sacSquare": "d5",
+     "playedEval": 408,
+     "evalLoss": 109,
+     "quietAlt": 517,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "necessary"
+    }
+   ]
+  },
+  {
+   "id": "168855234716",
+   "url": "https://www.chess.com/game/live/168855234716",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "168850401650",
+   "url": "https://www.chess.com/game/live/168850401650",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 10,
+     "san": "Bc4",
+     "sacrifice": 3.2,
+     "sacSquare": "c4",
+     "playedEval": -266,
+     "evalLoss": 532,
+     "quietAlt": 266,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 15,
+     "san": "Nxd6",
+     "sacrifice": 3,
+     "sacSquare": "d6",
+     "playedEval": -168,
+     "evalLoss": 467,
+     "quietAlt": 299,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 16,
+     "san": "Bxd6",
+     "sacrifice": 3.2,
+     "sacSquare": "d6",
+     "playedEval": -444,
+     "evalLoss": 263,
+     "quietAlt": -181,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 20,
+     "san": "exd8=Q+",
+     "sacrifice": 4,
+     "sacSquare": "d8",
+     "playedEval": -244,
+     "evalLoss": 2,
+     "quietAlt": null,
+     "shape": "promotion",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 25,
+     "san": "Rc8",
+     "sacrifice": 5,
+     "sacSquare": "c8",
+     "playedEval": -601,
+     "evalLoss": 160,
+     "quietAlt": -441,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "168850335400",
+   "url": "https://www.chess.com/game/live/168850335400",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "168765809026",
+   "url": "https://www.chess.com/game/live/168765809026",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 5,
+     "san": "Nf7",
+     "sacrifice": 3,
+     "sacSquare": "f7",
+     "playedEval": -368,
+     "evalLoss": 885,
+     "quietAlt": 517,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 9,
+     "san": "Qb4",
+     "sacrifice": 5.8,
+     "sacSquare": "b4",
+     "playedEval": -703,
+     "evalLoss": 309,
+     "quietAlt": -394,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 22,
+     "san": "Rxe6+",
+     "sacrifice": 5,
+     "sacSquare": "e6",
+     "playedEval": -164,
+     "evalLoss": 687,
+     "quietAlt": 523,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "168659588198",
+   "url": "https://www.chess.com/game/live/168659588198",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "168621635392",
+   "url": "https://www.chess.com/game/live/168621635392",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 14,
+     "san": "Bh2+",
+     "sacrifice": 3.2,
+     "sacSquare": "h2",
+     "playedEval": 791,
+     "evalLoss": 216,
+     "quietAlt": 1007,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    },
+    {
+     "moveNumber": 25,
+     "san": "Ng4+",
+     "sacrifice": 3,
+     "sacSquare": "g4",
+     "playedEval": 788,
+     "evalLoss": 169,
+     "quietAlt": 957,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "168621623618",
+   "url": "https://www.chess.com/game/live/168621623618",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "168618236454",
+   "url": "https://www.chess.com/game/live/168618236454",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "168565696368",
+   "url": "https://www.chess.com/game/live/168565696368",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "168479468892",
+   "url": "https://www.chess.com/game/live/168479468892",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 14,
+     "san": "Qxf7",
+     "sacrifice": 6,
+     "sacSquare": "f7",
+     "playedEval": -99990,
+     "evalLoss": 0,
+     "quietAlt": null,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "168453196234",
+   "url": "https://www.chess.com/game/live/168453196234",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 16,
+     "san": "Qg3",
+     "sacrifice": 4,
+     "sacSquare": "g3",
+     "playedEval": -501,
+     "evalLoss": 352,
+     "quietAlt": -149,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "168453127044",
+   "url": "https://www.chess.com/game/live/168453127044",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "168423019400",
+   "url": "https://www.chess.com/game/live/168423019400",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "168359015140",
+   "url": "https://www.chess.com/game/live/168359015140",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "168339880842",
+   "url": "https://www.chess.com/game/live/168339880842",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "168339816614",
+   "url": "https://www.chess.com/game/live/168339816614",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "168339695312",
+   "url": "https://www.chess.com/game/live/168339695312",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "168336220820",
+   "url": "https://www.chess.com/game/live/168336220820",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 17,
+     "san": "Qxd7+",
+     "sacrifice": 6,
+     "sacSquare": "d7",
+     "playedEval": -318,
+     "evalLoss": 27,
+     "quietAlt": null,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 29,
+     "san": "Rd1+",
+     "sacrifice": 5,
+     "sacSquare": "d1",
+     "playedEval": -829,
+     "evalLoss": 296,
+     "quietAlt": -533,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "168334603690",
+   "url": "https://www.chess.com/game/live/168334603690",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 6,
+     "san": "Bxf2+",
+     "sacrifice": 3.2,
+     "sacSquare": "f2",
+     "playedEval": 68,
+     "evalLoss": 38,
+     "quietAlt": 12,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": null
+    }
+   ]
+  },
+  {
+   "id": "168334584938",
+   "url": "https://www.chess.com/game/live/168334584938",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "168334571828",
+   "url": "https://www.chess.com/game/live/168334571828",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 4,
+     "san": "Qb5",
+     "sacrifice": 6,
+     "sacSquare": "b5",
+     "playedEval": -679,
+     "evalLoss": 598,
+     "quietAlt": -81,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "168334377314",
+   "url": "https://www.chess.com/game/live/168334377314",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 16,
+     "san": "Na5",
+     "sacrifice": 3.2,
+     "sacSquare": "b4",
+     "playedEval": 310,
+     "evalLoss": 423,
+     "quietAlt": 733,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "168317173436",
+   "url": "https://www.chess.com/game/live/168317173436",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "168314680824",
+   "url": "https://www.chess.com/game/live/168314680824",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "168314512686",
+   "url": "https://www.chess.com/game/live/168314512686",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 3,
+     "san": "Qxg5",
+     "sacrifice": 9,
+     "sacSquare": "g5",
+     "playedEval": -647,
+     "evalLoss": 760,
+     "quietAlt": 113,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 19,
+     "san": "Ne6+",
+     "sacrifice": 2,
+     "sacSquare": "e6",
+     "playedEval": -665,
+     "evalLoss": 107,
+     "quietAlt": -558,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 21,
+     "san": "Bf4+",
+     "sacrifice": 3,
+     "sacSquare": "d8",
+     "playedEval": -718,
+     "evalLoss": 177,
+     "quietAlt": -541,
+     "shape": "discovered",
+     "accepted": false,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 28,
+     "san": "Rxc6+",
+     "sacrifice": 5,
+     "sacSquare": "c6",
+     "playedEval": -1405,
+     "evalLoss": 325,
+     "quietAlt": -1080,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "168292604126",
+   "url": "https://www.chess.com/game/live/168292604126",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 27,
+     "san": "f2",
+     "sacrifice": 5,
+     "sacSquare": "g2",
+     "playedEval": -1800,
+     "evalLoss": 721,
+     "quietAlt": -1079,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 28,
+     "san": "f1=Q+",
+     "sacrifice": 9,
+     "sacSquare": "f1",
+     "playedEval": -2042,
+     "evalLoss": 91,
+     "quietAlt": -1951,
+     "shape": "promotion",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "168271440076",
+   "url": "https://www.chess.com/game/live/168271440076",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 19,
+     "san": "Re1",
+     "sacrifice": 3.2,
+     "sacSquare": "d5",
+     "playedEval": -712,
+     "evalLoss": -33,
+     "quietAlt": -807,
+     "shape": "discovered",
+     "accepted": false,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "168237804632",
+   "url": "https://www.chess.com/game/live/168237804632",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 19,
+     "san": "Nf4+",
+     "sacrifice": 3,
+     "sacSquare": "f4",
+     "playedEval": 335,
+     "evalLoss": 370,
+     "quietAlt": 705,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    },
+    {
+     "moveNumber": 32,
+     "san": "Qf4+",
+     "sacrifice": 9,
+     "sacSquare": "f4",
+     "playedEval": 37,
+     "evalLoss": 99893,
+     "quietAlt": 1244,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "168237747146",
+   "url": "https://www.chess.com/game/live/168237747146",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "168197472348",
+   "url": "https://www.chess.com/game/live/168197472348",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 22,
+     "san": "Bxf4",
+     "sacrifice": 3.2,
+     "sacSquare": "f4",
+     "playedEval": -118,
+     "evalLoss": 546,
+     "quietAlt": 428,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "168197461098",
+   "url": "https://www.chess.com/game/live/168197461098",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "168131912304",
+   "url": "https://www.chess.com/game/live/168131912304",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 6,
+     "san": "Bg4",
+     "sacrifice": 3.2,
+     "sacSquare": "g4",
+     "playedEval": -541,
+     "evalLoss": 535,
+     "quietAlt": -6,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 10,
+     "san": "Bxf5",
+     "sacrifice": 3.2,
+     "sacSquare": "f5",
+     "playedEval": 128,
+     "evalLoss": 99862,
+     "quietAlt": 99990,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "strong"
+    },
+    {
+     "moveNumber": 11,
+     "san": "Bxg4",
+     "sacrifice": 3.2,
+     "sacSquare": "g4",
+     "playedEval": -192,
+     "evalLoss": 308,
+     "quietAlt": 116,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 13,
+     "san": "Nf2",
+     "sacrifice": 3,
+     "sacSquare": "f2",
+     "playedEval": -207,
+     "evalLoss": 346,
+     "quietAlt": 134,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 14,
+     "san": "Ng4",
+     "sacrifice": 3,
+     "sacSquare": "g4",
+     "playedEval": -446,
+     "evalLoss": 250,
+     "quietAlt": -196,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "168097618678",
+   "url": "https://www.chess.com/game/live/168097618678",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "168090530716",
+   "url": "https://www.chess.com/game/live/168090530716",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 12,
+     "san": "Qxh4+",
+     "sacrifice": 9,
+     "sacSquare": "h4",
+     "playedEval": -788,
+     "evalLoss": 712,
+     "quietAlt": -76,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 20,
+     "san": "Nc6",
+     "sacrifice": 3,
+     "sacSquare": "c6",
+     "playedEval": 1278,
+     "evalLoss": 116,
+     "quietAlt": 1394,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "necessary"
+    },
+    {
+     "moveNumber": 31,
+     "san": "e5+",
+     "sacrifice": 3.2,
+     "sacSquare": "d5",
+     "playedEval": 2418,
+     "evalLoss": 97512,
+     "quietAlt": 4842,
+     "shape": "discovered",
+     "accepted": false,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "168052101366",
+   "url": "https://www.chess.com/game/live/168052101366",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 21,
+     "san": "Ng5",
+     "sacrifice": 2,
+     "sacSquare": "g5",
+     "playedEval": 922,
+     "evalLoss": 368,
+     "quietAlt": 1290,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "strong"
+    },
+    {
+     "moveNumber": 32,
+     "san": "Bg5+",
+     "sacrifice": 3.2,
+     "sacSquare": "g5",
+     "playedEval": 227,
+     "evalLoss": 314,
+     "quietAlt": 541,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "168046245366",
+   "url": "https://www.chess.com/game/live/168046245366",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 17,
+     "san": "Rxe7+",
+     "sacrifice": 5,
+     "sacSquare": "e7",
+     "playedEval": -717,
+     "evalLoss": 194,
+     "quietAlt": -523,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "168042736326",
+   "url": "https://www.chess.com/game/live/168042736326",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 12,
+     "san": "Nh4",
+     "sacrifice": 3,
+     "sacSquare": "h4",
+     "playedEval": -619,
+     "evalLoss": 83,
+     "quietAlt": -536,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 17,
+     "san": "Bxd6",
+     "sacrifice": 3.2,
+     "sacSquare": "d6",
+     "playedEval": -1030,
+     "evalLoss": 282,
+     "quietAlt": -748,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 20,
+     "san": "Nxe4",
+     "sacrifice": 6,
+     "sacSquare": "d5",
+     "playedEval": -1424,
+     "evalLoss": 282,
+     "quietAlt": -1142,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 28,
+     "san": "Nd7",
+     "sacrifice": 3,
+     "sacSquare": "d7",
+     "playedEval": -99990,
+     "evalLoss": 100205,
+     "quietAlt": 215,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "167999297428",
+   "url": "https://www.chess.com/game/live/167999297428",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 9,
+     "san": "Bxc3+",
+     "sacrifice": 3.2,
+     "sacSquare": "c3",
+     "playedEval": -843,
+     "evalLoss": 168,
+     "quietAlt": -675,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 16,
+     "san": "Bxh5",
+     "sacrifice": 3.2,
+     "sacSquare": "h5",
+     "playedEval": -304,
+     "evalLoss": 414,
+     "quietAlt": 110,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 18,
+     "san": "Ne2+",
+     "sacrifice": 3,
+     "sacSquare": "e2",
+     "playedEval": -578,
+     "evalLoss": 302,
+     "quietAlt": -276,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 33,
+     "san": "g2",
+     "sacrifice": 5,
+     "sacSquare": "h2",
+     "playedEval": -788,
+     "evalLoss": 547,
+     "quietAlt": -241,
+     "shape": "discovered",
+     "accepted": false,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 44,
+     "san": "Ke2",
+     "sacrifice": 5,
+     "sacSquare": "g4",
+     "playedEval": -757,
+     "evalLoss": 44,
+     "quietAlt": -735,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "167990805622",
+   "url": "https://www.chess.com/game/live/167990805622",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "167921996910",
+   "url": "https://www.chess.com/game/live/167921996910",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 17,
+     "san": "Nd5",
+     "sacrifice": 3,
+     "sacSquare": "d5",
+     "playedEval": -596,
+     "evalLoss": 100,
+     "quietAlt": -496,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "167918519140",
+   "url": "https://www.chess.com/game/live/167918519140",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 21,
+     "san": "Rg1",
+     "sacrifice": 2,
+     "sacSquare": "g1",
+     "playedEval": 682,
+     "evalLoss": 79,
+     "quietAlt": 761,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "necessary"
+    }
+   ]
+  },
+  {
+   "id": "167901168054",
+   "url": "https://www.chess.com/game/live/167901168054",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "167900365198",
+   "url": "https://www.chess.com/game/live/167900365198",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 8,
+     "san": "Ba4",
+     "sacrifice": 3.2,
+     "sacSquare": "a4",
+     "playedEval": -526,
+     "evalLoss": 510,
+     "quietAlt": -16,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 36,
+     "san": "Nd4",
+     "sacrifice": 3,
+     "sacSquare": "d4",
+     "playedEval": -99970,
+     "evalLoss": 99109,
+     "quietAlt": -861,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "167900329530",
+   "url": "https://www.chess.com/game/live/167900329530",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "167868560722",
+   "url": "https://www.chess.com/game/live/167868560722",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "167868504082",
+   "url": "https://www.chess.com/game/live/167868504082",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 7,
+     "san": "Qb5",
+     "sacrifice": 9,
+     "sacSquare": "b5",
+     "playedEval": -564,
+     "evalLoss": 1078,
+     "quietAlt": 514,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "167868438132",
+   "url": "https://www.chess.com/game/live/167868438132",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 11,
+     "san": "f4",
+     "sacrifice": 5.8,
+     "sacSquare": "d1",
+     "playedEval": -727,
+     "evalLoss": 727,
+     "quietAlt": 0,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "167810983214",
+   "url": "https://www.chess.com/game/live/167810983214",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 14,
+     "san": "Bd4",
+     "sacrifice": 3.2,
+     "sacSquare": "d4",
+     "playedEval": -595,
+     "evalLoss": 346,
+     "quietAlt": -249,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "167806559266",
+   "url": "https://www.chess.com/game/live/167806559266",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "167786578772",
+   "url": "https://www.chess.com/game/live/167786578772",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "167781130750",
+   "url": "https://www.chess.com/game/live/167781130750",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 13,
+     "san": "Nxh5",
+     "sacrifice": 3,
+     "sacSquare": "h5",
+     "playedEval": -353,
+     "evalLoss": 301,
+     "quietAlt": -52,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 23,
+     "san": "Qxe8",
+     "sacrifice": 5.8,
+     "sacSquare": "e8",
+     "playedEval": -726,
+     "evalLoss": 175,
+     "quietAlt": -551,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "167780918068",
+   "url": "https://www.chess.com/game/live/167780918068",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 9,
+     "san": "Bxc6+",
+     "sacrifice": 3.2,
+     "sacSquare": "c6",
+     "playedEval": -365,
+     "evalLoss": 347,
+     "quietAlt": -18,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "167779992358",
+   "url": "https://www.chess.com/game/live/167779992358",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 17,
+     "san": "Qb1+",
+     "sacrifice": 3.2,
+     "sacSquare": "e2",
+     "playedEval": 756,
+     "evalLoss": 50,
+     "quietAlt": 806,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "necessary"
+    },
+    {
+     "moveNumber": 23,
+     "san": "Nd4+",
+     "sacrifice": 2,
+     "sacSquare": "d4",
+     "playedEval": 806,
+     "evalLoss": 137,
+     "quietAlt": 943,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "167769830480",
+   "url": "https://www.chess.com/game/live/167769830480",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 26,
+     "san": "Ne5+",
+     "sacrifice": 3,
+     "sacSquare": "e5",
+     "playedEval": 567,
+     "evalLoss": -25,
+     "quietAlt": 542,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "necessary"
+    }
+   ]
+  },
+  {
+   "id": "167766708274",
+   "url": "https://www.chess.com/game/live/167766708274",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 18,
+     "san": "Qxb3+",
+     "sacrifice": 9,
+     "sacSquare": "b3",
+     "playedEval": -586,
+     "evalLoss": 100576,
+     "quietAlt": 99990,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "167738159584",
+   "url": "https://www.chess.com/game/live/167738159584",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "167738078882",
+   "url": "https://www.chess.com/game/live/167738078882",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "167735375646",
+   "url": "https://www.chess.com/game/live/167735375646",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 10,
+     "san": "Bxh2",
+     "sacrifice": 3.2,
+     "sacSquare": "h2",
+     "playedEval": -231,
+     "evalLoss": 383,
+     "quietAlt": 152,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "167711155810",
+   "url": "https://www.chess.com/game/live/167711155810",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 8,
+     "san": "Ndxe4",
+     "sacrifice": 3,
+     "sacSquare": "e4",
+     "playedEval": -239,
+     "evalLoss": 239,
+     "quietAlt": 0,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 39,
+     "san": "Qxc2+",
+     "sacrifice": 9,
+     "sacSquare": "c2",
+     "playedEval": 3696,
+     "evalLoss": 619,
+     "quietAlt": 3760,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "167711003510",
+   "url": "https://www.chess.com/game/live/167711003510",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "167679211282",
+   "url": "https://www.chess.com/game/live/167679211282",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 38,
+     "san": "Ke4",
+     "sacrifice": 5,
+     "sacSquare": "c5",
+     "playedEval": -99990,
+     "evalLoss": 20,
+     "quietAlt": -99970,
+     "shape": "discovered",
+     "accepted": false,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "167673613410",
+   "url": "https://www.chess.com/game/live/167673613410",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 12,
+     "san": "Bd6",
+     "sacrifice": 3.2,
+     "sacSquare": "d5",
+     "playedEval": 120,
+     "evalLoss": 80,
+     "quietAlt": 200,
+     "shape": "discovered",
+     "accepted": false,
+     "rejectedBy": "necessary"
+    },
+    {
+     "moveNumber": 23,
+     "san": "Rxc3",
+     "sacrifice": 5,
+     "sacSquare": "c3",
+     "playedEval": -99990,
+     "evalLoss": 99179,
+     "quietAlt": -811,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "167665587100",
+   "url": "https://www.chess.com/game/live/167665587100",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 14,
+     "san": "Bxb4",
+     "sacrifice": 3.2,
+     "sacSquare": "b4",
+     "playedEval": -136,
+     "evalLoss": 311,
+     "quietAlt": 175,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "167632259622",
+   "url": "https://www.chess.com/game/live/167632259622",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 16,
+     "san": "Nd7",
+     "sacrifice": 3,
+     "sacSquare": "d7",
+     "playedEval": -721,
+     "evalLoss": 256,
+     "quietAlt": -465,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 31,
+     "san": "Qxf4",
+     "sacrifice": 6,
+     "sacSquare": "f4",
+     "playedEval": -802,
+     "evalLoss": 55,
+     "quietAlt": null,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "167600947810",
+   "url": "https://www.chess.com/game/live/167600947810",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 27,
+     "san": "Bxd7",
+     "sacrifice": 3,
+     "sacSquare": "a6",
+     "playedEval": 1490,
+     "evalLoss": 98450,
+     "quietAlt": 99940,
+     "shape": "discovered",
+     "accepted": false,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "167596582136",
+   "url": "https://www.chess.com/game/live/167596582136",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 6,
+     "san": "Nxd5",
+     "sacrifice": 3,
+     "sacSquare": "d5",
+     "playedEval": -389,
+     "evalLoss": 503,
+     "quietAlt": 114,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 8,
+     "san": "Qb4",
+     "sacrifice": 5.8,
+     "sacSquare": "b4",
+     "playedEval": -628,
+     "evalLoss": 780,
+     "quietAlt": 152,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 14,
+     "san": "Nxf6+",
+     "sacrifice": 3,
+     "sacSquare": "f6",
+     "playedEval": -650,
+     "evalLoss": 198,
+     "quietAlt": -452,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "167592608124",
+   "url": "https://www.chess.com/game/live/167592608124",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 15,
+     "san": "Nxc5",
+     "sacrifice": 3,
+     "sacSquare": "c5",
+     "playedEval": 286,
+     "evalLoss": 258,
+     "quietAlt": 544,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "167574638516",
+   "url": "https://www.chess.com/game/live/167574638516",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 7,
+     "san": "Nd7",
+     "sacrifice": 3.2,
+     "sacSquare": "g4",
+     "playedEval": -544,
+     "evalLoss": 357,
+     "quietAlt": -187,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "96365331",
+   "url": "https://www.chess.com/game/daily/96365331",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 22,
+     "san": "Be7+",
+     "sacrifice": 3.2,
+     "sacSquare": "e7",
+     "playedEval": 99950,
+     "evalLoss": 20,
+     "quietAlt": 99970,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "necessary"
+    }
+   ]
+  },
+  {
+   "id": "167548050708",
+   "url": "https://www.chess.com/game/live/167548050708",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "167498789498",
+   "url": "https://www.chess.com/game/live/167498789498",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 15,
+     "san": "Nd2+",
+     "sacrifice": 3,
+     "sacSquare": "d2",
+     "playedEval": 296,
+     "evalLoss": 529,
+     "quietAlt": 803,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "167498483368",
+   "url": "https://www.chess.com/game/live/167498483368",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "95246947",
+   "url": "https://www.chess.com/game/daily/95246947",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "167493279210",
+   "url": "https://www.chess.com/game/live/167493279210",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "167402263214",
+   "url": "https://www.chess.com/game/live/167402263214",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "167363387290",
+   "url": "https://www.chess.com/game/live/167363387290",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "167354727806",
+   "url": "https://www.chess.com/game/live/167354727806",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 8,
+     "san": "Qxh2",
+     "sacrifice": 9,
+     "sacSquare": "h2",
+     "playedEval": -239,
+     "evalLoss": 1041,
+     "quietAlt": 802,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 16,
+     "san": "Rb8",
+     "sacrifice": 5,
+     "sacSquare": "b8",
+     "playedEval": -636,
+     "evalLoss": 402,
+     "quietAlt": -234,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 17,
+     "san": "Bd5",
+     "sacrifice": 2.2,
+     "sacSquare": "d5",
+     "playedEval": -852,
+     "evalLoss": 202,
+     "quietAlt": -650,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 18,
+     "san": "Nxd5",
+     "sacrifice": 3,
+     "sacSquare": "d5",
+     "playedEval": -979,
+     "evalLoss": 90,
+     "quietAlt": -889,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 22,
+     "san": "Be7",
+     "sacrifice": 3.2,
+     "sacSquare": "e7",
+     "playedEval": -99980,
+     "evalLoss": 0,
+     "quietAlt": -99990,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "167348572612",
+   "url": "https://www.chess.com/game/live/167348572612",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "167327011582",
+   "url": "https://www.chess.com/game/live/167327011582",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 20,
+     "san": "Rf5",
+     "sacrifice": 3.2,
+     "sacSquare": "e7",
+     "playedEval": 664,
+     "evalLoss": 161,
+     "quietAlt": 825,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "strong"
+    },
+    {
+     "moveNumber": 21,
+     "san": "Ne4",
+     "sacrifice": 3,
+     "sacSquare": "e4",
+     "playedEval": 498,
+     "evalLoss": 159,
+     "quietAlt": 657,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    },
+    {
+     "moveNumber": 32,
+     "san": "R5d4",
+     "sacrifice": 3,
+     "sacSquare": "f5",
+     "playedEval": 0,
+     "evalLoss": 357,
+     "quietAlt": 345,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 33,
+     "san": "Nd6",
+     "sacrifice": 5,
+     "sacSquare": "d4",
+     "playedEval": -517,
+     "evalLoss": 898,
+     "quietAlt": 381,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "167326821014",
+   "url": "https://www.chess.com/game/live/167326821014",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 7,
+     "san": "b5",
+     "sacrifice": 5,
+     "sacSquare": "a8",
+     "playedEval": -630,
+     "evalLoss": 334,
+     "quietAlt": -296,
+     "shape": "discovered",
+     "accepted": false,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 10,
+     "san": "Qe7",
+     "sacrifice": 3.2,
+     "sacSquare": "c8",
+     "playedEval": -1846,
+     "evalLoss": 857,
+     "quietAlt": -1091,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 16,
+     "san": "Qf6",
+     "sacrifice": 6,
+     "sacSquare": "f6",
+     "playedEval": -1534,
+     "evalLoss": 126,
+     "quietAlt": -1408,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "167321448898",
+   "url": "https://www.chess.com/game/live/167321448898",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "167320767906",
+   "url": "https://www.chess.com/game/live/167320767906",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 13,
+     "san": "Qxe5",
+     "sacrifice": 2,
+     "sacSquare": "a8",
+     "playedEval": -219,
+     "evalLoss": 750,
+     "quietAlt": 531,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "167258774758",
+   "url": "https://www.chess.com/game/live/167258774758",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "89566199",
+   "url": "https://www.chess.com/game/daily/89566199",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "167230580484",
+   "url": "https://www.chess.com/game/live/167230580484",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 26,
+     "san": "Qg1",
+     "sacrifice": 9,
+     "sacSquare": "g1",
+     "playedEval": -99990,
+     "evalLoss": 60,
+     "quietAlt": -99930,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "167230267044",
+   "url": "https://www.chess.com/game/live/167230267044",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 10,
+     "san": "Qd6",
+     "sacrifice": 6,
+     "sacSquare": "d6",
+     "playedEval": -679,
+     "evalLoss": 630,
+     "quietAlt": -49,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "167213070834",
+   "url": "https://www.chess.com/game/live/167213070834",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 14,
+     "san": "Qxc7",
+     "sacrifice": 2.8,
+     "sacSquare": "c7",
+     "playedEval": -320,
+     "evalLoss": 701,
+     "quietAlt": 381,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "167212935136",
+   "url": "https://www.chess.com/game/live/167212935136",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "167184900996",
+   "url": "https://www.chess.com/game/live/167184900996",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 9,
+     "san": "Qe4+",
+     "sacrifice": 5.8,
+     "sacSquare": "e4",
+     "playedEval": -568,
+     "evalLoss": 993,
+     "quietAlt": 425,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 13,
+     "san": "Bxd2+",
+     "sacrifice": 3.2,
+     "sacSquare": "d2",
+     "playedEval": -636,
+     "evalLoss": 216,
+     "quietAlt": -420,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 17,
+     "san": "Nd3",
+     "sacrifice": 5,
+     "sacSquare": "f8",
+     "playedEval": -99990,
+     "evalLoss": 99275,
+     "quietAlt": -715,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 19,
+     "san": "Kh8",
+     "sacrifice": 5,
+     "sacSquare": "f8",
+     "playedEval": -99990,
+     "evalLoss": 20,
+     "quietAlt": null,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "167170656652",
+   "url": "https://www.chess.com/game/live/167170656652",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "167168965724",
+   "url": "https://www.chess.com/game/live/167168965724",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "167124722552",
+   "url": "https://www.chess.com/game/live/167124722552",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 13,
+     "san": "Nxe4",
+     "sacrifice": 3,
+     "sacSquare": "e4",
+     "playedEval": -456,
+     "evalLoss": 456,
+     "quietAlt": 0,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 30,
+     "san": "Qxf3",
+     "sacrifice": 4,
+     "sacSquare": "f3",
+     "playedEval": -519,
+     "evalLoss": 181,
+     "quietAlt": -338,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 31,
+     "san": "Rxh2",
+     "sacrifice": 5,
+     "sacSquare": "h2",
+     "playedEval": -651,
+     "evalLoss": 88,
+     "quietAlt": -563,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "167117565258",
+   "url": "https://www.chess.com/game/live/167117565258",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 21,
+     "san": "Be5",
+     "sacrifice": 3.2,
+     "sacSquare": "e5",
+     "playedEval": -207,
+     "evalLoss": 588,
+     "quietAlt": 381,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "167091326436",
+   "url": "https://www.chess.com/game/live/167091326436",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 16,
+     "san": "Qe6+",
+     "sacrifice": 9,
+     "sacSquare": "e6",
+     "playedEval": 330,
+     "evalLoss": 541,
+     "quietAlt": 871,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "166907735892",
+   "url": "https://www.chess.com/game/live/166907735892",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "166907536992",
+   "url": "https://www.chess.com/game/live/166907536992",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "166907307698",
+   "url": "https://www.chess.com/game/live/166907307698",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 9,
+     "san": "Nxc4",
+     "sacrifice": 3,
+     "sacSquare": "c4",
+     "playedEval": 142,
+     "evalLoss": 443,
+     "quietAlt": 585,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    },
+    {
+     "moveNumber": 10,
+     "san": "Nxb2+",
+     "sacrifice": 3,
+     "sacSquare": "b2",
+     "playedEval": 259,
+     "evalLoss": 338,
+     "quietAlt": 597,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    },
+    {
+     "moveNumber": 15,
+     "san": "Nf6",
+     "sacrifice": 3,
+     "sacSquare": "f6",
+     "playedEval": -546,
+     "evalLoss": 142,
+     "quietAlt": -404,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 22,
+     "san": "Nc3",
+     "sacrifice": 3,
+     "sacSquare": "c3",
+     "playedEval": -338,
+     "evalLoss": 574,
+     "quietAlt": 236,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 29,
+     "san": "Rg2+",
+     "sacrifice": 5,
+     "sacSquare": "g2",
+     "playedEval": 322,
+     "evalLoss": 320,
+     "quietAlt": 642,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "166907239486",
+   "url": "https://www.chess.com/game/live/166907239486",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 11,
+     "san": "Nxd5",
+     "sacrifice": 2,
+     "sacSquare": "d5",
+     "playedEval": 86,
+     "evalLoss": 5,
+     "quietAlt": -363,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": null
+    }
+   ]
+  },
+  {
+   "id": "166907183646",
+   "url": "https://www.chess.com/game/live/166907183646",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "166906895978",
+   "url": "https://www.chess.com/game/live/166906895978",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 22,
+     "san": "Bd7+",
+     "sacrifice": 3.2,
+     "sacSquare": "d7",
+     "playedEval": 68,
+     "evalLoss": 549,
+     "quietAlt": 617,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "166906193530",
+   "url": "https://www.chess.com/game/live/166906193530",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 11,
+     "san": "Bc5",
+     "sacrifice": 3.2,
+     "sacSquare": "c5",
+     "playedEval": -449,
+     "evalLoss": 94,
+     "quietAlt": -355,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 20,
+     "san": "Qc3+",
+     "sacrifice": 9,
+     "sacSquare": "c3",
+     "playedEval": -1039,
+     "evalLoss": 100959,
+     "quietAlt": 99920,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 23,
+     "san": "Ke8",
+     "sacrifice": 5,
+     "sacSquare": "g8",
+     "playedEval": -99960,
+     "evalLoss": 98482,
+     "quietAlt": null,
+     "shape": "discovered",
+     "accepted": false,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 24,
+     "san": "Kd7",
+     "sacrifice": 5,
+     "sacSquare": "a8",
+     "playedEval": -99930,
+     "evalLoss": 0,
+     "quietAlt": null,
+     "shape": "discovered",
+     "accepted": false,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "166905548942",
+   "url": "https://www.chess.com/game/live/166905548942",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 18,
+     "san": "Nxd5",
+     "sacrifice": 2,
+     "sacSquare": "d5",
+     "playedEval": 586,
+     "evalLoss": 311,
+     "quietAlt": 897,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    },
+    {
+     "moveNumber": 19,
+     "san": "Nxb6",
+     "sacrifice": 3,
+     "sacSquare": "b6",
+     "playedEval": 449,
+     "evalLoss": 339,
+     "quietAlt": 756,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "166905127436",
+   "url": "https://www.chess.com/game/live/166905127436",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 21,
+     "san": "Ng5+",
+     "sacrifice": 3,
+     "sacSquare": "g5",
+     "playedEval": 793,
+     "evalLoss": 22,
+     "quietAlt": 815,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "necessary"
+    }
+   ]
+  },
+  {
+   "id": "166904355742",
+   "url": "https://www.chess.com/game/live/166904355742",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 23,
+     "san": "Nb5",
+     "sacrifice": 3,
+     "sacSquare": "b5",
+     "playedEval": 691,
+     "evalLoss": 66,
+     "quietAlt": 757,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "necessary"
+    },
+    {
+     "moveNumber": 35,
+     "san": "Rxc7",
+     "sacrifice": 5.8,
+     "sacSquare": "e8",
+     "playedEval": 1098,
+     "evalLoss": 98862,
+     "quietAlt": 99960,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "166829782102",
+   "url": "https://www.chess.com/game/live/166829782102",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "166788228176",
+   "url": "https://www.chess.com/game/live/166788228176",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 17,
+     "san": "Be6",
+     "sacrifice": 3,
+     "sacSquare": "e4",
+     "playedEval": -497,
+     "evalLoss": 8,
+     "quietAlt": -586,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "79611461",
+   "url": "https://www.chess.com/game/daily/79611461",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 13,
+     "san": "Bxc7",
+     "sacrifice": 3.2,
+     "sacSquare": "c7",
+     "playedEval": 845,
+     "evalLoss": 75,
+     "quietAlt": 920,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "necessary"
+    }
+   ]
+  },
+  {
+   "id": "166736697506",
+   "url": "https://www.chess.com/game/live/166736697506",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "166702044334",
+   "url": "https://www.chess.com/game/live/166702044334",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 13,
+     "san": "Nxg5",
+     "sacrifice": 2,
+     "sacSquare": "g5",
+     "playedEval": -303,
+     "evalLoss": 25,
+     "quietAlt": -325,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 42,
+     "san": "Bc1",
+     "sacrifice": 3.2,
+     "sacSquare": "c1",
+     "playedEval": -99990,
+     "evalLoss": 0,
+     "quietAlt": null,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 47,
+     "san": "Bf3",
+     "sacrifice": 3.2,
+     "sacSquare": "f3",
+     "playedEval": -99970,
+     "evalLoss": 10,
+     "quietAlt": -99960,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "166527781510",
+   "url": "https://www.chess.com/game/live/166527781510",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "166527518328",
+   "url": "https://www.chess.com/game/live/166527518328",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 18,
+     "san": "Bxb4",
+     "sacrifice": 2.2,
+     "sacSquare": "b4",
+     "playedEval": -575,
+     "evalLoss": 39,
+     "quietAlt": -540,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 32,
+     "san": "Rxg2",
+     "sacrifice": 5,
+     "sacSquare": "g2",
+     "playedEval": -421,
+     "evalLoss": 39,
+     "quietAlt": -382,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "166527481286",
+   "url": "https://www.chess.com/game/live/166527481286",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "43005125",
+   "url": "https://www.chess.com/game/daily/43005125",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "148318424262",
+   "url": "https://www.chess.com/game/live/148318424262",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 30,
+     "san": "Rb8",
+     "sacrifice": 5,
+     "sacSquare": "b8",
+     "playedEval": -702,
+     "evalLoss": 204,
+     "quietAlt": -498,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "17622413",
+   "url": "https://www.chess.com/game/daily/17622413",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "145883506792",
+   "url": "https://www.chess.com/game/live/145883506792",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 24,
+     "san": "Rd2",
+     "sacrifice": 5,
+     "sacSquare": "d2",
+     "playedEval": -640,
+     "evalLoss": 187,
+     "quietAlt": -453,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 25,
+     "san": "Nb4",
+     "sacrifice": 3,
+     "sacSquare": "b4",
+     "playedEval": -806,
+     "evalLoss": 159,
+     "quietAlt": -647,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 28,
+     "san": "Bxc2",
+     "sacrifice": 3.2,
+     "sacSquare": "c2",
+     "playedEval": -1215,
+     "evalLoss": 233,
+     "quietAlt": -982,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 38,
+     "san": "Re5",
+     "sacrifice": 5,
+     "sacSquare": "e5",
+     "playedEval": -99940,
+     "evalLoss": 98678,
+     "quietAlt": -1262,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "145883477302",
+   "url": "https://www.chess.com/game/live/145883477302",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "144053756456",
+   "url": "https://www.chess.com/game/live/144053756456",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "143869338392",
+   "url": "https://www.chess.com/game/live/143869338392",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "143595113850",
+   "url": "https://www.chess.com/game/live/143595113850",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 14,
+     "san": "Qa6",
+     "sacrifice": 3,
+     "sacSquare": "b4",
+     "playedEval": 135,
+     "evalLoss": 238,
+     "quietAlt": null,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "143240654768",
+   "url": "https://www.chess.com/game/live/143240654768",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 25,
+     "san": "Ne7",
+     "sacrifice": 3,
+     "sacSquare": "e7",
+     "playedEval": -99920,
+     "evalLoss": -10,
+     "quietAlt": -99950,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 26,
+     "san": "Rf7",
+     "sacrifice": 5,
+     "sacSquare": "f7",
+     "playedEval": -99970,
+     "evalLoss": 20,
+     "quietAlt": -99950,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "139751791826",
+   "url": "https://www.chess.com/game/live/139751791826",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "144313175967",
+   "url": "https://www.chess.com/game/live/144313175967",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "144312566059",
+   "url": "https://www.chess.com/game/live/144312566059",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 25,
+     "san": "Rd3+",
+     "sacrifice": 4.8,
+     "sacSquare": "d3",
+     "playedEval": 1164,
+     "evalLoss": 98786,
+     "quietAlt": 99930,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "144056416053",
+   "url": "https://www.chess.com/game/live/144056416053",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "139473689526",
+   "url": "https://www.chess.com/game/live/139473689526",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 41,
+     "san": "Kd2",
+     "sacrifice": 9,
+     "sacSquare": "b3",
+     "playedEval": -99940,
+     "evalLoss": -20,
+     "quietAlt": null,
+     "shape": "discovered",
+     "accepted": false,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "143788807649",
+   "url": "https://www.chess.com/game/live/143788807649",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 15,
+     "san": "Ng5",
+     "sacrifice": 3,
+     "sacSquare": "g5",
+     "playedEval": 668,
+     "evalLoss": 261,
+     "quietAlt": 929,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "143455813043",
+   "url": "https://www.chess.com/game/live/143455813043",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 24,
+     "san": "Re2",
+     "sacrifice": 5,
+     "sacSquare": "d8",
+     "playedEval": 2121,
+     "evalLoss": 97749,
+     "quietAlt": 99870,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "143454610589",
+   "url": "https://www.chess.com/game/live/143454610589",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 9,
+     "san": "fxe5",
+     "sacrifice": 5.8,
+     "sacSquare": "d8",
+     "playedEval": -629,
+     "evalLoss": 379,
+     "quietAlt": -250,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "138541704198",
+   "url": "https://www.chess.com/game/live/138541704198",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 21,
+     "san": "Qf3+",
+     "sacrifice": 9,
+     "sacSquare": "f3",
+     "playedEval": -99910,
+     "evalLoss": 99309,
+     "quietAlt": -601,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "138534363022",
+   "url": "https://www.chess.com/game/live/138534363022",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "138092914014",
+   "url": "https://www.chess.com/game/live/138092914014",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 27,
+     "san": "Qxb4",
+     "sacrifice": 5,
+     "sacSquare": "a8",
+     "playedEval": -99990,
+     "evalLoss": 99142,
+     "quietAlt": -861,
+     "shape": "discovered",
+     "accepted": false,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 31,
+     "san": "Kf7",
+     "sacrifice": 5,
+     "sacSquare": "h8",
+     "playedEval": -99980,
+     "evalLoss": 30,
+     "quietAlt": null,
+     "shape": "discovered",
+     "accepted": false,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "138092867846",
+   "url": "https://www.chess.com/game/live/138092867846",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "129145466697",
+   "url": "https://www.chess.com/game/live/129145466697",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "129144809469",
+   "url": "https://www.chess.com/game/live/129144809469",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 5,
+     "san": "Bb4+",
+     "sacrifice": 3.2,
+     "sacSquare": "b4",
+     "playedEval": -509,
+     "evalLoss": 452,
+     "quietAlt": -57,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "129144247785",
+   "url": "https://www.chess.com/game/live/129144247785",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "129144204047",
+   "url": "https://www.chess.com/game/live/129144204047",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "128125166991",
+   "url": "https://www.chess.com/game/live/128125166991",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "121025442216",
+   "url": "https://www.chess.com/game/live/121025442216",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 26,
+     "san": "Bxg5",
+     "sacrifice": 3,
+     "sacSquare": "g6",
+     "playedEval": 146,
+     "evalLoss": 375,
+     "quietAlt": 521,
+     "shape": "discovered",
+     "accepted": false,
+     "rejectedBy": "strong"
+    },
+    {
+     "moveNumber": 30,
+     "san": "Bh6",
+     "sacrifice": 3.2,
+     "sacSquare": "h6",
+     "playedEval": -125,
+     "evalLoss": 605,
+     "quietAlt": 480,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "125087975529",
+   "url": "https://www.chess.com/game/live/125087975529",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 19,
+     "san": "Be5",
+     "sacrifice": 3.2,
+     "sacSquare": "e5",
+     "playedEval": -392,
+     "evalLoss": 852,
+     "quietAlt": 460,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 21,
+     "san": "Nxd5+",
+     "sacrifice": 2,
+     "sacSquare": "d5",
+     "playedEval": -399,
+     "evalLoss": 12,
+     "quietAlt": -512,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 28,
+     "san": "Qb5",
+     "sacrifice": 4,
+     "sacSquare": "b5",
+     "playedEval": -99980,
+     "evalLoss": 70,
+     "quietAlt": -99920,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 34,
+     "san": "Rd7+",
+     "sacrifice": 5,
+     "sacSquare": "d7",
+     "playedEval": -884,
+     "evalLoss": 23,
+     "quietAlt": -861,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 45,
+     "san": "Rf1",
+     "sacrifice": 5,
+     "sacSquare": "f1",
+     "playedEval": -99990,
+     "evalLoss": 40,
+     "quietAlt": -99950,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "125086814631",
+   "url": "https://www.chess.com/game/live/125086814631",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 5,
+     "san": "Bxf7+",
+     "sacrifice": 3.2,
+     "sacSquare": "f7",
+     "playedEval": -235,
+     "evalLoss": -15,
+     "quietAlt": -251,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 9,
+     "san": "d5+",
+     "sacrifice": 3,
+     "sacSquare": "e5",
+     "playedEval": 33,
+     "evalLoss": 321,
+     "quietAlt": 354,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "strong"
+    },
+    {
+     "moveNumber": 28,
+     "san": "Nf5",
+     "sacrifice": 3,
+     "sacSquare": "f5",
+     "playedEval": 606,
+     "evalLoss": 34,
+     "quietAlt": 640,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "necessary"
+    }
+   ]
+  },
+  {
+   "id": "124643355777",
+   "url": "https://www.chess.com/game/live/124643355777",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "124222226341",
+   "url": "https://www.chess.com/game/live/124222226341",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 16,
+     "san": "Qe3+",
+     "sacrifice": 9,
+     "sacSquare": "e3",
+     "playedEval": -633,
+     "evalLoss": 1136,
+     "quietAlt": 503,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "123984651203",
+   "url": "https://www.chess.com/game/live/123984651203",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 21,
+     "san": "Nxc7+",
+     "sacrifice": 3,
+     "sacSquare": "c7",
+     "playedEval": 89,
+     "evalLoss": 80,
+     "quietAlt": null,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "necessary"
+    }
+   ]
+  },
+  {
+   "id": "123984643435",
+   "url": "https://www.chess.com/game/live/123984643435",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "123783068809",
+   "url": "https://www.chess.com/game/live/123783068809",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "123461432931",
+   "url": "https://www.chess.com/game/live/123461432931",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "123448874857",
+   "url": "https://www.chess.com/game/live/123448874857",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 30,
+     "san": "Qxb4+",
+     "sacrifice": 3,
+     "sacSquare": "e3",
+     "playedEval": 99950,
+     "evalLoss": 20,
+     "quietAlt": 99970,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "necessary"
+    }
+   ]
+  },
+  {
+   "id": "123362467483",
+   "url": "https://www.chess.com/game/live/123362467483",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 22,
+     "san": "Ke7",
+     "sacrifice": 5,
+     "sacSquare": "h8",
+     "playedEval": -99960,
+     "evalLoss": 100985,
+     "quietAlt": 1025,
+     "shape": "discovered",
+     "accepted": false,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "123260503855",
+   "url": "https://www.chess.com/game/live/123260503855",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 26,
+     "san": "Qxc1",
+     "sacrifice": 4,
+     "sacSquare": "c1",
+     "playedEval": 1218,
+     "evalLoss": 20,
+     "quietAlt": 1238,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "necessary"
+    },
+    {
+     "moveNumber": 30,
+     "san": "f5",
+     "sacrifice": 3,
+     "sacSquare": "g5",
+     "playedEval": 1075,
+     "evalLoss": 242,
+     "quietAlt": 1317,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "123260421649",
+   "url": "https://www.chess.com/game/live/123260421649",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 7,
+     "san": "Bg5",
+     "sacrifice": 3.2,
+     "sacSquare": "g5",
+     "playedEval": -239,
+     "evalLoss": 676,
+     "quietAlt": 437,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 15,
+     "san": "Nc3",
+     "sacrifice": 3,
+     "sacSquare": "c3",
+     "playedEval": -364,
+     "evalLoss": 801,
+     "quietAlt": 437,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 16,
+     "san": "Qd2",
+     "sacrifice": 5,
+     "sacSquare": "a1",
+     "playedEval": -363,
+     "evalLoss": -22,
+     "quietAlt": -385,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "123034209751",
+   "url": "https://www.chess.com/game/live/123034209751",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "123033582577",
+   "url": "https://www.chess.com/game/live/123033582577",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "123032431385",
+   "url": "https://www.chess.com/game/live/123032431385",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "123030583107",
+   "url": "https://www.chess.com/game/live/123030583107",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 19,
+     "san": "b6",
+     "sacrifice": 3,
+     "sacSquare": "a6",
+     "playedEval": -557,
+     "evalLoss": 565,
+     "quietAlt": 8,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 31,
+     "san": "Be3+",
+     "sacrifice": 3.2,
+     "sacSquare": "e3",
+     "playedEval": 99950,
+     "evalLoss": -98720,
+     "quietAlt": 1230,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": null
+    }
+   ]
+  },
+  {
+   "id": "123029433713",
+   "url": "https://www.chess.com/game/live/123029433713",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 10,
+     "san": "Nxe4",
+     "sacrifice": 5,
+     "sacSquare": "d8",
+     "playedEval": -45,
+     "evalLoss": 525,
+     "quietAlt": 480,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 14,
+     "san": "Ba5",
+     "sacrifice": 3.2,
+     "sacSquare": "a5",
+     "playedEval": -478,
+     "evalLoss": 570,
+     "quietAlt": 92,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 17,
+     "san": "Nb2",
+     "sacrifice": 3,
+     "sacSquare": "b2",
+     "playedEval": -535,
+     "evalLoss": 140,
+     "quietAlt": -395,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "123029396869",
+   "url": "https://www.chess.com/game/live/123029396869",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "123028830647",
+   "url": "https://www.chess.com/game/live/123028830647",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 7,
+     "san": "Nxc2+",
+     "sacrifice": 3,
+     "sacSquare": "c2",
+     "playedEval": 91,
+     "evalLoss": 326,
+     "quietAlt": 417,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "123027655829",
+   "url": "https://www.chess.com/game/live/123027655829",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 18,
+     "san": "Qb8+",
+     "sacrifice": 9,
+     "sacSquare": "b8",
+     "playedEval": -122,
+     "evalLoss": 100082,
+     "quietAlt": 99960,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 26,
+     "san": "Ne6+",
+     "sacrifice": 3,
+     "sacSquare": "e6",
+     "playedEval": -560,
+     "evalLoss": 20,
+     "quietAlt": -551,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 39,
+     "san": "d8=Q",
+     "sacrifice": 5.8,
+     "sacSquare": "d8",
+     "playedEval": -228,
+     "evalLoss": 408,
+     "quietAlt": 180,
+     "shape": "promotion",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "123025204123",
+   "url": "https://www.chess.com/game/live/123025204123",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "123023987805",
+   "url": "https://www.chess.com/game/live/123023987805",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 20,
+     "san": "Qe7+",
+     "sacrifice": 9,
+     "sacSquare": "e7",
+     "playedEval": -60,
+     "evalLoss": 797,
+     "quietAlt": 737,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 21,
+     "san": "Bb3",
+     "sacrifice": 2,
+     "sacSquare": "c4",
+     "playedEval": -279,
+     "evalLoss": 225,
+     "quietAlt": -54,
+     "shape": "discovered",
+     "accepted": false,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 29,
+     "san": "Bxg5",
+     "sacrifice": 3.2,
+     "sacSquare": "g5",
+     "playedEval": 580,
+     "evalLoss": 99410,
+     "quietAlt": 99990,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "123022810943",
+   "url": "https://www.chess.com/game/live/123022810943",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 4,
+     "san": "Nxd5",
+     "sacrifice": 3,
+     "sacSquare": "d5",
+     "playedEval": -262,
+     "evalLoss": 389,
+     "quietAlt": 127,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "123010260621",
+   "url": "https://www.chess.com/game/live/123010260621",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 21,
+     "san": "Na1+",
+     "sacrifice": 3,
+     "sacSquare": "a1",
+     "playedEval": -16,
+     "evalLoss": 28,
+     "quietAlt": 12,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "122950453247",
+   "url": "https://www.chess.com/game/live/122950453247",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 10,
+     "san": "Bxc3+",
+     "sacrifice": 3.2,
+     "sacSquare": "c3",
+     "playedEval": -187,
+     "evalLoss": 388,
+     "quietAlt": 201,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "120125376890",
+   "url": "https://www.chess.com/game/live/120125376890",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 14,
+     "san": "Nxh8",
+     "sacrifice": 4,
+     "sacSquare": "h5",
+     "playedEval": -179,
+     "evalLoss": 497,
+     "quietAlt": 318,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 20,
+     "san": "Ng6",
+     "sacrifice": 3,
+     "sacSquare": "g6",
+     "playedEval": -459,
+     "evalLoss": 139,
+     "quietAlt": -320,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "122670316019",
+   "url": "https://www.chess.com/game/live/122670316019",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 14,
+     "san": "Qe2+",
+     "sacrifice": 5.8,
+     "sacSquare": "e2",
+     "playedEval": 1103,
+     "evalLoss": 300,
+     "quietAlt": 1403,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    },
+    {
+     "moveNumber": 25,
+     "san": "Bd5+",
+     "sacrifice": 5,
+     "sacSquare": "d7",
+     "playedEval": 615,
+     "evalLoss": 99345,
+     "quietAlt": 99960,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "122668532421",
+   "url": "https://www.chess.com/game/live/122668532421",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 27,
+     "san": "exf4",
+     "sacrifice": 5,
+     "sacSquare": "e1",
+     "playedEval": 575,
+     "evalLoss": 655,
+     "quietAlt": 1230,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "120044948876",
+   "url": "https://www.chess.com/game/live/120044948876",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 8,
+     "san": "Nxe4",
+     "sacrifice": 3,
+     "sacSquare": "e4",
+     "playedEval": -324,
+     "evalLoss": 271,
+     "quietAlt": -53,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 28,
+     "san": "Ra1+",
+     "sacrifice": 5,
+     "sacSquare": "a1",
+     "playedEval": -657,
+     "evalLoss": 1360,
+     "quietAlt": 703,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 31,
+     "san": "c1=Q+",
+     "sacrifice": 9,
+     "sacSquare": "c1",
+     "playedEval": -677,
+     "evalLoss": -40,
+     "quietAlt": null,
+     "shape": "promotion",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 34,
+     "san": "Kf7",
+     "sacrifice": 5,
+     "sacSquare": "c8",
+     "playedEval": -650,
+     "evalLoss": -2,
+     "quietAlt": null,
+     "shape": "discovered",
+     "accepted": false,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "122402064201",
+   "url": "https://www.chess.com/game/live/122402064201",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 12,
+     "san": "Nc2",
+     "sacrifice": 3,
+     "sacSquare": "c2",
+     "playedEval": 642,
+     "evalLoss": 188,
+     "quietAlt": 830,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "122400932993",
+   "url": "https://www.chess.com/game/live/122400932993",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 25,
+     "san": "Nxe4",
+     "sacrifice": 3,
+     "sacSquare": "e4",
+     "playedEval": 618,
+     "evalLoss": 271,
+     "quietAlt": 889,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "119893374256",
+   "url": "https://www.chess.com/game/live/119893374256",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 11,
+     "san": "Rxf2",
+     "sacrifice": 2,
+     "sacSquare": "f2",
+     "playedEval": -330,
+     "evalLoss": 148,
+     "quietAlt": -182,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "119813617808",
+   "url": "https://www.chess.com/game/live/119813617808",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 4,
+     "san": "Nb5",
+     "sacrifice": 3,
+     "sacSquare": "b5",
+     "playedEval": -490,
+     "evalLoss": 368,
+     "quietAlt": -122,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "119811422004",
+   "url": "https://www.chess.com/game/live/119811422004",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "121441806719",
+   "url": "https://www.chess.com/game/live/121441806719",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "119609115964",
+   "url": "https://www.chess.com/game/live/119609115964",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "119607607098",
+   "url": "https://www.chess.com/game/live/119607607098",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "119591738514",
+   "url": "https://www.chess.com/game/live/119591738514",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 8,
+     "san": "Bf5",
+     "sacrifice": 3,
+     "sacSquare": "h5",
+     "playedEval": -436,
+     "evalLoss": 431,
+     "quietAlt": -5,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 11,
+     "san": "Bxd3",
+     "sacrifice": 3.2,
+     "sacSquare": "d3",
+     "playedEval": -520,
+     "evalLoss": 601,
+     "quietAlt": 81,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 12,
+     "san": "Bb4",
+     "sacrifice": 3.2,
+     "sacSquare": "b4",
+     "playedEval": -670,
+     "evalLoss": 249,
+     "quietAlt": -421,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 21,
+     "san": "Rd6",
+     "sacrifice": 5,
+     "sacSquare": "c8",
+     "playedEval": -1317,
+     "evalLoss": 568,
+     "quietAlt": -749,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 24,
+     "san": "Nc5",
+     "sacrifice": 3,
+     "sacSquare": "c5",
+     "playedEval": -739,
+     "evalLoss": 387,
+     "quietAlt": -352,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "119591704086",
+   "url": "https://www.chess.com/game/live/119591704086",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "119583082324",
+   "url": "https://www.chess.com/game/live/119583082324",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 42,
+     "san": "Nb4",
+     "sacrifice": 2,
+     "sacSquare": "d8",
+     "playedEval": -618,
+     "evalLoss": 618,
+     "quietAlt": 0,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "119582674140",
+   "url": "https://www.chess.com/game/live/119582674140",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 32,
+     "san": "Nxb5",
+     "sacrifice": 5,
+     "sacSquare": "d1",
+     "playedEval": 530,
+     "evalLoss": 632,
+     "quietAlt": 1162,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "strong"
+    },
+    {
+     "moveNumber": 43,
+     "san": "Nf3",
+     "sacrifice": 3.2,
+     "sacSquare": "f5",
+     "playedEval": -558,
+     "evalLoss": 10,
+     "quietAlt": -548,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 52,
+     "san": "Nf6+",
+     "sacrifice": 3,
+     "sacSquare": "d6",
+     "playedEval": -4452,
+     "evalLoss": -95448,
+     "quietAlt": null,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "119582432926",
+   "url": "https://www.chess.com/game/live/119582432926",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 13,
+     "san": "Bxd4",
+     "sacrifice": 3.2,
+     "sacSquare": "d4",
+     "playedEval": -589,
+     "evalLoss": 229,
+     "quietAlt": -360,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "113407772253",
+   "url": "https://www.chess.com/game/live/113407772253",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "79545552221",
+   "url": "https://www.chess.com/game/live/79545552221",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 9,
+     "san": "Qd7",
+     "sacrifice": 5,
+     "sacSquare": "a8",
+     "playedEval": -635,
+     "evalLoss": 432,
+     "quietAlt": -203,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "79544531507",
+   "url": "https://www.chess.com/game/live/79544531507",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 4,
+     "san": "Bb4",
+     "sacrifice": 3.2,
+     "sacSquare": "b4",
+     "playedEval": -550,
+     "evalLoss": 580,
+     "quietAlt": 30,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 8,
+     "san": "Nxe4",
+     "sacrifice": 3,
+     "sacSquare": "e4",
+     "playedEval": -698,
+     "evalLoss": 191,
+     "quietAlt": -507,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "78243147445",
+   "url": "https://www.chess.com/game/live/78243147445",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 13,
+     "san": "Ba3",
+     "sacrifice": 3.2,
+     "sacSquare": "a3",
+     "playedEval": -400,
+     "evalLoss": 246,
+     "quietAlt": -154,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 20,
+     "san": "Bxb5",
+     "sacrifice": 3.2,
+     "sacSquare": "b5",
+     "playedEval": -583,
+     "evalLoss": 110,
+     "quietAlt": -473,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "78155551321",
+   "url": "https://www.chess.com/game/live/78155551321",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 23,
+     "san": "Nxb6",
+     "sacrifice": 2,
+     "sacSquare": "b6",
+     "playedEval": 676,
+     "evalLoss": 22,
+     "quietAlt": 673,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "necessary"
+    }
+   ]
+  },
+  {
+   "id": "78155000013",
+   "url": "https://www.chess.com/game/live/78155000013",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "78154418353",
+   "url": "https://www.chess.com/game/live/78154418353",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 9,
+     "san": "Qxe5",
+     "sacrifice": 6,
+     "sacSquare": "e5",
+     "playedEval": -655,
+     "evalLoss": 693,
+     "quietAlt": 38,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 17,
+     "san": "Rd1",
+     "sacrifice": 3,
+     "sacSquare": "e4",
+     "playedEval": -1011,
+     "evalLoss": 6,
+     "quietAlt": -1005,
+     "shape": "discovered",
+     "accepted": false,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 21,
+     "san": "Nf4",
+     "sacrifice": 3,
+     "sacSquare": "f4",
+     "playedEval": -1206,
+     "evalLoss": 142,
+     "quietAlt": -1064,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 25,
+     "san": "Bh3",
+     "sacrifice": 3.2,
+     "sacSquare": "h3",
+     "playedEval": -1346,
+     "evalLoss": 88,
+     "quietAlt": -1258,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 26,
+     "san": "Rxh3",
+     "sacrifice": 2,
+     "sacSquare": "h3",
+     "playedEval": -1363,
+     "evalLoss": -4,
+     "quietAlt": -1378,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "77570737331",
+   "url": "https://www.chess.com/game/live/77570737331",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 4,
+     "san": "Nxd4",
+     "sacrifice": 3,
+     "sacSquare": "d4",
+     "playedEval": -443,
+     "evalLoss": 443,
+     "quietAlt": 0,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "77570558335",
+   "url": "https://www.chess.com/game/live/77570558335",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "77570098677",
+   "url": "https://www.chess.com/game/live/77570098677",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 16,
+     "san": "Qe3",
+     "sacrifice": 5.8,
+     "sacSquare": "e3",
+     "playedEval": -348,
+     "evalLoss": 767,
+     "quietAlt": 419,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 27,
+     "san": "Ne5",
+     "sacrifice": 3,
+     "sacSquare": "e5",
+     "playedEval": -99890,
+     "evalLoss": 98841,
+     "quietAlt": -1805,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "75816571857",
+   "url": "https://www.chess.com/game/live/75816571857",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 23,
+     "san": "Qe6",
+     "sacrifice": 9,
+     "sacSquare": "e6",
+     "playedEval": -553,
+     "evalLoss": 432,
+     "quietAlt": -121,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "75730344201",
+   "url": "https://www.chess.com/game/live/75730344201",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 4,
+     "san": "Nh5",
+     "sacrifice": 3,
+     "sacSquare": "h5",
+     "playedEval": -357,
+     "evalLoss": 316,
+     "quietAlt": -41,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 10,
+     "san": "Nxd4",
+     "sacrifice": 3,
+     "sacSquare": "d4",
+     "playedEval": -537,
+     "evalLoss": 158,
+     "quietAlt": -379,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 15,
+     "san": "Bxb4",
+     "sacrifice": 3.2,
+     "sacSquare": "b4",
+     "playedEval": -671,
+     "evalLoss": 125,
+     "quietAlt": -546,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 19,
+     "san": "Be6",
+     "sacrifice": 3.2,
+     "sacSquare": "e6",
+     "playedEval": -920,
+     "evalLoss": -9,
+     "quietAlt": -987,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "75729696237",
+   "url": "https://www.chess.com/game/live/75729696237",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 11,
+     "san": "Qd2",
+     "sacrifice": 3,
+     "sacSquare": "f3",
+     "playedEval": -536,
+     "evalLoss": 268,
+     "quietAlt": -268,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 16,
+     "san": "Bf4",
+     "sacrifice": 2.2,
+     "sacSquare": "f4",
+     "playedEval": -321,
+     "evalLoss": 447,
+     "quietAlt": 126,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 29,
+     "san": "Kd2",
+     "sacrifice": 5,
+     "sacSquare": "a1",
+     "playedEval": 617,
+     "evalLoss": -18,
+     "quietAlt": null,
+     "shape": "discovered",
+     "accepted": false,
+     "rejectedBy": "necessary"
+    }
+   ]
+  },
+  {
+   "id": "75090759031",
+   "url": "https://www.chess.com/game/live/75090759031",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 9,
+     "san": "d5",
+     "sacrifice": 2,
+     "sacSquare": "e5",
+     "playedEval": -639,
+     "evalLoss": 387,
+     "quietAlt": -252,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 15,
+     "san": "Rd1",
+     "sacrifice": 2,
+     "sacSquare": "d1",
+     "playedEval": -834,
+     "evalLoss": 69,
+     "quietAlt": -765,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "75090176179",
+   "url": "https://www.chess.com/game/live/75090176179",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 12,
+     "san": "Nxd5",
+     "sacrifice": 3,
+     "sacSquare": "d5",
+     "playedEval": 25,
+     "evalLoss": 66,
+     "quietAlt": 91,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "necessary"
+    },
+    {
+     "moveNumber": 41,
+     "san": "Nf5+",
+     "sacrifice": 3,
+     "sacSquare": "f5",
+     "playedEval": -99830,
+     "evalLoss": 98741,
+     "quietAlt": -1089,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "75090115301",
+   "url": "https://www.chess.com/game/live/75090115301",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "75047512111",
+   "url": "https://www.chess.com/game/live/75047512111",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 14,
+     "san": "Nc3",
+     "sacrifice": 3,
+     "sacSquare": "c3",
+     "playedEval": -14,
+     "evalLoss": 147,
+     "quietAlt": 88,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "75047047669",
+   "url": "https://www.chess.com/game/live/75047047669",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 15,
+     "san": "Qe6+",
+     "sacrifice": 9,
+     "sacSquare": "e6",
+     "playedEval": -62,
+     "evalLoss": 1026,
+     "quietAlt": 964,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "75046302171",
+   "url": "https://www.chess.com/game/live/75046302171",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 24,
+     "san": "Bf5",
+     "sacrifice": 3.2,
+     "sacSquare": "f5",
+     "playedEval": -99990,
+     "evalLoss": 10,
+     "quietAlt": -99990,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "74787123513",
+   "url": "https://www.chess.com/game/live/74787123513",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 11,
+     "san": "Re1",
+     "sacrifice": 5,
+     "sacSquare": "e1",
+     "playedEval": -99870,
+     "evalLoss": 100277,
+     "quietAlt": 407,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 19,
+     "san": "Nf3",
+     "sacrifice": 4,
+     "sacSquare": "d3",
+     "playedEval": -605,
+     "evalLoss": 4,
+     "quietAlt": -623,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 22,
+     "san": "Rb2",
+     "sacrifice": 3.2,
+     "sacSquare": "c1",
+     "playedEval": -857,
+     "evalLoss": 282,
+     "quietAlt": -575,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "74786072525",
+   "url": "https://www.chess.com/game/live/74786072525",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 21,
+     "san": "Bh3",
+     "sacrifice": 3.2,
+     "sacSquare": "h3",
+     "playedEval": -623,
+     "evalLoss": 263,
+     "quietAlt": -360,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 26,
+     "san": "Rd3",
+     "sacrifice": 5,
+     "sacSquare": "d3",
+     "playedEval": -660,
+     "evalLoss": 212,
+     "quietAlt": -448,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 34,
+     "san": "Rxd5+",
+     "sacrifice": 4,
+     "sacSquare": "d5",
+     "playedEval": -99940,
+     "evalLoss": 98910,
+     "quietAlt": -1030,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 36,
+     "san": "Rd1",
+     "sacrifice": 5,
+     "sacSquare": "d1",
+     "playedEval": -1476,
+     "evalLoss": -16,
+     "quietAlt": null,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 37,
+     "san": "Qxd1",
+     "sacrifice": 4,
+     "sacSquare": "d1",
+     "playedEval": -99960,
+     "evalLoss": 0,
+     "quietAlt": null,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "74178067459",
+   "url": "https://www.chess.com/game/live/74178067459",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "74109630979",
+   "url": "https://www.chess.com/game/live/74109630979",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "74109132251",
+   "url": "https://www.chess.com/game/live/74109132251",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "73743050071",
+   "url": "https://www.chess.com/game/live/73743050071",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 9,
+     "san": "Bxc6+",
+     "sacrifice": 3.2,
+     "sacSquare": "c6",
+     "playedEval": -527,
+     "evalLoss": 504,
+     "quietAlt": -23,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "73742490905",
+   "url": "https://www.chess.com/game/live/73742490905",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 31,
+     "san": "Nxf4+",
+     "sacrifice": 3,
+     "sacSquare": "f4",
+     "playedEval": 375,
+     "evalLoss": 64,
+     "quietAlt": 439,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "necessary"
+    }
+   ]
+  },
+  {
+   "id": "73742421677",
+   "url": "https://www.chess.com/game/live/73742421677",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 6,
+     "san": "Nxd4",
+     "sacrifice": 3,
+     "sacSquare": "d4",
+     "playedEval": -368,
+     "evalLoss": 290,
+     "quietAlt": -78,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "73742035557",
+   "url": "https://www.chess.com/game/live/73742035557",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 12,
+     "san": "Qb8",
+     "sacrifice": 3,
+     "sacSquare": "d7",
+     "playedEval": -99990,
+     "evalLoss": 100112,
+     "quietAlt": 122,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "73741959615",
+   "url": "https://www.chess.com/game/live/73741959615",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "73657360419",
+   "url": "https://www.chess.com/game/live/73657360419",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 15,
+     "san": "Nxf3+",
+     "sacrifice": 3,
+     "sacSquare": "f3",
+     "playedEval": 152,
+     "evalLoss": 187,
+     "quietAlt": 339,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    },
+    {
+     "moveNumber": 35,
+     "san": "Bb1+",
+     "sacrifice": 5,
+     "sacSquare": "b3",
+     "playedEval": 99970,
+     "evalLoss": 10,
+     "quietAlt": 99980,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "necessary"
+    }
+   ]
+  },
+  {
+   "id": "73402449343",
+   "url": "https://www.chess.com/game/live/73402449343",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "73401873349",
+   "url": "https://www.chess.com/game/live/73401873349",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 10,
+     "san": "Bxd4",
+     "sacrifice": 3.2,
+     "sacSquare": "d4",
+     "playedEval": -805,
+     "evalLoss": 191,
+     "quietAlt": -614,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 27,
+     "san": "Rb7",
+     "sacrifice": 5,
+     "sacSquare": "b7",
+     "playedEval": -1075,
+     "evalLoss": 430,
+     "quietAlt": -645,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 28,
+     "san": "Kb8",
+     "sacrifice": 5,
+     "sacSquare": "d8",
+     "playedEval": -4359,
+     "evalLoss": 3268,
+     "quietAlt": -1091,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "73353236933",
+   "url": "https://www.chess.com/game/live/73353236933",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 11,
+     "san": "Ng5",
+     "sacrifice": 3,
+     "sacSquare": "g5",
+     "playedEval": -214,
+     "evalLoss": 515,
+     "quietAlt": 301,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "73224875915",
+   "url": "https://www.chess.com/game/live/73224875915",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 39,
+     "san": "Nc5+",
+     "sacrifice": 3,
+     "sacSquare": "c5",
+     "playedEval": 624,
+     "evalLoss": 99276,
+     "quietAlt": 99900,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    },
+    {
+     "moveNumber": 40,
+     "san": "Qe6+",
+     "sacrifice": 5,
+     "sacSquare": "e6",
+     "playedEval": 9,
+     "evalLoss": 743,
+     "quietAlt": 752,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "73130025047",
+   "url": "https://www.chess.com/game/live/73130025047",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 7,
+     "san": "d5",
+     "sacrifice": 3,
+     "sacSquare": "c5",
+     "playedEval": -418,
+     "evalLoss": 281,
+     "quietAlt": -137,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "73057007019",
+   "url": "https://www.chess.com/game/live/73057007019",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "73056434083",
+   "url": "https://www.chess.com/game/live/73056434083",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 13,
+     "san": "Ne3",
+     "sacrifice": 3,
+     "sacSquare": "e3",
+     "playedEval": 107,
+     "evalLoss": 509,
+     "quietAlt": 616,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    },
+    {
+     "moveNumber": 14,
+     "san": "Nc2+",
+     "sacrifice": 3,
+     "sacSquare": "c2",
+     "playedEval": 521,
+     "evalLoss": 69,
+     "quietAlt": 590,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "necessary"
+    }
+   ]
+  },
+  {
+   "id": "73055868147",
+   "url": "https://www.chess.com/game/live/73055868147",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 12,
+     "san": "Nxb5",
+     "sacrifice": 2,
+     "sacSquare": "b5",
+     "playedEval": 690,
+     "evalLoss": 257,
+     "quietAlt": 947,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "strong"
+    },
+    {
+     "moveNumber": 22,
+     "san": "Qxd6+",
+     "sacrifice": 3,
+     "sacSquare": "a7",
+     "playedEval": 99980,
+     "evalLoss": 0,
+     "quietAlt": 99980,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "necessary"
+    }
+   ]
+  },
+  {
+   "id": "73055820237",
+   "url": "https://www.chess.com/game/live/73055820237",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 3,
+     "san": "Qxh4",
+     "sacrifice": 9,
+     "sacSquare": "h4",
+     "playedEval": -667,
+     "evalLoss": 754,
+     "quietAlt": 87,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "72639906139",
+   "url": "https://www.chess.com/game/live/72639906139",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 5,
+     "san": "Nxd4",
+     "sacrifice": 3,
+     "sacSquare": "d4",
+     "playedEval": -496,
+     "evalLoss": 444,
+     "quietAlt": -52,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "72576138697",
+   "url": "https://www.chess.com/game/live/72576138697",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 19,
+     "san": "Qe6",
+     "sacrifice": 9,
+     "sacSquare": "e6",
+     "playedEval": -773,
+     "evalLoss": 689,
+     "quietAlt": -84,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 23,
+     "san": "Nc6",
+     "sacrifice": 3,
+     "sacSquare": "c6",
+     "playedEval": -947,
+     "evalLoss": 179,
+     "quietAlt": -768,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "72547860285",
+   "url": "https://www.chess.com/game/live/72547860285",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "72537756875",
+   "url": "https://www.chess.com/game/live/72537756875",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 32,
+     "san": "Na4",
+     "sacrifice": 3,
+     "sacSquare": "a4",
+     "playedEval": -642,
+     "evalLoss": 180,
+     "quietAlt": -462,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 57,
+     "san": "Bxa2",
+     "sacrifice": 3.2,
+     "sacSquare": "a2",
+     "playedEval": -99910,
+     "evalLoss": 10,
+     "quietAlt": -99900,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "72526398327",
+   "url": "https://www.chess.com/game/live/72526398327",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 8,
+     "san": "Nxe5",
+     "sacrifice": 3,
+     "sacSquare": "e5",
+     "playedEval": -422,
+     "evalLoss": 333,
+     "quietAlt": -89,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 9,
+     "san": "Bg4",
+     "sacrifice": 3.2,
+     "sacSquare": "g4",
+     "playedEval": -723,
+     "evalLoss": 341,
+     "quietAlt": -382,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 14,
+     "san": "Qxh3",
+     "sacrifice": 9,
+     "sacSquare": "h3",
+     "playedEval": -1055,
+     "evalLoss": 535,
+     "quietAlt": -520,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 16,
+     "san": "O-O",
+     "sacrifice": 3,
+     "sacSquare": "e7",
+     "playedEval": -1135,
+     "evalLoss": 19,
+     "quietAlt": -1116,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "72525882971",
+   "url": "https://www.chess.com/game/live/72525882971",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 11,
+     "san": "Bg5",
+     "sacrifice": 3.2,
+     "sacSquare": "g5",
+     "playedEval": -335,
+     "evalLoss": 832,
+     "quietAlt": 497,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 17,
+     "san": "Nxd5",
+     "sacrifice": 2,
+     "sacSquare": "d5",
+     "playedEval": -465,
+     "evalLoss": 12,
+     "quietAlt": -453,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "72369273649",
+   "url": "https://www.chess.com/game/live/72369273649",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 9,
+     "san": "Bg5+",
+     "sacrifice": 3.2,
+     "sacSquare": "g5",
+     "playedEval": -307,
+     "evalLoss": 459,
+     "quietAlt": 152,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 16,
+     "san": "Bf6+",
+     "sacrifice": 3.2,
+     "sacSquare": "f6",
+     "playedEval": -333,
+     "evalLoss": 459,
+     "quietAlt": 126,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 23,
+     "san": "Bc3",
+     "sacrifice": 3.2,
+     "sacSquare": "c3",
+     "playedEval": 12,
+     "evalLoss": 2,
+     "quietAlt": 14,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "72301356027",
+   "url": "https://www.chess.com/game/live/72301356027",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "72221529153",
+   "url": "https://www.chess.com/game/live/72221529153",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 19,
+     "san": "Nb4",
+     "sacrifice": 3,
+     "sacSquare": "b4",
+     "playedEval": -548,
+     "evalLoss": 333,
+     "quietAlt": -215,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 30,
+     "san": "Qa2",
+     "sacrifice": 9,
+     "sacSquare": "a2",
+     "playedEval": -939,
+     "evalLoss": 521,
+     "quietAlt": -418,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 44,
+     "san": "Rg7",
+     "sacrifice": 5,
+     "sacSquare": "g7",
+     "playedEval": -99990,
+     "evalLoss": 70,
+     "quietAlt": null,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "72131254071",
+   "url": "https://www.chess.com/game/live/72131254071",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 6,
+     "san": "Nxd4",
+     "sacrifice": 3,
+     "sacSquare": "d4",
+     "playedEval": -368,
+     "evalLoss": 290,
+     "quietAlt": -78,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 12,
+     "san": "Bxd5",
+     "sacrifice": 3.2,
+     "sacSquare": "d5",
+     "playedEval": -544,
+     "evalLoss": 117,
+     "quietAlt": -427,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "72130559225",
+   "url": "https://www.chess.com/game/live/72130559225",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 20,
+     "san": "Qh7+",
+     "sacrifice": 9,
+     "sacSquare": "h7",
+     "playedEval": -321,
+     "evalLoss": 1314,
+     "quietAlt": 993,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 25,
+     "san": "Bg4",
+     "sacrifice": 3,
+     "sacSquare": "g4",
+     "playedEval": -635,
+     "evalLoss": 690,
+     "quietAlt": 55,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "72111247441",
+   "url": "https://www.chess.com/game/live/72111247441",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 12,
+     "san": "Bf6",
+     "sacrifice": 3.2,
+     "sacSquare": "f6",
+     "playedEval": -1539,
+     "evalLoss": 554,
+     "quietAlt": -985,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 21,
+     "san": "Ra6",
+     "sacrifice": 5,
+     "sacSquare": "a6",
+     "playedEval": -1174,
+     "evalLoss": 455,
+     "quietAlt": -719,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 27,
+     "san": "Nxe3",
+     "sacrifice": 3,
+     "sacSquare": "e3",
+     "playedEval": -621,
+     "evalLoss": 345,
+     "quietAlt": -276,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 28,
+     "san": "Rd3",
+     "sacrifice": 4,
+     "sacSquare": "d3",
+     "playedEval": -956,
+     "evalLoss": 319,
+     "quietAlt": -637,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 37,
+     "san": "Kc2",
+     "sacrifice": 3.2,
+     "sacSquare": "e2",
+     "playedEval": -99880,
+     "evalLoss": 95316,
+     "quietAlt": -4564,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "72110841519",
+   "url": "https://www.chess.com/game/live/72110841519",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 4,
+     "san": "Nxh7",
+     "sacrifice": 3,
+     "sacSquare": "h7",
+     "playedEval": -185,
+     "evalLoss": 399,
+     "quietAlt": 214,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "72012130191",
+   "url": "https://www.chess.com/game/live/72012130191",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 12,
+     "san": "Qg5",
+     "sacrifice": 9,
+     "sacSquare": "g5",
+     "playedEval": -525,
+     "evalLoss": 1304,
+     "quietAlt": 779,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 23,
+     "san": "Nd4+",
+     "sacrifice": 3,
+     "sacSquare": "d4",
+     "playedEval": 596,
+     "evalLoss": 19,
+     "quietAlt": 237,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": null
+    }
+   ]
+  },
+  {
+   "id": "72011166495",
+   "url": "https://www.chess.com/game/live/72011166495",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 17,
+     "san": "Qd5",
+     "sacrifice": 3.2,
+     "sacSquare": "e1",
+     "playedEval": -471,
+     "evalLoss": 110,
+     "quietAlt": -361,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 20,
+     "san": "exf6",
+     "sacrifice": 2,
+     "sacSquare": "e1",
+     "playedEval": -781,
+     "evalLoss": 1299,
+     "quietAlt": 442,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "71930666449",
+   "url": "https://www.chess.com/game/live/71930666449",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "71922350989",
+   "url": "https://www.chess.com/game/live/71922350989",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 22,
+     "san": "Qf3+",
+     "sacrifice": 6.8,
+     "sacSquare": "f3",
+     "playedEval": 1746,
+     "evalLoss": 98244,
+     "quietAlt": 99990,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    },
+    {
+     "moveNumber": 36,
+     "san": "Rxh4",
+     "sacrifice": 5,
+     "sacSquare": "h4",
+     "playedEval": 99990,
+     "evalLoss": -10,
+     "quietAlt": 99970,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "necessary"
+    }
+   ]
+  },
+  {
+   "id": "71922177837",
+   "url": "https://www.chess.com/game/live/71922177837",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "71804494263",
+   "url": "https://www.chess.com/game/live/71804494263",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 10,
+     "san": "Ng4",
+     "sacrifice": 3,
+     "sacSquare": "g4",
+     "playedEval": 79,
+     "evalLoss": 129,
+     "quietAlt": 208,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "71803918715",
+   "url": "https://www.chess.com/game/live/71803918715",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 17,
+     "san": "Nb5",
+     "sacrifice": 3,
+     "sacSquare": "b5",
+     "playedEval": -925,
+     "evalLoss": 199,
+     "quietAlt": -726,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 20,
+     "san": "Ke1",
+     "sacrifice": 5,
+     "sacSquare": "a1",
+     "playedEval": -99980,
+     "evalLoss": 98978,
+     "quietAlt": -1002,
+     "shape": "discovered",
+     "accepted": false,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 21,
+     "san": "Kf2",
+     "sacrifice": 5,
+     "sacSquare": "h1",
+     "playedEval": -1550,
+     "evalLoss": -191,
+     "quietAlt": null,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "71796798681",
+   "url": "https://www.chess.com/game/live/71796798681",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 23,
+     "san": "Rxe4+",
+     "sacrifice": 5,
+     "sacSquare": "e4",
+     "playedEval": 911,
+     "evalLoss": 339,
+     "quietAlt": 1250,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    },
+    {
+     "moveNumber": 27,
+     "san": "Qc6+",
+     "sacrifice": 3,
+     "sacSquare": "c6",
+     "playedEval": -248,
+     "evalLoss": 1136,
+     "quietAlt": 888,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 32,
+     "san": "Nxb3",
+     "sacrifice": 3,
+     "sacSquare": "b3",
+     "playedEval": 695,
+     "evalLoss": 162,
+     "quietAlt": 857,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "71588623427",
+   "url": "https://www.chess.com/game/live/71588623427",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 16,
+     "san": "Bxf2+",
+     "sacrifice": 3.2,
+     "sacSquare": "f2",
+     "playedEval": -442,
+     "evalLoss": 750,
+     "quietAlt": 308,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 19,
+     "san": "Bd3",
+     "sacrifice": 3.2,
+     "sacSquare": "d3",
+     "playedEval": -594,
+     "evalLoss": 167,
+     "quietAlt": -427,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 20,
+     "san": "Qh4",
+     "sacrifice": 9,
+     "sacSquare": "h4",
+     "playedEval": -911,
+     "evalLoss": 313,
+     "quietAlt": -598,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "71533522913",
+   "url": "https://www.chess.com/game/live/71533522913",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 13,
+     "san": "Qxa2",
+     "sacrifice": 5.8,
+     "sacSquare": "a2",
+     "playedEval": -752,
+     "evalLoss": 309,
+     "quietAlt": -456,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 25,
+     "san": "Qd2+",
+     "sacrifice": 9,
+     "sacSquare": "d2",
+     "playedEval": 532,
+     "evalLoss": 64,
+     "quietAlt": 596,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "necessary"
+    }
+   ]
+  },
+  {
+   "id": "71533389333",
+   "url": "https://www.chess.com/game/live/71533389333",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "71443466943",
+   "url": "https://www.chess.com/game/live/71443466943",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 7,
+     "san": "Nxh2",
+     "sacrifice": 3,
+     "sacSquare": "h2",
+     "playedEval": -260,
+     "evalLoss": 408,
+     "quietAlt": 148,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 15,
+     "san": "Kf7",
+     "sacrifice": 9,
+     "sacSquare": "d8",
+     "playedEval": -1249,
+     "evalLoss": 837,
+     "quietAlt": -412,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "71350094733",
+   "url": "https://www.chess.com/game/live/71350094733",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 5,
+     "san": "Nxd5",
+     "sacrifice": 3,
+     "sacSquare": "d5",
+     "playedEval": -471,
+     "evalLoss": 352,
+     "quietAlt": -119,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 28,
+     "san": "Kb8",
+     "sacrifice": 5,
+     "sacSquare": "d7",
+     "playedEval": -1157,
+     "evalLoss": 456,
+     "quietAlt": -701,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "71326434247",
+   "url": "https://www.chess.com/game/live/71326434247",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 19,
+     "san": "Bxg5+",
+     "sacrifice": 2.2,
+     "sacSquare": "g5",
+     "playedEval": -296,
+     "evalLoss": 435,
+     "quietAlt": 139,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 21,
+     "san": "Rd5+",
+     "sacrifice": 2,
+     "sacSquare": "d5",
+     "playedEval": -152,
+     "evalLoss": 687,
+     "quietAlt": 535,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 23,
+     "san": "Bd6+",
+     "sacrifice": 2.2,
+     "sacSquare": "d6",
+     "playedEval": 692,
+     "evalLoss": 84,
+     "quietAlt": 776,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "necessary"
+    },
+    {
+     "moveNumber": 30,
+     "san": "Qe6+",
+     "sacrifice": 9,
+     "sacSquare": "e6",
+     "playedEval": -262,
+     "evalLoss": 1105,
+     "quietAlt": 843,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "71320591909",
+   "url": "https://www.chess.com/game/live/71320591909",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 19,
+     "san": "Bxe7",
+     "sacrifice": 3.2,
+     "sacSquare": "e7",
+     "playedEval": 566,
+     "evalLoss": 88,
+     "quietAlt": 654,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "necessary"
+    }
+   ]
+  },
+  {
+   "id": "71285049251",
+   "url": "https://www.chess.com/game/live/71285049251",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "71283881601",
+   "url": "https://www.chess.com/game/live/71283881601",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 29,
+     "san": "Nxh3",
+     "sacrifice": 3.2,
+     "sacSquare": "e6",
+     "playedEval": 288,
+     "evalLoss": 420,
+     "quietAlt": 708,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "strong"
+    },
+    {
+     "moveNumber": 31,
+     "san": "Rc2",
+     "sacrifice": 5,
+     "sacSquare": "c2",
+     "playedEval": 174,
+     "evalLoss": 967,
+     "quietAlt": 1141,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "70987385835",
+   "url": "https://www.chess.com/game/live/70987385835",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 10,
+     "san": "Kd7",
+     "sacrifice": 3,
+     "sacSquare": "f5",
+     "playedEval": -594,
+     "evalLoss": 397,
+     "quietAlt": -197,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "70984384265",
+   "url": "https://www.chess.com/game/live/70984384265",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 13,
+     "san": "O-O",
+     "sacrifice": 3,
+     "sacSquare": "e2",
+     "playedEval": -73,
+     "evalLoss": 358,
+     "quietAlt": 285,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 23,
+     "san": "Qe8+",
+     "sacrifice": 9,
+     "sacSquare": "e8",
+     "playedEval": -826,
+     "evalLoss": 257,
+     "quietAlt": -569,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "70984051877",
+   "url": "https://www.chess.com/game/live/70984051877",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 4,
+     "san": "Ng8",
+     "sacrifice": 3,
+     "sacSquare": "g8",
+     "playedEval": -701,
+     "evalLoss": 90,
+     "quietAlt": -611,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 7,
+     "san": "Qf4",
+     "sacrifice": 9,
+     "sacSquare": "f4",
+     "playedEval": -1367,
+     "evalLoss": 575,
+     "quietAlt": -792,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "70932728211",
+   "url": "https://www.chess.com/game/live/70932728211",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 15,
+     "san": "Qd7",
+     "sacrifice": 9,
+     "sacSquare": "d7",
+     "playedEval": -861,
+     "evalLoss": 827,
+     "quietAlt": -34,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "70929336507",
+   "url": "https://www.chess.com/game/live/70929336507",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 9,
+     "san": "Qa5",
+     "sacrifice": 3,
+     "sacSquare": "f6",
+     "playedEval": -425,
+     "evalLoss": 665,
+     "quietAlt": 240,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 21,
+     "san": "b1=Q",
+     "sacrifice": 4,
+     "sacSquare": "b1",
+     "playedEval": 32,
+     "evalLoss": 289,
+     "quietAlt": 321,
+     "shape": "promotion",
+     "accepted": true,
+     "rejectedBy": "strong"
+    },
+    {
+     "moveNumber": 22,
+     "san": "Qxd3+",
+     "sacrifice": 9,
+     "sacSquare": "d3",
+     "playedEval": 468,
+     "evalLoss": 1128,
+     "quietAlt": 1596,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    },
+    {
+     "moveNumber": 23,
+     "san": "Qc1+",
+     "sacrifice": 9,
+     "sacSquare": "c1",
+     "playedEval": -743,
+     "evalLoss": 1199,
+     "quietAlt": 456,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "70929121583",
+   "url": "https://www.chess.com/game/live/70929121583",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 19,
+     "san": "Nxd4",
+     "sacrifice": 3,
+     "sacSquare": "d4",
+     "playedEval": -99970,
+     "evalLoss": 100373,
+     "quietAlt": 403,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 27,
+     "san": "Kc6",
+     "sacrifice": 9,
+     "sacSquare": "c4",
+     "playedEval": -603,
+     "evalLoss": -2,
+     "quietAlt": null,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "70921312263",
+   "url": "https://www.chess.com/game/live/70921312263",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 18,
+     "san": "Rg8",
+     "sacrifice": 5,
+     "sacSquare": "g8",
+     "playedEval": 328,
+     "evalLoss": 632,
+     "quietAlt": 960,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "70888290969",
+   "url": "https://www.chess.com/game/live/70888290969",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "70762293387",
+   "url": "https://www.chess.com/game/live/70762293387",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 15,
+     "san": "Qe3",
+     "sacrifice": 6,
+     "sacSquare": "e3",
+     "playedEval": -617,
+     "evalLoss": 403,
+     "quietAlt": -447,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 18,
+     "san": "Rxf3",
+     "sacrifice": 2,
+     "sacSquare": "f3",
+     "playedEval": -693,
+     "evalLoss": -21,
+     "quietAlt": null,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 30,
+     "san": "Bb7+",
+     "sacrifice": 3.2,
+     "sacSquare": "b7",
+     "playedEval": -605,
+     "evalLoss": 220,
+     "quietAlt": -385,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 44,
+     "san": "Ne6",
+     "sacrifice": 2,
+     "sacSquare": "e6",
+     "playedEval": -4002,
+     "evalLoss": -95948,
+     "quietAlt": -99950,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 49,
+     "san": "e8=Q+",
+     "sacrifice": 9,
+     "sacSquare": "e8",
+     "playedEval": -3896,
+     "evalLoss": -96054,
+     "quietAlt": null,
+     "shape": "promotion",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "70636898879",
+   "url": "https://www.chess.com/game/live/70636898879",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 6,
+     "san": "Qh5",
+     "sacrifice": 9,
+     "sacSquare": "h5",
+     "playedEval": -692,
+     "evalLoss": 767,
+     "quietAlt": 75,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 21,
+     "san": "Ke2",
+     "sacrifice": 3,
+     "sacSquare": "b1",
+     "playedEval": -822,
+     "evalLoss": 150,
+     "quietAlt": -672,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 40,
+     "san": "g8=Q+",
+     "sacrifice": 9,
+     "sacSquare": "g8",
+     "playedEval": -4298,
+     "evalLoss": 658,
+     "quietAlt": -3640,
+     "shape": "promotion",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "70590255599",
+   "url": "https://www.chess.com/game/live/70590255599",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 19,
+     "san": "Bf6",
+     "sacrifice": 3.2,
+     "sacSquare": "f6",
+     "playedEval": -395,
+     "evalLoss": 124,
+     "quietAlt": -271,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "70402294709",
+   "url": "https://www.chess.com/game/live/70402294709",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 11,
+     "san": "Bxg4",
+     "sacrifice": 2.2,
+     "sacSquare": "g4",
+     "playedEval": 121,
+     "evalLoss": 294,
+     "quietAlt": 415,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "70401840607",
+   "url": "https://www.chess.com/game/live/70401840607",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 5,
+     "san": "Qxf2+",
+     "sacrifice": 9,
+     "sacSquare": "f2",
+     "playedEval": -642,
+     "evalLoss": 1189,
+     "quietAlt": 547,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "70392795647",
+   "url": "https://www.chess.com/game/live/70392795647",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "70392261885",
+   "url": "https://www.chess.com/game/live/70392261885",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 13,
+     "san": "Nd4",
+     "sacrifice": 3,
+     "sacSquare": "d4",
+     "playedEval": -448,
+     "evalLoss": 621,
+     "quietAlt": 173,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "69870256327",
+   "url": "https://www.chess.com/game/live/69870256327",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 13,
+     "san": "Qe3",
+     "sacrifice": 5.8,
+     "sacSquare": "e3",
+     "playedEval": 67,
+     "evalLoss": 583,
+     "quietAlt": 650,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    },
+    {
+     "moveNumber": 27,
+     "san": "Nxc6",
+     "sacrifice": 3,
+     "sacSquare": "c6",
+     "playedEval": -556,
+     "evalLoss": 1061,
+     "quietAlt": 505,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 29,
+     "san": "Nxe4",
+     "sacrifice": 5,
+     "sacSquare": "d1",
+     "playedEval": -574,
+     "evalLoss": 923,
+     "quietAlt": 349,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "69798477321",
+   "url": "https://www.chess.com/game/live/69798477321",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 21,
+     "san": "Bc5",
+     "sacrifice": 3,
+     "sacSquare": "e5",
+     "playedEval": 1910,
+     "evalLoss": 98080,
+     "quietAlt": 99990,
+     "shape": "discovered",
+     "accepted": false,
+     "rejectedBy": "strong"
+    },
+    {
+     "moveNumber": 22,
+     "san": "Be3+",
+     "sacrifice": 3.2,
+     "sacSquare": "e3",
+     "playedEval": 99980,
+     "evalLoss": 10,
+     "quietAlt": 99990,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "necessary"
+    },
+    {
+     "moveNumber": 27,
+     "san": "Qf1+",
+     "sacrifice": 7.2,
+     "sacSquare": "f1",
+     "playedEval": 784,
+     "evalLoss": 99206,
+     "quietAlt": 99990,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    },
+    {
+     "moveNumber": 29,
+     "san": "Rd2+",
+     "sacrifice": 5,
+     "sacSquare": "d2",
+     "playedEval": 592,
+     "evalLoss": 246,
+     "quietAlt": 838,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "69686051255",
+   "url": "https://www.chess.com/game/live/69686051255",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 28,
+     "san": "Qf8+",
+     "sacrifice": 9,
+     "sacSquare": "f8",
+     "playedEval": -375,
+     "evalLoss": 100325,
+     "quietAlt": 99950,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "69685394963",
+   "url": "https://www.chess.com/game/live/69685394963",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "69684366975",
+   "url": "https://www.chess.com/game/live/69684366975",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 16,
+     "san": "Bf5",
+     "sacrifice": 3.2,
+     "sacSquare": "f5",
+     "playedEval": -221,
+     "evalLoss": 428,
+     "quietAlt": 207,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "69626078775",
+   "url": "https://www.chess.com/game/live/69626078775",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 16,
+     "san": "Nh4",
+     "sacrifice": 3,
+     "sacSquare": "h4",
+     "playedEval": 550,
+     "evalLoss": 228,
+     "quietAlt": 778,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "strong"
+    },
+    {
+     "moveNumber": 27,
+     "san": "Be7",
+     "sacrifice": 3.2,
+     "sacSquare": "e7",
+     "playedEval": 1233,
+     "evalLoss": 98667,
+     "quietAlt": 99900,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    },
+    {
+     "moveNumber": 28,
+     "san": "Ba3",
+     "sacrifice": 3.2,
+     "sacSquare": "a3",
+     "playedEval": 1194,
+     "evalLoss": 98706,
+     "quietAlt": 99900,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "strong"
+    },
+    {
+     "moveNumber": 31,
+     "san": "Qe7",
+     "sacrifice": 6,
+     "sacSquare": "e7",
+     "playedEval": 797,
+     "evalLoss": 99153,
+     "quietAlt": 99950,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "69553431451",
+   "url": "https://www.chess.com/game/live/69553431451",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "69434079481",
+   "url": "https://www.chess.com/game/live/69434079481",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 7,
+     "san": "Nc5",
+     "sacrifice": 3,
+     "sacSquare": "c5",
+     "playedEval": -502,
+     "evalLoss": 728,
+     "quietAlt": 226,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 14,
+     "san": "axb5",
+     "sacrifice": 5,
+     "sacSquare": "a1",
+     "playedEval": -1093,
+     "evalLoss": 315,
+     "quietAlt": -778,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 15,
+     "san": "Ra4",
+     "sacrifice": 5,
+     "sacSquare": "a4",
+     "playedEval": -1107,
+     "evalLoss": 572,
+     "quietAlt": -535,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 24,
+     "san": "Rf1",
+     "sacrifice": 3,
+     "sacSquare": "e5",
+     "playedEval": -1130,
+     "evalLoss": 328,
+     "quietAlt": -802,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 27,
+     "san": "Kd1",
+     "sacrifice": 3.2,
+     "sacSquare": "f1",
+     "playedEval": -99910,
+     "evalLoss": 95930,
+     "quietAlt": null,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "69433175723",
+   "url": "https://www.chess.com/game/live/69433175723",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "69433154421",
+   "url": "https://www.chess.com/game/live/69433154421",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "69428034285",
+   "url": "https://www.chess.com/game/live/69428034285",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 22,
+     "san": "Qxe3+",
+     "sacrifice": 8.8,
+     "sacSquare": "e3",
+     "playedEval": 715,
+     "evalLoss": 835,
+     "quietAlt": 1476,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "69378865539",
+   "url": "https://www.chess.com/game/live/69378865539",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "69377834055",
+   "url": "https://www.chess.com/game/live/69377834055",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 21,
+     "san": "Qf3",
+     "sacrifice": 9,
+     "sacSquare": "f3",
+     "playedEval": -648,
+     "evalLoss": 1129,
+     "quietAlt": 481,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 24,
+     "san": "Be7",
+     "sacrifice": 3.2,
+     "sacSquare": "e7",
+     "playedEval": -1011,
+     "evalLoss": 447,
+     "quietAlt": -564,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 28,
+     "san": "Rd7",
+     "sacrifice": 5,
+     "sacSquare": "d7",
+     "playedEval": -815,
+     "evalLoss": 241,
+     "quietAlt": -574,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 29,
+     "san": "Bg2",
+     "sacrifice": 3.2,
+     "sacSquare": "g2",
+     "playedEval": -1188,
+     "evalLoss": 373,
+     "quietAlt": -815,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "69374849007",
+   "url": "https://www.chess.com/game/live/69374849007",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "69374295097",
+   "url": "https://www.chess.com/game/live/69374295097",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 14,
+     "san": "axb5",
+     "sacrifice": 5,
+     "sacSquare": "a1",
+     "playedEval": -1070,
+     "evalLoss": 371,
+     "quietAlt": -699,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 20,
+     "san": "Kf3",
+     "sacrifice": 9,
+     "sacSquare": "f1",
+     "playedEval": -897,
+     "evalLoss": 897,
+     "quietAlt": 0,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 32,
+     "san": "Re5",
+     "sacrifice": 5,
+     "sacSquare": "e5",
+     "playedEval": -4294,
+     "evalLoss": 503,
+     "quietAlt": -3791,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 34,
+     "san": "Ke2",
+     "sacrifice": 5,
+     "sacSquare": "e3",
+     "playedEval": -99980,
+     "evalLoss": 60,
+     "quietAlt": null,
+     "shape": "discovered",
+     "accepted": false,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "69373702477",
+   "url": "https://www.chess.com/game/live/69373702477",
+   "userColor": "w",
+   "candidates": []
+  },
+  {
+   "id": "69280581695",
+   "url": "https://www.chess.com/game/live/69280581695",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 9,
+     "san": "Qxb3",
+     "sacrifice": 9,
+     "sacSquare": "b3",
+     "playedEval": -609,
+     "evalLoss": 829,
+     "quietAlt": 220,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 15,
+     "san": "Nb3",
+     "sacrifice": 3.2,
+     "sacSquare": "c4",
+     "playedEval": -632,
+     "evalLoss": 120,
+     "quietAlt": -512,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 28,
+     "san": "Nc2",
+     "sacrifice": 3,
+     "sacSquare": "c2",
+     "playedEval": 0,
+     "evalLoss": 504,
+     "quietAlt": 504,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 34,
+     "san": "Ne1+",
+     "sacrifice": 3,
+     "sacSquare": "e1",
+     "playedEval": -520,
+     "evalLoss": 432,
+     "quietAlt": -88,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 37,
+     "san": "Ng4+",
+     "sacrifice": 3,
+     "sacSquare": "g4",
+     "playedEval": 362,
+     "evalLoss": 230,
+     "quietAlt": 592,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    },
+    {
+     "moveNumber": 78,
+     "san": "Bg3",
+     "sacrifice": 3.2,
+     "sacSquare": "g3",
+     "playedEval": 3425,
+     "evalLoss": 875,
+     "quietAlt": 4300,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "69169474795",
+   "url": "https://www.chess.com/game/live/69169474795",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 18,
+     "san": "gxh8=Q+",
+     "sacrifice": 4,
+     "sacSquare": "h8",
+     "playedEval": 247,
+     "evalLoss": 29,
+     "quietAlt": null,
+     "shape": "promotion",
+     "accepted": true,
+     "rejectedBy": "necessary"
+    },
+    {
+     "moveNumber": 23,
+     "san": "Rxc5",
+     "sacrifice": 5,
+     "sacSquare": "c5",
+     "playedEval": -472,
+     "evalLoss": 1041,
+     "quietAlt": 569,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 28,
+     "san": "Bd4",
+     "sacrifice": 3,
+     "sacSquare": "a3",
+     "playedEval": -706,
+     "evalLoss": 36,
+     "quietAlt": -720,
+     "shape": "discovered",
+     "accepted": false,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 47,
+     "san": "Be6",
+     "sacrifice": 3.2,
+     "sacSquare": "e6",
+     "playedEval": -99980,
+     "evalLoss": 30,
+     "quietAlt": -99950,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 50,
+     "san": "Qh8+",
+     "sacrifice": 9,
+     "sacSquare": "h8",
+     "playedEval": -99950,
+     "evalLoss": 199940,
+     "quietAlt": 99990,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "69076347829",
+   "url": "https://www.chess.com/game/live/69076347829",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 49,
+     "san": "Rf4+",
+     "sacrifice": 5,
+     "sacSquare": "f4",
+     "playedEval": 99960,
+     "evalLoss": 10,
+     "quietAlt": 99970,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "necessary"
+    }
+   ]
+  },
+  {
+   "id": "69023093493",
+   "url": "https://www.chess.com/game/live/69023093493",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 35,
+     "san": "c8=Q",
+     "sacrifice": 7.2,
+     "sacSquare": "c8",
+     "playedEval": 99910,
+     "evalLoss": 70,
+     "quietAlt": 99980,
+     "shape": "promotion",
+     "accepted": true,
+     "rejectedBy": "necessary"
+    },
+    {
+     "moveNumber": 39,
+     "san": "Kc2",
+     "sacrifice": 5,
+     "sacSquare": "e1",
+     "playedEval": 99930,
+     "evalLoss": -10,
+     "quietAlt": null,
+     "shape": "discovered",
+     "accepted": false,
+     "rejectedBy": "necessary"
+    }
+   ]
+  },
+  {
+   "id": "69022432661",
+   "url": "https://www.chess.com/game/live/69022432661",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 20,
+     "san": "Nxd3",
+     "sacrifice": 3,
+     "sacSquare": "d3",
+     "playedEval": 746,
+     "evalLoss": 163,
+     "quietAlt": 909,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "68993970175",
+   "url": "https://www.chess.com/game/live/68993970175",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 32,
+     "san": "Nh6",
+     "sacrifice": 3.2,
+     "sacSquare": "e7",
+     "playedEval": -1483,
+     "evalLoss": 567,
+     "quietAlt": -916,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 34,
+     "san": "Nd8",
+     "sacrifice": 3,
+     "sacSquare": "d8",
+     "playedEval": -2180,
+     "evalLoss": 485,
+     "quietAlt": -1710,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 35,
+     "san": "Rf6",
+     "sacrifice": 5,
+     "sacSquare": "f6",
+     "playedEval": -99960,
+     "evalLoss": 40,
+     "quietAlt": -99920,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "68948122331",
+   "url": "https://www.chess.com/game/live/68948122331",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 8,
+     "san": "Ne4",
+     "sacrifice": 3,
+     "sacSquare": "e4",
+     "playedEval": -500,
+     "evalLoss": 559,
+     "quietAlt": 59,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 25,
+     "san": "Qxd2+",
+     "sacrifice": 5,
+     "sacSquare": "d2",
+     "playedEval": -285,
+     "evalLoss": 639,
+     "quietAlt": 354,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 46,
+     "san": "fxg1=Q",
+     "sacrifice": 6,
+     "sacSquare": "g1",
+     "playedEval": 635,
+     "evalLoss": 354,
+     "quietAlt": 989,
+     "shape": "promotion",
+     "accepted": true,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "68903865247",
+   "url": "https://www.chess.com/game/live/68903865247",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 29,
+     "san": "Nh6",
+     "sacrifice": 3,
+     "sacSquare": "h6",
+     "playedEval": 709,
+     "evalLoss": 384,
+     "quietAlt": 1093,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "68902648629",
+   "url": "https://www.chess.com/game/live/68902648629",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 31,
+     "san": "Qd4",
+     "sacrifice": 9,
+     "sacSquare": "d4",
+     "playedEval": -712,
+     "evalLoss": 787,
+     "quietAlt": 75,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 37,
+     "san": "Be1",
+     "sacrifice": 3.2,
+     "sacSquare": "e1",
+     "playedEval": -1632,
+     "evalLoss": 226,
+     "quietAlt": -1406,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "68860979973",
+   "url": "https://www.chess.com/game/live/68860979973",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 48,
+     "san": "f8=Q",
+     "sacrifice": 9,
+     "sacSquare": "f8",
+     "playedEval": -99940,
+     "evalLoss": -10,
+     "quietAlt": null,
+     "shape": "promotion",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "68860320943",
+   "url": "https://www.chess.com/game/live/68860320943",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 10,
+     "san": "Qxg5",
+     "sacrifice": 9,
+     "sacSquare": "g5",
+     "playedEval": -581,
+     "evalLoss": 857,
+     "quietAlt": 276,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "68859226331",
+   "url": "https://www.chess.com/game/live/68859226331",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 18,
+     "san": "Nxd5",
+     "sacrifice": 3,
+     "sacSquare": "d5",
+     "playedEval": -67,
+     "evalLoss": 331,
+     "quietAlt": 264,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "68847406715",
+   "url": "https://www.chess.com/game/live/68847406715",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 26,
+     "san": "Qd5",
+     "sacrifice": 8,
+     "sacSquare": "d5",
+     "playedEval": 85,
+     "evalLoss": 1077,
+     "quietAlt": 1162,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "68820772835",
+   "url": "https://www.chess.com/game/live/68820772835",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 27,
+     "san": "Nxf3+",
+     "sacrifice": 2,
+     "sacSquare": "f3",
+     "playedEval": 1376,
+     "evalLoss": 98564,
+     "quietAlt": 99940,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "strong"
+    },
+    {
+     "moveNumber": 37,
+     "san": "Re3",
+     "sacrifice": 5,
+     "sacSquare": "e3",
+     "playedEval": 99970,
+     "evalLoss": 0,
+     "quietAlt": 99970,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "necessary"
+    }
+   ]
+  },
+  {
+   "id": "68819792559",
+   "url": "https://www.chess.com/game/live/68819792559",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 16,
+     "san": "Bg7",
+     "sacrifice": 3.2,
+     "sacSquare": "g7",
+     "playedEval": 138,
+     "evalLoss": 449,
+     "quietAlt": 587,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    },
+    {
+     "moveNumber": 22,
+     "san": "Bg4",
+     "sacrifice": 3.2,
+     "sacSquare": "g4",
+     "playedEval": 22,
+     "evalLoss": 606,
+     "quietAlt": 628,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "68776924307",
+   "url": "https://www.chess.com/game/live/68776924307",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 21,
+     "san": "Rxb3+",
+     "sacrifice": 5,
+     "sacSquare": "b3",
+     "playedEval": 192,
+     "evalLoss": 513,
+     "quietAlt": 705,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    },
+    {
+     "moveNumber": 23,
+     "san": "Qxg1",
+     "sacrifice": 4,
+     "sacSquare": "g1",
+     "playedEval": -355,
+     "evalLoss": 513,
+     "quietAlt": 158,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 34,
+     "san": "Nf3",
+     "sacrifice": 3,
+     "sacSquare": "f3",
+     "playedEval": 594,
+     "evalLoss": 132,
+     "quietAlt": 726,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "68736286871",
+   "url": "https://www.chess.com/game/live/68736286871",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 12,
+     "san": "Nc5",
+     "sacrifice": 3,
+     "sacSquare": "c5",
+     "playedEval": -562,
+     "evalLoss": 182,
+     "quietAlt": -380,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 18,
+     "san": "Nxe4",
+     "sacrifice": 2,
+     "sacSquare": "e4",
+     "playedEval": -743,
+     "evalLoss": 151,
+     "quietAlt": -592,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 19,
+     "san": "Qa6",
+     "sacrifice": 9,
+     "sacSquare": "a6",
+     "playedEval": -1253,
+     "evalLoss": 477,
+     "quietAlt": -776,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 25,
+     "san": "Qxh3",
+     "sacrifice": 9,
+     "sacSquare": "h3",
+     "playedEval": -1410,
+     "evalLoss": 289,
+     "quietAlt": -1121,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 40,
+     "san": "Rh7",
+     "sacrifice": 5,
+     "sacSquare": "h7",
+     "playedEval": -99990,
+     "evalLoss": 20,
+     "quietAlt": -99990,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "59831975341",
+   "url": "https://www.chess.com/game/live/59831975341",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 15,
+     "san": "Bxf3",
+     "sacrifice": 3.2,
+     "sacSquare": "f3",
+     "playedEval": 503,
+     "evalLoss": 178,
+     "quietAlt": 681,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    }
+   ]
+  },
+  {
+   "id": "59488143351",
+   "url": "https://www.chess.com/game/live/59488143351",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 21,
+     "san": "Nd6+",
+     "sacrifice": 2,
+     "sacSquare": "d6",
+     "playedEval": -1326,
+     "evalLoss": 325,
+     "quietAlt": -1001,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "59486465547",
+   "url": "https://www.chess.com/game/live/59486465547",
+   "userColor": "b",
+   "candidates": [
+    {
+     "moveNumber": 31,
+     "san": "Ng8",
+     "sacrifice": 3,
+     "sacSquare": "g8",
+     "playedEval": -99970,
+     "evalLoss": 99505,
+     "quietAlt": -465,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 33,
+     "san": "Re7",
+     "sacrifice": 5,
+     "sacSquare": "e7",
+     "playedEval": -99990,
+     "evalLoss": 0,
+     "quietAlt": -99990,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "59328109305",
+   "url": "https://www.chess.com/game/live/59328109305",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 23,
+     "san": "c8=Q",
+     "sacrifice": 4,
+     "sacSquare": "c8",
+     "playedEval": 99960,
+     "evalLoss": -20,
+     "quietAlt": null,
+     "shape": "promotion",
+     "accepted": false,
+     "rejectedBy": "necessary"
+    },
+    {
+     "moveNumber": 26,
+     "san": "Qh8",
+     "sacrifice": 9,
+     "sacSquare": "h8",
+     "playedEval": 852,
+     "evalLoss": 99138,
+     "quietAlt": 99990,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "strong"
+    },
+    {
+     "moveNumber": 45,
+     "san": "b8=Q",
+     "sacrifice": 9,
+     "sacSquare": "b8",
+     "playedEval": 0,
+     "evalLoss": 3950,
+     "quietAlt": 3950,
+     "shape": "promotion",
+     "accepted": true,
+     "rejectedBy": "sound"
+    }
+   ]
+  },
+  {
+   "id": "58537756587",
+   "url": "https://www.chess.com/game/live/58537756587",
+   "userColor": "b",
+   "candidates": []
+  },
+  {
+   "id": "17963559191",
+   "url": "https://www.chess.com/game/live/17963559191",
+   "userColor": "w",
+   "candidates": [
+    {
+     "moveNumber": 15,
+     "san": "Ba6",
+     "sacrifice": 3.2,
+     "sacSquare": "a6",
+     "playedEval": -768,
+     "evalLoss": 324,
+     "quietAlt": -444,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 18,
+     "san": "Bc3",
+     "sacrifice": 3.2,
+     "sacSquare": "c3",
+     "playedEval": -99960,
+     "evalLoss": 98831,
+     "quietAlt": -1129,
+     "shape": "direct",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 20,
+     "san": "Qd6",
+     "sacrifice": 9,
+     "sacSquare": "d6",
+     "playedEval": -1686,
+     "evalLoss": 870,
+     "quietAlt": -816,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 21,
+     "san": "Ba5",
+     "sacrifice": 3.2,
+     "sacSquare": "a5",
+     "playedEval": -1669,
+     "evalLoss": 968,
+     "quietAlt": -701,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 38,
+     "san": "Ke2",
+     "sacrifice": 5,
+     "sacSquare": "c1",
+     "playedEval": -1138,
+     "evalLoss": 3,
+     "quietAlt": -1135,
+     "shape": "discovered",
+     "accepted": true,
+     "rejectedBy": "sound"
+    },
+    {
+     "moveNumber": 44,
+     "san": "Rxe3",
+     "sacrifice": 2,
+     "sacSquare": "e3",
+     "playedEval": -99960,
+     "evalLoss": 50,
+     "quietAlt": -99910,
+     "shape": "direct",
+     "accepted": false,
+     "rejectedBy": "sound"
+    }
+   ]
+  }
+ ],
+ "limit": 400
+}

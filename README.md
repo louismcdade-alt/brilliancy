@@ -1,5 +1,7 @@
 # Brilliancy — `!!`
 
+**Live at [brilliancychess.com](https://brilliancychess.com)**
+
 Type any chess.com username and the site pulls your recent games, then runs a
 chess engine over them **in your browser** to surface your **brilliant moves**
 (sound sacrifices) alongside your ratings and record.

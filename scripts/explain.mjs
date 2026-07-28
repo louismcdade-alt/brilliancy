@@ -19,6 +19,9 @@ const arg = (name) => {
   return i >= 0 ? argv[i + 1] : undefined;
 };
 const DEPTH = Number(arg("depth") ?? process.env.DEPTH) || 14;
+// Must mirror REJECT_SHAPES in src/engine/brilliancy.ts. Only promotions are cut;
+// `discovered` is measured but deliberately not rejected — see the note there.
+const REJECTED_SHAPES = ["promotion"];
 
 async function launch() {
   for (const channel of ["msedge", "chrome"]) {
@@ -156,18 +159,26 @@ for (const t of targets) {
   }
   for (const c of rows) {
     // Shape is a separate axis from the eval gates: a move can clear all three
-    // and still be dropped for being a discovered or promoted offer, and when
-    // chasing a false negative you need to see which of the two happened.
+    // and still be dropped for its shape, and when chasing a false negative you
+    // need to see which of the two happened. Only shapes in REJECT_SHAPES are
+    // actually cut — this used to print "CUT" for any non-direct offer, which
+    // was wrong for `discovered` and made 12...g6 look rejected when it is in
+    // fact still flagged.
+    const cut = REJECTED_SHAPES.includes(c.shape);
     const verdict = c.rejectedBy
       ? `REJECTED by ${c.rejectedBy}`
-      : c.shape !== "direct"
+      : cut
         ? `CUT (${c.shape} offer)`
         : "BRILLIANT";
     const alt = c.quietAlt === null || !isFinite(c.quietAlt) ? "none" : `${c.quietAlt}cp`;
+    const marg =
+      c.quietAlt === null || !isFinite(c.quietAlt) ? "  n/a" : String(c.playedEval - c.quietAlt).padStart(5);
+    const acc = c.accepted === null ? "?" : c.accepted ? "TAKEN" : "declined";
     console.log(
       `    ${String(c.moveNumber).padStart(3)}.${c.san.padEnd(8)} ${verdict.padEnd(22)}` +
         ` sac ${String(c.sacrifice).padEnd(4)}on ${String(c.sacSquare ?? "?").padEnd(3)}` +
-        ` eval ${String(c.playedEval).padStart(6)}cp  loss ${String(c.evalLoss).padStart(5)}cp  best quiet alt ${alt}`,
+        ` eval ${String(c.playedEval).padStart(6)}cp  loss ${String(c.evalLoss).padStart(5)}cp` +
+        `  quietAlt ${alt.padStart(7)}  margin ${marg}  ${acc}`,
     );
   }
   console.log("");

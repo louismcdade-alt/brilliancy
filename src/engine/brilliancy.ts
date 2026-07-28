@@ -45,6 +45,38 @@ const MAX_EVAL_LOSS = 120; // cp the played move may trail the engine's best
 // position, while being 66cp WORSE than just playing quietly; "necessary" is a
 // strange thing to call a sacrifice you'd have done better without.
 const NECESSARY_MARGIN = 50; // cp the sacrifice must BEAT the best quiet alternative by
+
+// KNOWN MISS, investigated 2026-07-28 and deliberately left unfixed: 24.Ne6 in
+// game 169999249810 is confirmed starred by chess.com and this gate rejects it.
+// Recorded here because the obvious fixes have all been tried and they fail.
+//
+//   Not a depth problem. At depth 20 the margin gets WORSE (-102 -> -120), so
+//   the engine really does think a quiet move is a whole pawn better. chess.com
+//   starred a move that is objectively not best, which our gate cannot express.
+//
+//   No threshold can work. Order the labelled moves by either feature and the
+//   positive is sandwiched between two negatives:
+//
+//     margin   12.Nxd5 (-66) >  24.Ne6 (-102) > 19.Rxd6 (-113)
+//     loss     12.Nxd5 ( 66) <  24.Ne6 ( 102) < 19.Rxd6 ( 113)
+//     label        FP              TP               FP
+//
+//   Non-monotonic in both. Any cut admitting 24.Ne6 also admits 12...Nxd5, and
+//   19.Rxd6 sits 11cp away on the other side — inside engine noise. 24.Ne6 and
+//   19.Rxd6 are even in the SAME GAME.
+//
+//   `accepted` looked like the answer and isn't. It does split that pair
+//   (24.Ne6 declined, 19.Rxd6 taken), but letting a declined direct offer bypass
+//   this gate also admits 12...Nxd5 and 23.Nxb6, both declined, both direct,
+//   both confirmed NOT starred. It separates the case you are staring at and
+//   nothing else.
+//
+// The honest position is that one labelled positive cannot support a new rule.
+// The last pattern this project promoted on 3 examples cut Légal's Mate. So the
+// miss stays counted against recall rather than hidden behind a `diverges`
+// entry, and the fix waits for more labelled brilliancies — specifically ones
+// the engine scores BELOW a quiet alternative, which is the class 24.Ne6 is in
+// and the class we currently have exactly one of.
 const MULTI_PV = 3; // lines to search: played/best + enough to find a quiet alt
 
 // Opening/book guard: ignore theoretical pawn gambits (Queen's Gambit, Smith-Morra,
@@ -108,6 +140,20 @@ export interface Candidate {
    * without the shape rule, which is what makes a fit/test split affordable.
    */
   shape: OfferShape;
+  /**
+   * Does the opponent's BEST reply actually take the offered material?
+   *
+   * Free to compute — the post-move search already returns a bestmove, so this
+   * costs no extra engine time. Measured, not gated, until there is enough
+   * labelled data to say whether it means anything: the last time this project
+   * promoted a 3-for-3 pattern straight to a rule it cut Légal's Mate.
+   *
+   * The chess intuition is that a real sacrifice is one the opponent cannot
+   * profitably accept, whereas a "sacrifice" the engine simply takes was closer
+   * to a bad trade. null when there was no legal reply (mate/stalemate) or no
+   * identifiable offered square.
+   */
+  accepted: boolean | null;
   /** Which EVAL gate rejected it, or null if all three passed. */
   rejectedBy: "sound" | "strong" | "necessary" | null;
 }
@@ -218,6 +264,12 @@ export async function scanGame(
       evalLoss: Math.round(evalLoss),
       quietAlt: Math.round(quietAlt),
       shape,
+      // UCI bestmove is "<from><to>[promotion]", so the destination is chars 2-4.
+      // The opponent accepted iff their best reply lands on the offered square.
+      accepted:
+        offered.square === null || !post.bestMove || post.bestMove.length < 4
+          ? null
+          : post.bestMove.slice(2, 4) === offered.square,
       rejectedBy: !sound ? "sound" : !strong ? "strong" : !necessary ? "necessary" : null,
     });
 

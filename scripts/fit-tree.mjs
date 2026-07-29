@@ -43,6 +43,64 @@ const MIN_LEAF = arg("min-leaf", 10);
 const rows = loadRows();
 const train = rows.filter((r) => r.half === "fit");
 const test = rows.filter((r) => r.half === "test");
+
+/**
+ * DEPTH IS CHOSEN ON AN INNER VALIDATION SPLIT, not on fit-half F1.
+ *
+ * Fit-half F1 rises monotonically with depth here — 0.394, 0.429, 0.475 for
+ * depths 6, 7, 8 — because a deeper tree memorises more of what it was shown.
+ * Selecting on it would always pick the deepest tree and call overfitting a
+ * result. So the fit half is split again: a quarter of its GAMES are held back as
+ * inner validation, depth is chosen there, and only then is the tree refitted on
+ * the whole fit half and shown the test half exactly once.
+ *
+ * Split by game and by hash, for the same reasons as the outer split: candidates
+ * from one game must not straddle, and the assignment must not shift when the
+ * dataset grows.
+ */
+const innerVal = (id) => {
+  let h = 0x811c9dc5;
+  for (const ch of `${id}v`) {
+    h ^= ch.charCodeAt(0);
+    h = Math.imul(h, 0x01000193) >>> 0;
+  }
+  return h % 4 === 0;
+};
+const inner = train.filter((r) => !innerVal(r.gameId));
+const val = train.filter((r) => innerVal(r.gameId));
+
+function fitAndCut(data, depth, evalOn) {
+  const w = classWeights(data);
+  const t = buildTree(data, { features: FEATURES, W: w, maxDepth: depth, minLeaf: MIN_LEAF });
+  const sc = (r) => purity(t, r);
+  const rnd = data.filter((r) => r.sample === "random");
+  let best = null;
+  for (const c of [...new Set(data.map(sc))].sort((a, b) => b - a)) {
+    const s = evaluate(rnd, (r) => sc(r) >= c);
+    if (s.F1 !== null && (!best || s.F1 > best.f1)) best = { cut: c, f1: s.F1 };
+  }
+  if (!best) return null;
+  return { tree: t, cut: best.cut, score: evaluate(evalOn, (r) => sc(r) >= best.cut) };
+}
+
+if (process.argv.includes("--select")) {
+  console.log("DEPTH SELECTION — fitted on 3/4 of the fit half, scored on the held-back quarter\n");
+  console.log("depth   val P       val R      val F1");
+  let pick = null;
+  for (let d = 2; d <= 9; d++) {
+    const r = fitAndCut(inner, d, val);
+    if (!r) continue;
+    console.log(`  ${d}   ${pct(r.score.P).padStart(7)}  ${pct(r.score.R).padStart(9)}  ${r.score.F1 === null ? "n/a" : r.score.F1.toFixed(3)}`);
+    if (r.score.F1 !== null && (!pick || r.score.F1 > pick.f1)) pick = { d, f1: r.score.F1 };
+  }
+  console.log(`\nchosen depth: ${pick.d} (inner-validation F1 ${pick.f1.toFixed(3)})`);
+  const final = fitAndCut(train, pick.d, test);
+  console.log("\nTEST HALF — held out, shown once");
+  console.log(line("  shipping rule", evaluate(test, shippingRule)));
+  console.log(line("  tree", final.score));
+  process.exit(0);
+}
+
 const W = classWeights(train);
 const tree = buildTree(train, { features: FEATURES, W, maxDepth: MAX_DEPTH, minLeaf: MIN_LEAF });
 

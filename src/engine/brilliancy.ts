@@ -4,6 +4,7 @@ import type { Brilliancy, Game, ReplayMove } from "../types";
 import { parseGame } from "../chess/replay";
 import { engine } from "./engine";
 import { allowedMaterial, materialBalance, newMaterialOffered, VALUE } from "./see";
+import { kingPressure } from "./king";
 
 /**
  * Heuristic for a "brilliant" move, in the spirit of chess.com's !! (we told the
@@ -215,6 +216,24 @@ export interface Candidate {
   regain2: number;
   regain4: number;
   regain6: number;
+  /**
+   * What the sacrifice was FOR — pressure on the enemy king, counted statically.
+   *
+   *   kingRing       squares of the enemy king's ring (plus his own square) the
+   *                  player attacks after the move.
+   *   kingRingDelta  how many of those the move itself added. A delta, for the
+   *                  same reason `newMaterialOffered` is one: a position that was
+   *                  already an attack must not credit every move played in it.
+   *   kingMoves      legal king moves the opponent has left. Low is the point.
+   *
+   * Every other feature here describes what was given up or what the engine
+   * thinks. These are the first that describe what the move was trying to do,
+   * which is the half of "brilliant" the detector has never measured. Free, and
+   * measured-ungated like the rest.
+   */
+  kingRing: number;
+  kingRingDelta: number;
+  kingMoves: number;
   /** Which EVAL gate rejected it, or null if all three passed. */
   rejectedBy: "sound" | "strong" | "necessary" | null;
 }
@@ -382,6 +401,7 @@ export async function scanGame(
       // after a sacrifice — it goes when the opponent takes it — so measuring
       // against fenAfter would read every offer as costing nothing.
       ...regainAt(moves, ply, game.userColor),
+      ...kingPressure(move.fenBefore, move.fenAfter, game.userColor),
       fresh: allow ? Math.round(allow.fresh.value * 10) / 10 : 0,
       freshSquare: allow?.fresh.square ?? null,
       standing: allow ? Math.round(allow.standing.value * 10) / 10 : 0,

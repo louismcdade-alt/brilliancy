@@ -1,11 +1,20 @@
 /**
- * Backfill the `regain` feature into an existing harvest cache — no engine.
+ * Backfill the SEARCH-FREE features into an existing harvest cache — no engine.
  *
  * Adding a feature normally means re-scanning, and the last full harvest took
- * about two hours of search. But material-regain needs no search at all: it is a
- * piece count over the continuation that was already played. So the games are
+ * about two hours of search. But several features need no search at all — they
+ * are counts over positions we can replay from the PGN — so the games are
  * re-fetched from the public archive API, replayed, and the numbers written into
- * the cached candidates in place.
+ * the cached candidates in place. Minutes instead of hours.
+ *
+ * Covers:
+ *   regain2/4/6                       material relative to before the move, 2/4/6
+ *                                     plies later in the game actually played.
+ *   kingRing, kingRingDelta, kingMoves  pressure on the enemy king after it.
+ *
+ * Anything needing an engine opinion (evals, quiet alternatives, whether the
+ * opponent's BEST reply takes the material) cannot come through here and costs a
+ * real re-harvest.
  *
  * The computation runs the REAL `materialBalance` from src/engine/see.ts in the
  * browser, not a copy of it in node. Two hand-rolled reimplementations of SEE
@@ -15,7 +24,7 @@
  *
  * Prereq: the dev server must be running (npm run dev).
  *
- *   node scripts/backfill-regain.mjs
+ *   node scripts/backfill-features.mjs
  */
 import { chromium } from "playwright";
 import { readFileSync, writeFileSync } from "node:fs";
@@ -69,6 +78,7 @@ for (let i = 0; i < games.length; i += BATCH) {
 
   const out = await page.evaluate(async (rows) => {
     const { materialBalance } = await import("/src/engine/see.ts");
+    const { kingPressure } = await import("/src/engine/king.ts");
     const { parseGame } = await import("/src/chess/replay.ts");
     return rows.map((r) => {
       let moves;
@@ -90,7 +100,10 @@ for (let i = 0; i < games.length; i += BATCH) {
           const m = moves[Math.min(ply + k, moves.length - 1)];
           return Math.round((materialBalance(m.fenAfter, r.userColor) - base) * 10) / 10;
         };
-        values[`${want.moveNumber} ${want.san}`] = { regain2: at(2), regain4: at(4), regain6: at(6) };
+        values[`${want.moveNumber} ${want.san}`] = {
+          regain2: at(2), regain4: at(4), regain6: at(6),
+          ...kingPressure(moves[ply].fenBefore, moves[ply].fenAfter, r.userColor),
+        };
       }
       return { id: r.id, values };
     });
@@ -112,7 +125,7 @@ for (let i = 0; i < games.length; i += BATCH) {
 }
 
 await browser.close();
-cache.schema = 2;
+cache.schema = 3;
 writeFileSync(CACHE, JSON.stringify(cache, null, 1));
 
 const total = games.reduce((n, g) => n + g.candidates.length, 0);

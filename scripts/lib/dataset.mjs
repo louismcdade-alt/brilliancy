@@ -51,6 +51,14 @@ export function loadRows(path = "scripts/harvest-multi.json") {
           isDirect: c.shape === "direct" ? 1 : 0,
           isPromotion: c.shape === "promotion" ? 1 : 0,
           isOffer: c.admitted === "offer" ? 1 : 0,
+          kingRing: c.kingRing ?? 0,
+          kingRingDelta: c.kingRingDelta ?? 0,
+          kingMoves: c.kingMoves ?? 0,
+          // Mate distance, derived from the eval we already cache: engine.ts
+          // encodes a forced mate as MATE_CP (100000) minus 10 per ply, so this
+          // needs no re-scan. 0 means "no forced mate", which sorts below every
+          // real mate — the shorter the mate, the larger the number.
+          mateIn: Math.abs(c.playedEval) > 90000 ? Math.max(0, 1000 - Math.round((100000 - Math.abs(c.playedEval)) / 10)) * Math.sign(c.playedEval) : 0,
           regain2: c.regain2 ?? 0,
           regain4: c.regain4 ?? 0,
           regain6: c.regain6 ?? 0,
@@ -66,7 +74,8 @@ export function loadRows(path = "scripts/harvest-multi.json") {
 export const FEATURES = [
   "sacrifice", "playedEval", "evalLoss", "margin", "hasQuietAlt", "fresh",
   "standing", "accepted", "isDirect", "isPromotion", "isOffer",
-  "regain2", "regain4", "regain6", "moveNumber", "rating",
+  "regain2", "regain4", "regain6", "kingRing", "kingRingDelta", "kingMoves",
+  "mateIn", "moveNumber", "rating",
 ];
 
 /** The shipping detector, expressed over the same rows — the thing to beat. */

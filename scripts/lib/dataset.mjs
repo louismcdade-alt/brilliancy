@@ -51,6 +51,9 @@ export function loadRows(path = "scripts/harvest-multi.json") {
           isDirect: c.shape === "direct" ? 1 : 0,
           isPromotion: c.shape === "promotion" ? 1 : 0,
           isOffer: c.admitted === "offer" ? 1 : 0,
+          regain2: c.regain2 ?? 0,
+          regain4: c.regain4 ?? 0,
+          regain6: c.regain6 ?? 0,
           moveNumber: c.moveNumber,
           rating: g.rating ?? 0,
         },
@@ -62,7 +65,8 @@ export function loadRows(path = "scripts/harvest-multi.json") {
 
 export const FEATURES = [
   "sacrifice", "playedEval", "evalLoss", "margin", "hasQuietAlt", "fresh",
-  "standing", "accepted", "isDirect", "isPromotion", "isOffer", "moveNumber", "rating",
+  "standing", "accepted", "isDirect", "isPromotion", "isOffer",
+  "regain2", "regain4", "regain6", "moveNumber", "rating",
 ];
 
 /** The shipping detector, expressed over the same rows — the thing to beat. */

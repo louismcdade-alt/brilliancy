@@ -150,6 +150,28 @@ export function newMaterialOffered(
 }
 
 /**
+ * Material balance in pawns from `playerColor`'s point of view, kings excluded.
+ *
+ * Deliberately a plain count of what is on the board, not an evaluation: it is
+ * used to ask whether material came BACK after a sacrifice, and an evaluation
+ * would fold in position, king safety and everything else the question is trying
+ * to exclude.
+ */
+export function materialBalance(fen: string, playerColor: Color): number {
+  const board = fen.split(" ")[0];
+  let total = 0;
+  for (const ch of board) {
+    const lower = ch.toLowerCase();
+    const v = VALUE[lower];
+    if (v === undefined || lower === "k") continue;
+    const isWhite = ch === ch.toUpperCase();
+    const mine = (isWhite && playerColor === "w") || (!isWhite && playerColor === "b");
+    total += mine ? v : -v;
+  }
+  return total;
+}
+
+/**
  * Material the move ALLOWS rather than offers — what it declines to rescue.
  *
  * `newMaterialOffered` only sees material a move pushes into danger. It is blind

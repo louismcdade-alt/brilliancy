@@ -3,7 +3,7 @@ import type { Square } from "chess.js";
 import type { Brilliancy, Game, ReplayMove } from "../types";
 import { parseGame } from "../chess/replay";
 import { engine } from "./engine";
-import { allowedMaterial, newMaterialOffered, VALUE } from "./see";
+import { allowedMaterial, materialBalance, newMaterialOffered, VALUE } from "./see";
 
 /**
  * Heuristic for a "brilliant" move, in the spirit of chess.com's !! (we told the
@@ -193,6 +193,28 @@ export interface Candidate {
   freshSquare: string | null;
   standing: number;
   standingSquare: string | null;
+  /**
+   * Did the material come BACK, and how fast — pawns of material relative to the
+   * position before the move, measured 2, 4 and 6 plies later in the game that
+   * was actually played. Negative means still down; near zero means recovered.
+   *
+   * The motivation is that a "sacrifice" you win straight back is a trade, and
+   * trades are not brilliant. Nothing we currently measure distinguishes the two:
+   * `sacrifice` says what went on offer, `accepted` says whether it was taken,
+   * and neither says whether it came home.
+   *
+   * Free — it reads the continuation already parsed for the scan, no search. Two
+   * honest limits. It reflects what the OPPONENT actually played rather than best
+   * play, so a blunder afterwards can flatter a bad sacrifice; and near the end of
+   * a game the horizon is clipped to the final position. It is legitimate to use
+   * at inference time regardless, because this detector only ever scans completed
+   * games — the continuation is always available, so this is not leakage.
+   *
+   * Measured and ungated, like `shape`, `accepted`, `fresh` and `standing`.
+   */
+  regain2: number;
+  regain4: number;
+  regain6: number;
   /** Which EVAL gate rejected it, or null if all three passed. */
   rejectedBy: "sound" | "strong" | "necessary" | null;
 }
@@ -356,6 +378,10 @@ export async function scanGame(
           ? null
           : post.bestMove.slice(2, 4) === focusSquare,
       admitted: isOffer ? "offer" : "allow",
+      // Relative to BEFORE the move: the material is not gone yet immediately
+      // after a sacrifice — it goes when the opponent takes it — so measuring
+      // against fenAfter would read every offer as costing nothing.
+      ...regainAt(moves, ply, game.userColor),
       fresh: allow ? Math.round(allow.fresh.value * 10) / 10 : 0,
       freshSquare: allow?.fresh.square ?? null,
       standing: allow ? Math.round(allow.standing.value * 10) / 10 : 0,
@@ -386,6 +412,28 @@ export async function scanGame(
   }
 
   return found;
+}
+
+/**
+ * Material relative to the position before move `ply`, 2 / 4 / 6 plies later.
+ *
+ * Clipped to the final position when the game ends inside the horizon, which is
+ * the right reading rather than a missing value: if the game finished, the
+ * material situation is whatever it finished as. A mating sacrifice therefore
+ * shows as still-down material, correctly — nothing came back, the game just
+ * stopped mattering.
+ */
+function regainAt(
+  moves: ReplayMove[],
+  ply: number,
+  color: Game["userColor"],
+): { regain2: number; regain4: number; regain6: number } {
+  const base = materialBalance(moves[ply].fenBefore, color);
+  const at = (k: number) => {
+    const m = moves[Math.min(ply + k, moves.length - 1)];
+    return Math.round((materialBalance(m.fenAfter, color) - base) * 10) / 10;
+  };
+  return { regain2: at(2), regain4: at(4), regain6: at(6) };
 }
 
 /** Value of a captured piece for netting against a sac — pawns don't count. */

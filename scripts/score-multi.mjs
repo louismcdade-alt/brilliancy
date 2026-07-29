@@ -49,6 +49,35 @@ const GATES = {
     return c.playedEval >= STILL_GOOD && c.evalLoss <= MAX_EVAL_LOSS && m !== null && m >= -200;
   },
   "no necessary": (c) => c.playedEval >= STILL_GOOD && c.evalLoss <= MAX_EVAL_LOSS,
+
+  /**
+   * PRE-REGISTERED 2026-07-29, written before the held-out half was read.
+   *
+   * The decision tree and the hand-written rule are wrong in opposite
+   * directions. The tree, free to use `margin`, never splits on it at any depth
+   * — yet margin is where our precision comes from. Meanwhile the tree puts the
+   * soundness and strength cuts at −77cp and 95cp, far looser than our +20 and
+   * 120, and still reaches 69% recall. Neither rule has tried keeping `margin`
+   * while relaxing the other two.
+   *
+   * Hypothesis: our `sound` gate is the one costing recall for nothing. +20
+   * demands the position be better than equal AFTER giving material away, which
+   * is a strong claim about a sacrifice; the tree says the real boundary is
+   * closer to "not already lost". Prediction: `loose sound` gains recall at
+   * roughly flat precision, and `hybrid` sits between the two.
+   */
+  "loose sound": (c) => {
+    const m = margin(c);
+    return c.playedEval >= -77.5 && c.evalLoss <= MAX_EVAL_LOSS && m !== null && m >= NECESSARY_MARGIN;
+  },
+  "loose strong": (c) => {
+    const m = margin(c);
+    return c.playedEval >= STILL_GOOD && c.evalLoss <= 95.5 && m !== null && m >= NECESSARY_MARGIN;
+  },
+  hybrid: (c) => {
+    const m = margin(c);
+    return c.playedEval >= -77.5 && c.evalLoss <= 95.5 && m !== null && m >= NECESSARY_MARGIN;
+  },
 };
 
 const flags = (adm, gate, c) => ADMISSION[adm](c) && GATES[gate](c) && !REJECT_SHAPES.includes(c.shape);

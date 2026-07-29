@@ -35,6 +35,7 @@ export function loadRows(path = "scripts/harvest-multi.json") {
         half: half(g.id),
         sample: g.sample,
         gameId: g.id,
+        user: g.user,
         move: `${c.moveNumber}${g.userColor === "w" ? "." : "…"}${c.san}`,
         f: {
           sacrifice: c.sacrifice,

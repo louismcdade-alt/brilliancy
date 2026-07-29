@@ -62,11 +62,16 @@ if (!users.length) {
 }
 
 const cache = !RESCAN && existsSync(CACHE) ? JSON.parse(readFileSync(CACHE, "utf8")) : { schema: SCHEMA, games: {} };
-if (cache.schema !== SCHEMA) {
-  console.error(`cache schema ${cache.schema} ≠ ${SCHEMA} — rescanning everything`);
-  cache.schema = SCHEMA;
+// A NEWER schema is fine — it means a backfill added columns, and extra columns
+// cannot invalidate the engine numbers already paid for. Only an OLDER cache is
+// missing things and must rescan. The first version tested equality, and the
+// day a backfill stamped the cache 3 against this file's 1, a routine harvest
+// silently threw away 1,779 games of scans and spent two hours rebuying them.
+if ((cache.schema ?? 1) < SCHEMA) {
+  console.error(`cache schema ${cache.schema} < ${SCHEMA} — rescanning everything`);
   cache.games = {};
 }
+cache.schema = Math.max(SCHEMA, cache.schema ?? 1);
 
 async function launch() {
   for (const channel of ["msedge", "chrome"]) {

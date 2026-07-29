@@ -56,6 +56,36 @@ const flags = (adm, gate, c) => ADMISSION[adm](c) && GATES[gate](c) && !REJECT_S
 const band = (r) => (r === null || r === undefined ? "unknown" : `${Math.floor(r / 400) * 400}–${Math.floor(r / 400) * 400 + 399}`);
 
 /**
+ * FIT / TEST SPLIT — a pure function of the game id, and that is the point.
+ *
+ * The Louis label file splits by walking an id-sorted list and alternating, which
+ * is stable there because ids are chronological and games only ever get appended.
+ * That guarantee does NOT hold here: growing the random sample inserts games from
+ * anywhere in an account's history, and a single insertion flips the half of
+ * every game after it. Re-running the harvester with `--negatives 300` instead of
+ * 40 would have silently re-cut the split — the exact hazard the frozen split
+ * exists to prevent, arriving through the back door.
+ *
+ * Hashing the id removes the failure mode instead of documenting it: a game's
+ * half depends on nothing but its own id, so the assignment cannot be disturbed
+ * by what else is in the dataset, and there is nothing to freeze because there is
+ * nothing that could drift. Re-rolling it would mean editing this function, which
+ * shows up in a diff.
+ *
+ * Split by GAME, never by candidate — a game's starred move and the near-misses
+ * around it must not straddle the halves, or the test half is scoring positions
+ * it has already seen.
+ */
+const half = (id) => {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < id.length; i++) {
+    h ^= id.charCodeAt(i);
+    h = Math.imul(h, 0x01000193) >>> 0;
+  }
+  return h % 2 === 0 ? "fit" : "test";
+};
+
+/**
  * Recall uses every game; precision uses random games ONLY — and that means both
  * of its terms, not just the false positives.
  *
@@ -104,14 +134,23 @@ const positives = games.reduce((n, g) => n + g.expected.length, 0);
 console.log(`${games.length} games (${starGames} star, ${randomGames} random) · ${positives} labelled positives`);
 console.log(`precision from random games only (${randomGames}); recall from all\n`);
 
+const row = (label, s) =>
+  `${label.padEnd(26)} ${String(s.tp).padStart(3)} ${String(s.fn).padStart(4)}  | ${String(s.tpRandom).padStart(6)} ${String(s.fp).padStart(3)}   ${pct(P(s))}  ${pct(R(s))}   ${s.prefilterFn}`;
+
+console.log("ALL GAMES");
 console.log("rule                       TP   FN  |  randTP  FP        P       R   (pre-filter FN)");
 for (const adm of Object.keys(ADMISSION))
-  for (const gate of Object.keys(GATES)) {
-    const s = score(adm, gate);
-    console.log(
-      `${(adm + " / " + gate).padEnd(26)} ${String(s.tp).padStart(3)} ${String(s.fn).padStart(4)}  | ${String(s.tpRandom).padStart(6)} ${String(s.fp).padStart(3)}   ${pct(P(s))}  ${pct(R(s))}   ${s.prefilterFn}`,
-    );
-  }
+  for (const gate of Object.keys(GATES)) console.log(row(`${adm} / ${gate}`, score(adm, gate)));
+
+// The fit half is where a rule gets chosen; the test half is the only place a
+// number means anything. Printed separately and never pooled.
+for (const h of ["fit", "test"]) {
+  console.log(`\n${h.toUpperCase()} HALF${h === "test" ? " — held out; a measurement, not a menu" : " — look freely"}`);
+  console.log("rule                       TP   FN  |  randTP  FP        P       R   (pre-filter FN)");
+  for (const adm of Object.keys(ADMISSION))
+    for (const gate of Object.keys(GATES))
+      console.log(row(`${adm} / ${gate}`, score(adm, gate, (g) => half(g.id) === h)));
+}
 
 if (BY_RATING) {
   console.log("\nSHIPPING RULE BY RATING BAND — does chess.com's label mean the same thing");

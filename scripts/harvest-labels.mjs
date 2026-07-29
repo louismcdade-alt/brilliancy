@@ -13,16 +13,24 @@
  * script records every move that reached the engine, flagged or not, which is
  * the only way false negatives become visible.
  *
- * Two passes, because one half of labelling is free and the other is not:
+ * ONE PASS NOW (2026-07-29). This used to be two: scan automatically, then read
+ * post-game summary counts by hand into harvest-counts.mjs to resolve them.
+ * chess.com's all-time Brilliant Moves list made the manual half redundant —
+ * labels-louismcdade.mjs now carries an exact `expected` list for every rated
+ * game, so a scan resolves itself. The hand-read counts are no longer consulted
+ * at all; they disagreed with chess.com's own list once (170905472716), which is
+ * reason enough not to mix them in.
  *
- *   1. SCAN (this script, expensive but automatic) — run the real detector over
- *      N games and record every candidate with its full feature vector.
- *   2. COUNT (you, cheap but manual) — open the unresolved games on chess.com and
- *      read the post-game summary's Brilliant count into harvest-counts.mjs.
+ * ALLOW-CANDIDATES ARE ADMITTED HERE AND ONLY HERE. The scan runs with
+ * `admitAllow: true`, so moves that expose nothing new but leave material on the
+ * table get searched and recorded. The app does not do this and nothing flags on
+ * it — the point is to find out what a rule admitting them would cost, using 366
+ * confirmed negatives to price it. It roughly doubles the number of searches:
+ * 381 offer candidates become ~896.
  *
- * Re-run afterwards and it resolves what it can, writes the dataset, and prints a
- * shorter checklist. Scan results are cached to JSON so step 2 never costs engine
- * time twice.
+ * Scan results are cached to JSON. The cache records a SCHEMA version, so adding
+ * a feature column invalidates it rather than silently reporting a dataset with
+ * the new columns blank.
  *
  * Prereq: the dev server must be running (npm run dev).
  *
@@ -33,7 +41,6 @@
 import { chromium } from "playwright";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { chesscomLabels } from "./labels-louismcdade.mjs";
-import { COUNTS } from "./harvest-counts.mjs";
 
 const USER = process.argv[2] ?? "louismcdade";
 const LIMIT = Number(process.argv[3] ?? 100);
@@ -46,35 +53,14 @@ const CSV = `scripts/dataset-${USER}.csv`;
 /** chess.com's numeric game id, the key every label file in this repo uses. */
 const gameId = (url) => String(url).split("/").pop();
 
-/**
- * Resolve an array of summary reads into a usable count.
- *
- * The summary is non-deterministic and over-reports, so only unanimous zeros are
- * trustworthy. Anything else is unresolved and must wait for a Game Review —
- * taking the max, the mode, or the most recent read would all manufacture a
- * positive out of noise, and a wrong positive is the most expensive kind of
- * label this project can hold.
- */
-const resolveReads = (reads) => {
-  const arr = Array.isArray(reads) ? reads : [reads];
-  if (arr.length && arr.every((n) => n === 0)) return { count: 0, source: `summary×${arr.length}` };
-  return { count: Math.max(...arr), source: "summary-disputed", unresolved: true };
-};
+/** Bump when a feature column is added, so stale caches rescan instead of lying. */
+const SCHEMA = 2;
 
-/** Counts from both sources. labels-louismcdade.mjs is richer, so it wins. */
-const knownCounts = new Map(Object.entries(COUNTS).map(([id, reads]) => [id, resolveReads(reads)]));
+/** Every labelled game, keyed by chess.com's numeric id. */
+const knownCounts = new Map();
 /** Games where we know WHICH move was starred — these give a positive directly. */
 const knownMove = new Map();
-/** Games where the two sources disagree about the count. Never silently merged. */
-const conflicts = [];
 for (const g of chesscomLabels) {
-  const fromCounts = knownCounts.get(g.id);
-  // A disagreement means one of the two readings is wrong, and picking the
-  // "richer" source silently would bake a bad label into the dataset for good.
-  // Labels are the scarce resource here; a wrong one is worse than a missing one.
-  if (fromCounts && fromCounts.count !== g.count) {
-    conflicts.push({ id: g.id, counts: fromCounts.count, labels: g.count, source: g.source });
-  }
   knownCounts.set(g.id, { count: g.count, source: g.source });
   if (g.expected?.length) knownMove.set(g.id, new Set(g.expected.map((m) => `${m.moveNumber} ${m.san}`)));
 }
@@ -117,10 +103,12 @@ async function scan() {
           const seen = [];
           // rejectShapes:[] — a harvester must record what the RULES would drop,
           // or the dataset can only ever confirm the rules it was built under.
+          // admitAllow — same argument one level earlier: a dataset that only
+          // contains moves the pre-filter admits cannot price the pre-filter.
           await bril.scanGame(
             { ...game, timeClass: "blitz", timeControl: "", rated: true, endTime: 0,
               result: "win", resultReason: "", oppUsername: "opponent" },
-            { depth, rejectShapes: [], onCandidate: (c) => seen.push(c) },
+            { depth, rejectShapes: [], admitAllow: true, onCandidate: (c) => seen.push(c) },
           );
           return seen.map((c) => ({
             moveNumber: c.moveNumber,
@@ -132,6 +120,11 @@ async function scan() {
             quietAlt: isFinite(c.quietAlt) ? c.quietAlt : null,
             shape: c.shape,
             accepted: c.accepted,
+            admitted: c.admitted,
+            fresh: c.fresh,
+            freshSquare: c.freshSquare,
+            standing: c.standing,
+            standingSquare: c.standingSquare,
             rejectedBy: c.rejectedBy,
           }));
         },
@@ -154,7 +147,7 @@ async function scan() {
   // account has fewer games than a round-number request, so comparing the cache
   // against `games.length` means `... 400` never matches a 398-game archive and
   // rescans every single run.
-  writeFileSync(CACHE, JSON.stringify({ user: USER, depth: DEPTH, limit: LIMIT, scannedAt: new Date().toISOString(), games: out }, null, 1));
+  writeFileSync(CACHE, JSON.stringify({ user: USER, schema: SCHEMA, depth: DEPTH, limit: LIMIT, scannedAt: new Date().toISOString(), games: out }, null, 1));
   return out;
 }
 
@@ -163,11 +156,11 @@ const cached = !RESCAN && existsSync(CACHE) ? JSON.parse(readFileSync(CACHE, "ut
 // Reuse the cache only if it covers what was asked for. Without the length check
 // a later `... 396` silently reports on a cached 60 and looks like the account
 // simply has fewer games than it does.
-if (cached && (cached.limit ?? 0) >= LIMIT && cached.depth === DEPTH) {
+if (cached && (cached.limit ?? 0) >= LIMIT && cached.depth === DEPTH && cached.schema === SCHEMA) {
   games = cached.games;
   console.error(`using cached scan of ${games.length} games (${cached.scannedAt}); --rescan to redo\n`);
 } else {
-  if (cached) console.error(`cache holds ${cached.games.length} games at depth ${cached.depth}; rescanning for ${LIMIT} at depth ${DEPTH}`);
+  if (cached) console.error(`cache holds ${cached.games.length} games at depth ${cached.depth} (schema ${cached.schema ?? 1}); rescanning ${LIMIT} at depth ${DEPTH} for schema ${SCHEMA}`);
   games = await scan();
 }
 
@@ -215,7 +208,7 @@ for (const g of games) {
 }
 
 // ─── dataset ─────────────────────────────────────────────────────────────────
-const COLS = ["gameId","userColor","moveNumber","san","sacrifice","sacSquare","playedEval","evalLoss","quietAlt","margin","shape","accepted","rejectedBy","label"];
+const COLS = ["gameId","userColor","moveNumber","san","sacrifice","sacSquare","playedEval","evalLoss","quietAlt","margin","shape","accepted","admitted","fresh","standing","rejectedBy","label"];
 const csv = [COLS.join(",")];
 for (const r of rows) csv.push(COLS.map((k) => (r[k] === null || r[k] === undefined ? "" : String(r[k]))).join(","));
 writeFileSync(CSV, csv.join("\n") + "\n");
@@ -228,15 +221,6 @@ console.log(`unlabelled: ${totalCandidates - rows.length} candidates across ${un
 
 if (pos < 20) {
   console.log(`⚠  ${pos} positives. Fitting anything below ~20 will describe the sample, not the rule.\n`);
-}
-
-if (conflicts.length) {
-  console.log(`── ⚠ COUNT CONFLICTS — resolve before trusting these games ──`);
-  for (const c of conflicts) {
-    console.log(`   https://www.chess.com/game/live/${c.id}`);
-    console.log(`     harvest-counts.mjs says ${c.counts}, labels-louismcdade.mjs says ${c.labels} (${c.source})`);
-  }
-  console.log(`   Using the labels-louismcdade value. Recheck the summary and fix one.\n`);
 }
 
 if (preFilterMisses.length) {
@@ -276,8 +260,11 @@ unresolved.sort((a, b) => closest(a) - closest(b));
 const CHECK = unresolved.filter((g) => g.candidates.length > 0).slice(0, 40);
 if (CHECK.length) {
   console.log(`── CHECK THESE (${CHECK.length} shown, best value first) ──`);
-  console.log(`Open each, read the post-game summary's Brilliant count for ${USER},`);
-  console.log(`then add  "<id>": <count>  to scripts/harvest-counts.mjs and re-run.\n`);
+  console.log(`These are UNRATED games. chess.com's all-time list only covers rated ones,`);
+  console.log(`so nothing here is labelled either way. The summary count is not an answer —`);
+  console.log(`it is non-deterministic and it has been wrong in both directions. Only a full`);
+  console.log(`Game Review resolves one, which Diamond makes unlimited. Add confirmed moves`);
+  console.log(`to unratedReviewMoves in scripts/brilliant-moves-louismcdade.mjs and re-run.\n`);
   for (const g of CHECK) {
     const n = g.candidates.length;
     const d = closest(g);

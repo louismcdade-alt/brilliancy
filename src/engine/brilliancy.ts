@@ -3,7 +3,7 @@ import type { Square } from "chess.js";
 import type { Brilliancy, Game, ReplayMove } from "../types";
 import { parseGame } from "../chess/replay";
 import { engine } from "./engine";
-import { newMaterialOffered, VALUE } from "./see";
+import { allowedMaterial, newMaterialOffered, VALUE } from "./see";
 
 /**
  * Heuristic for a "brilliant" move, in the spirit of chess.com's !! (we told the
@@ -154,6 +154,45 @@ export interface Candidate {
    * identifiable offered square.
    */
   accepted: boolean | null;
+  /**
+   * Which test admitted this move to candidacy.
+   *
+   *   offer  the move newly exposed material — the shipping pre-filter.
+   *   allow  it exposed nothing new, but left material of the opponent's on the
+   *          table. ONLY produced when `admitAllow` is set, and such a move is
+   *          never flagged. It is here to be priced, not to be believed.
+   *
+   * `shape` is derived from the offered square and is therefore only meaningful
+   * when this is "offer".
+   */
+  admitted: "offer" | "allow";
+  /**
+   * Material the move declined to rescue, split by when it went on offer — see
+   * `allowedMaterial` in see.ts. `fresh` is what the opponent's immediately
+   * preceding move attacked; `standing` was already loose before that.
+   *
+   * Measured, never gated, on the same terms as `shape` and `accepted` — and as
+   * of 2026-07-29 measured means REFUTED as an admission rule. Do not retry it
+   * without new evidence:
+   *
+   *   admission     TP  FP  FN     over 294 labelled games, gates unchanged
+   *   base           4   1   7     what ships
+   *   fresh ≥ 2      4  12   7
+   *   fresh ≥ 5      4   4   7
+   *   standing ≥ 2   4   7   7
+   *   any allow      4  18   7
+   *
+   * Every relaxation costs false positives and buys NOTHING. The reason is the
+   * useful part: admitting allow-sacrifices does surface all three of the stars
+   * the pre-filter used to miss, and all three then die at the EVAL gates anyway
+   * — `14...fxe5` margin −22, `7.Qxc5` margin −6, `23.Rhd1` evalLoss 184. The
+   * pre-filter was never the binding constraint on those moves; `necessary` is.
+   * See scripts/score-offline.mjs to re-run the table.
+   */
+  fresh: number;
+  freshSquare: string | null;
+  standing: number;
+  standingSquare: string | null;
   /** Which EVAL gate rejected it, or null if all three passed. */
   rejectedBy: "sound" | "strong" | "necessary" | null;
 }
@@ -168,6 +207,19 @@ export interface ScanOptions {
    * in labels-louismcdade.mjs.
    */
   rejectShapes?: readonly OfferShape[];
+  /**
+   * Also admit ALLOW-sacrifices as candidates: moves that expose nothing new but
+   * leave material of the opponent's on the table. Off by default, and it does
+   * not change what gets flagged either way — an allow candidate is reported to
+   * `onCandidate` with its engine numbers and then dropped.
+   *
+   * The point is to buy the measurement before the rule, and the measurement came
+   * back negative (see `fresh` on Candidate for the table). Keep the flag: it is
+   * what makes the dataset able to price the pre-filter at all, and a dataset
+   * containing only moves the pre-filter admits can never do that. It costs a
+   * 398-game harvest about 2.3× the searches — 381 candidates become 1138.
+   */
+  admitAllow?: boolean;
   /**
    * Fires for every move that clears the static sacrifice filter, whether or not
    * the engine gates pass. Lets the calibration scripts see *why* a move was
@@ -185,6 +237,7 @@ export async function scanGame(
   const depth = opts.depth ?? 14;
   const minSac = opts.minSacrifice ?? MIN_SACRIFICE;
   const rejectShapes = opts.rejectShapes ?? REJECT_SHAPES;
+  const admitAllow = opts.admitAllow ?? false;
 
   let moves;
   try {
@@ -203,11 +256,34 @@ export async function scanGame(
     // (1) static sacrifice pre-filter — no engine cost.
     const offered = sacrificeValue(move, game.userColor);
     const sacrifice = offered.value;
-    if (sacrifice < minSac) continue;
+    const isOffer = sacrifice >= minSac;
+
+    // What the move leaves on the table, as opposed to what it puts there. Only
+    // computed when it can matter — for a move that already qualifies as an offer
+    // (so the record carries the columns) or when allow-candidates are wanted —
+    // so the app pays nothing new per move.
+    //
+    // The previous ply is the opponent's, so ITS fenBefore is the position with
+    // the opponent to move, which is what `allowedMaterial` needs.
+    const allow =
+      isOffer || admitAllow
+        ? allowedMaterial(
+            ply > 0 ? moves[ply - 1].fenBefore : null,
+            move.fenBefore,
+            move.fenAfter,
+            game.userColor,
+          )
+        : null;
+    const allowValue = allow ? Math.max(allow.fresh.value, allow.standing.value) : 0;
+
+    if (!isOffer && !(admitAllow && allowValue >= minSac)) continue;
     const after = new Chess(move.fenAfter);
 
-    // opening/book guard: in the first few moves, only a real piece sac qualifies
-    if (move.moveNumber <= OPENING_MOVE && sacrifice < OPENING_MIN_SAC) continue;
+    // opening/book guard: in the first few moves, only a real piece sac qualifies.
+    // For an offer this is exactly the old test; an allow is judged on what it
+    // leaves hanging instead.
+    const headline = isOffer ? sacrifice : allowValue;
+    if (move.moveNumber <= OPENING_MOVE && headline < OPENING_MIN_SAC) continue;
 
     // (1b) shape of the offer — also static. Note this does NOT `continue`: the
     // engine still runs, so onCandidate can report the eval of a rejected shape.
@@ -220,6 +296,14 @@ export async function scanGame(
           ? "promotion"
           : "direct"
         : "discovered";
+
+    // The square the whole judgement hangs on: what was offered, or for an allow
+    // the more valuable of the two things left standing.
+    const focusSquare = isOffer
+      ? offered.square
+      : allow && allow.fresh.value >= allow.standing.value
+        ? allow.fresh.square
+        : (allow?.standing.square ?? null);
 
     // (2) + (3) engine verification. MultiPV gives the best move plus alternatives,
     // so we can test that the sac was actually necessary.
@@ -265,15 +349,24 @@ export async function scanGame(
       quietAlt: Math.round(quietAlt),
       shape,
       // UCI bestmove is "<from><to>[promotion]", so the destination is chars 2-4.
-      // The opponent accepted iff their best reply lands on the offered square.
+      // The opponent accepted iff their best reply lands on the square in
+      // question — the offered one, or for an allow the one left hanging.
       accepted:
-        offered.square === null || !post.bestMove || post.bestMove.length < 4
+        focusSquare === null || !post.bestMove || post.bestMove.length < 4
           ? null
-          : post.bestMove.slice(2, 4) === offered.square,
+          : post.bestMove.slice(2, 4) === focusSquare,
+      admitted: isOffer ? "offer" : "allow",
+      fresh: allow ? Math.round(allow.fresh.value * 10) / 10 : 0,
+      freshSquare: allow?.fresh.square ?? null,
+      standing: allow ? Math.round(allow.standing.value * 10) / 10 : 0,
+      standingSquare: allow?.standing.square ?? null,
       rejectedBy: !sound ? "sound" : !strong ? "strong" : !necessary ? "necessary" : null,
     });
 
-    if (sound && strong && necessary && !rejectShapes.includes(shape)) {
+    // An allow candidate is never flagged, whatever the engine says about it.
+    // Admitting one costs a search and yields a labelled row; flagging one would
+    // be asserting a rule this project has not earned yet.
+    if (isOffer && sound && strong && necessary && !rejectShapes.includes(shape)) {
       found.push({
         game,
         ply,

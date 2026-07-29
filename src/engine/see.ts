@@ -148,3 +148,74 @@ export function newMaterialOffered(
   }
   return { value: best, square: bestSq };
 }
+
+/**
+ * Material the move ALLOWS rather than offers — what it declines to rescue.
+ *
+ * `newMaterialOffered` only sees material a move pushes into danger. It is blind
+ * by construction to the other half of chess.com's label: the opponent attacks
+ * something, and instead of saving it you play elsewhere. The delta there is
+ * zero, so the move never reaches the engine. Four of the nine brilliancies
+ * chess.com credits to LouisMcdade are that shape.
+ *
+ * Split in two, because the two halves have opposite track records and must not
+ * be pooled:
+ *
+ *   fresh     the opponent's IMMEDIATELY PRECEDING move put this on offer, and
+ *             the reply leaves it there. `14...fxe5` — White plays e4 attacking
+ *             the knight on f5, Black strikes elsewhere and lets it go.
+ *   standing  it was already on offer before the opponent's last move, and the
+ *             reply still doesn't address it. This is the dangerous one: it is
+ *             the class that once credited Carlsen's `38...Kg8` with sacrificing
+ *             a rook on c2 it never touched, 12 of 21 flags on real games. It is
+ *             measured here because `7.Qxc5` — a confirmed brilliancy with a rook
+ *             loose on h1 since before the opponent's move — lands in it, so the
+ *             class is not empty of true positives either.
+ *
+ * Per square, like `newMaterialOffered`: an exposure the opponent created must not
+ * cancel against an unrelated one that disappeared.
+ *
+ * `fenBeforeOpp` is the position before the opponent's preceding move, so the
+ * OPPONENT is already to move in it and it must not be flipped — flipping hands
+ * the move to the player, who cannot capture their own pieces, and every map
+ * comes back empty. Pass null at the first ply of a game.
+ */
+export function allowedMaterial(
+  fenBeforeOpp: string | null,
+  fenBefore: string,
+  fenAfter: string,
+  playerColor: Color,
+): {
+  fresh: { value: number; square: Square | null };
+  standing: { value: number; square: Square | null };
+} {
+  const beforeOpp = fenBeforeOpp
+    ? hangingMap(new Chess(fenBeforeOpp), playerColor)
+    : new Map<Square, number>();
+  const before = hangingMap(new Chess(withOpponentToMove(fenBefore)), playerColor);
+  const after = hangingMap(new Chess(fenAfter), playerColor);
+
+  let fresh = 0;
+  let freshSq: Square | null = null;
+  let standing = 0;
+  let standingSq: Square | null = null;
+
+  for (const [sq, survives] of after) {
+    const was = before.get(sq) ?? 0;
+    const older = beforeOpp.get(sq) ?? 0;
+    // What the opponent's last move added here, and what predates it. Both are
+    // capped by what is still on offer after the reply — material the move
+    // actually rescued isn't allowed, it's saved.
+    const created = Math.min(Math.max(0, was - older), survives);
+    const carried = Math.min(Math.min(was, older), survives);
+    if (created > fresh) {
+      fresh = created;
+      freshSq = sq;
+    }
+    if (carried > standing) {
+      standing = carried;
+      standingSq = sq;
+    }
+  }
+  return { fresh: { value: fresh, square: freshSq }, standing: { value: standing, square: standingSq } };
+}

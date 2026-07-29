@@ -40,6 +40,23 @@ import { fixtures } from "./fixtures.mjs";
 const DEPTH = Number(process.env.DEPTH) || 14;
 
 /**
+ * The label set went from 27 games to 294 on 2026-07-29, so a full pass is now a
+ * long run rather than a quick one. HALF subsets it; MAX truncates it.
+ *
+ *   HALF=fit,guard node scripts/test-harness.mjs   # iterate without touching test
+ *   MAX=40 node scripts/test-harness.mjs           # smoke-sized run
+ *
+ * A subset run reports the halves it ran and nothing else — the summary only
+ * prints groups it actually measured, so a filtered run can't be mistaken for a
+ * full one. Reach for HALF=fit,guard while inventing a rule; run everything when
+ * you want a number.
+ */
+const HALVES = (process.env.HALF ?? "fit,test,guard").split(",").map((s) => s.trim());
+const suite = fixtures
+  .filter((fx) => HALVES.includes(fx.half ?? "guard"))
+  .slice(0, Number(process.env.MAX) || Infinity);
+
+/**
  * PRE-REGISTERED, 2026-07-28. Written down before the held-out half was looked at.
  *
  * Hypothesis: what separates a real brilliancy from our false positives is not
@@ -79,7 +96,10 @@ const page = await browser.newPage();
 page.on("pageerror", (e) => console.log("PAGEERROR:", e.message));
 await page.goto("http://localhost:5173/", { waitUntil: "networkidle" });
 
-console.log(`Brilliancy calibration — ${fixtures.length} games at depth ${DEPTH}\n`);
+console.log(
+  `Brilliancy calibration — ${suite.length}/${fixtures.length} games at depth ${DEPTH}` +
+    `${suite.length === fixtures.length ? "" : ` (halves: ${HALVES.join(", ")})`}\n`,
+);
 
 // Each config is (shapes it rejects, how it decides "necessary"). Necessity is
 // spelled out per config rather than read off `rejectedBy`, because the shipped
@@ -105,7 +125,7 @@ const score = Object.fromEntries(
   CONFIGS.map((c) => [c, { fit: zero(), test: zero(), guard: zero() }]),
 );
 
-for (const fx of fixtures) {
+for (const fx of suite) {
   const half = fx.half ?? "guard";
   // Scan with the shape rule OFF so every candidate is visible, then filter.
   const detectedBase = await page.evaluate(
@@ -240,21 +260,28 @@ const line = (label, s) =>
   `   P ${show(prec(s))}  R ${show(rec(s))}`;
 
 console.log("═══════════════════════════════════════════════════════════");
-console.log("fit and test hold only ZERO-count games, so they have no positives:");
-console.log("their measurement is the FP count, and P/R there are n/a by construction.\n");
+console.log("Both halves now carry labelled positives (chess.com's all-time list),");
+console.log("so recall is a real number on each — not n/a as it was until 2026-07-29.\n");
+const ranHalves = ["fit", "test", "guard"].filter((h) => HALVES.includes(h));
 for (const cfg of CONFIGS) {
   console.log(CONFIG_BLURB[cfg]);
-  for (const half of ["fit", "test", "guard"]) console.log(line(half, score[cfg][half]));
+  for (const half of ranHalves) console.log(line(half, score[cfg][half]));
   console.log("");
 }
 
-console.log("HELD-OUT RESULT — the only number here that wasn't fitted:");
-for (const cfg of CONFIGS.filter((c) => c !== "base")) {
-  const d = score.oldGate.test.fp - score[cfg].test.fp;
-  console.log(
-    `  ${cfg.padEnd(6)} test-half false positives ${score.oldGate.test.fp} → ${score[cfg].test.fp}` +
-      (d === 0 ? "   (no held-out examples — UNTESTED)" : `   (−${d})`),
-  );
+if (ranHalves.includes("test")) {
+  console.log("HELD-OUT RESULT — the only numbers here that weren't fitted:");
+  for (const cfg of CONFIGS.filter((c) => c !== "base")) {
+    const d = score.oldGate.test.fp - score[cfg].test.fp;
+    const s = score[cfg].test;
+    console.log(
+      `  ${cfg.padEnd(6)} test-half FP ${score.oldGate.test.fp} → ${score[cfg].test.fp}` +
+        (d === 0 ? " (no held-out examples — UNTESTED)" : ` (${d > 0 ? "−" : "+"}${Math.abs(d)})`) +
+        `   recall ${show(rec(s))} (${s.tp}/${s.tp + s.fn})`,
+    );
+  }
+} else {
+  console.log(`HELD-OUT RESULT — not run (halves: ${HALVES.join(", ")}).`);
 }
 
 // The guard gate asks one question: did the shape rule cost us a confirmed

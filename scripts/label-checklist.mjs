@@ -1,4 +1,13 @@
 /**
+ * SUPERSEDED 2026-07-29. This script exists to decide which games are worth
+ * spending a scarce Game Review on. chess.com's Advanced Stats now hands over
+ * every starred move for every rated game at once, so there is no ranking problem
+ * left to solve — see scripts/brilliant-moves-louismcdade.mjs. Kept only because
+ * the shortfall ranking it computes may be useful again if the labels ever have
+ * to be collected by hand for another account.
+ *
+ * ─────────────────────────────────────────────────────────────────────────────
+ *
  * Turn a diag-account.mjs run into a checklist for collecting chess.com labels.
  *
  * The point is to make labels CHEAP. chess.com's full Game Review is limited to

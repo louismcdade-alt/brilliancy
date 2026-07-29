@@ -30,12 +30,15 @@ import { chesscomLabels } from "./labels-louismcdade.mjs";
 /**
  * chess.com's own labels, as harness fixtures.
  *
- * Only the games where we know WHICH move was starred are scoreable: the
- * zero-count games (nothing starred, so anything we flag is a false positive)
- * and the two confirmed in full Game Review. Games where the summary reported a
- * star but not its location are carried in labels-louismcdade.mjs and left out
- * here — scoring them would mean assuming the star sits on the move we flagged,
- * which is the thing under test.
+ * Every game here is scoreable, which was not true before 2026-07-29. The labels
+ * used to come from post-game summaries, where a count of 1 meant "a star exists
+ * somewhere in this game" — so only the zero-count games could be scored, and the
+ * rest were carried unscored rather than assume the star sat on the move we
+ * happened to flag. chess.com's all-time Brilliant Moves list publishes the
+ * location, so a nonzero game is now an exact positive and a game with no entry
+ * is an exact negative. The `expected !== null` filter is kept as a tripwire: if
+ * a label ever comes back locationless again, it drops out instead of being
+ * silently scored as "no brilliancies here".
  */
 const realLabels = chesscomLabels
   .filter((g) => g.expected !== null)

@@ -1,4 +1,19 @@
 /**
+ * SUPERSEDED 2026-07-29 — kept for the record, not for collecting more labels.
+ *
+ * Every reading below is a post-game summary count, painstakingly read one game
+ * at a time to work around Game Review's one-a-day limit. chess.com's Advanced
+ * Stats now publishes every starred move WITH ITS LOCATION, all-time, in a single
+ * page: scripts/brilliant-moves-louismcdade.mjs. That is strictly better on every
+ * axis — complete, located, and free of the non-determinism documented below — so
+ * labels come from there and nothing new should be added here.
+ *
+ * The one reading this file got WRONG, worth keeping because it retires the rule
+ * this whole apparatus rested on: 170905472716 was read as an exact 0, and
+ * chess.com stars 19.Bb6+ in it. "A summary 0 is exact" was 19-for-20, not 20.
+ *
+ * ─────────────────────────────────────────────────────────────────────────────
+ *
  * chess.com brilliancy readings, keyed by game id.
  *
  * Each value is an ARRAY of independent reads, not a single number, because the

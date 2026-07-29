@@ -1,131 +1,55 @@
 /**
- * One-off generator: turn the collected chess.com labels into a data file.
+ * Generator: turn chess.com's own brilliant-move list into the project's labels.
  *
- * Only ZERO-count games are emitted as labels here, and that restriction is the
- * point. chess.com's post-game summary is unlimited but over-counts relative to
- * full Game Review, so "0 brilliancies" is exact and complete while "1" only
- * tells you a star exists somewhere — not that it's on the move we flagged. A
- * pile of exact negatives is worth more than a pile of maybes, especially for a
- * detector whose problem is false positives.
+ *   node scripts/make-labels.mjs
  *
- *   node scripts/make-labels.mjs > scripts/labels-louismcdade.mjs
+ * WHAT CHANGED, 2026-07-29. This script used to carry a hand-maintained table of
+ * counts read off post-game summaries one game at a time, and it could only emit
+ * a label when the count was 0 (exact) — a nonzero count meant "a star is
+ * somewhere in this game", which is not a label. chess.com's Advanced Stats now
+ * publishes every starred move with its location, so the table is gone and the
+ * labels are derived: see scripts/brilliant-moves-louismcdade.mjs for the source,
+ * its provenance, and why it covers RATED games only.
+ *
+ * The consequence is the whole point. Because the list is exhaustive over rated
+ * games, every rated game is now scoreable — the ones with no star are complete
+ * negatives and the nine with a star are exact positives. That takes the labelled
+ * set from 27 games to 293, and from 0 usable positives to 9.
+ *
+ * FIT / TEST SPLIT. Sort by chess.com game id (chronological, and blind to what
+ * the detector does) and alternate, fit first — the same rule the hand-frozen
+ * split used. Two changes:
+ *
+ *   1. It is COMPUTED here rather than written out by hand. The hazard a frozen
+ *      split protects against is a split that silently re-rolls as the set grows,
+ *      letting you re-roll until the numbers flatter you. Alternating down an
+ *      id-sorted list is immune to that by construction: ids are chronological, so
+ *      new games only ever append, and appending cannot change the parity — and
+ *      therefore the half — of any game already in the list. Freezing 293 rows by
+ *      hand would buy nothing and rot on the first re-run.
+ *   2. Stars and non-stars are alternated in SEPARATE passes, so the nine
+ *      positives are spread across both halves instead of landing wherever the
+ *      id ordering happens to put them.
+ *
+ * Disclosed up front, because it decides how a number should be read: this rule
+ * puts all three of the currently-detected positives in the FIT half. Held-out
+ * recall is consequently 0/4 today. That is a real limitation of a 9-positive
+ * dataset, not a reason to re-cut the split — a split chosen after seeing which
+ * cut gives a better test number is not a test.
+ *
+ * The two Game-Review positives from UNRATED games stay in `guard`, as before.
+ * Their games' negatives are unknown (the list does not cover unrated games), so
+ * they can only ever catch a rule that destroys a known brilliancy.
  */
 import { writeFileSync } from "node:fs";
+import {
+  brilliantMoves,
+  unratedReviewMoves,
+  plyToMove,
+  parseMove,
+} from "./brilliant-moves-louismcdade.mjs";
 
 const USER = "louismcdade";
-
-// gameId -> brilliancies chess.com reports for LouisMcdade's side.
-// "review" = confirmed in full Game Review (authoritative about WHICH move).
-// "summary" = post-game highlights (exact only when the count is 0).
-//
-// `half` is the fit/test split, and it is written down HERE, by hand, on purpose.
-// A split computed at runtime is a split that silently re-rolls every time the
-// set grows — and a re-rollable split is one you can keep re-rolling until the
-// numbers look good, which defeats the entire point of holding data back. Frozen
-// in source, any change to it shows up in a diff and has to be argued for.
-//
-// The assignment rule was: order the 14 exact-negative games by chess.com game id
-// (which is chronological, and knows nothing about what the detector flags) and
-// alternate fit/test down the list. Interleaving by date rather than splitting at
-// a date also keeps the halves from differing by rating or era.
-//
-// The two Game-Review-confirmed POSITIVES are not split. Two examples cannot be
-// halved into anything that measures recall; instead both sit in the guard set
-// with the classical fixtures, where their only job is to fail loudly if a new
-// rule kills a known brilliancy.
-const LABELS = {
-  // — confirmed by full Game Review — guard set, never used for fitting —
-  "168334603690": { n: 1, src: "review", move: "6...Bxf2+", half: "guard" },
-  "169999249810": { n: 1, src: "review", move: "24.Ne6", half: "guard" },
-  // Resolved in Game Review 2026-07-28. This one was worth a whole review on its
-  // own: we flagged TWO moves and chess.com stars exactly one, so a single
-  // lookup produced a confirmed positive AND a confirmed false positive.
-  // 16...Qxc3 is starred (direct offer). 31...Rc5+ is not (discovered offer) —
-  // consistent with the discovered pattern, though Légal's Mate already showed
-  // that pattern can't be promoted to a rule.
-  "169869209718": { n: 1, src: "review", move: "16...Qxc3", half: "guard" },
-  // — WITHDRAWN 2026-07-29. These were inferred positives, and the inference is
-  //   no longer safe.
-  //
-  // All three rested on a post-game summary count of 1. That count turns out to
-  // be NON-DETERMINISTIC: the same game read minutes apart gives 1 Brilliant on
-  // one load and none on the next. Reloading 172078598998 produced 0, 0 and 1 on
-  // three separate reads.
-  //
-  // The noise looks one-directional — the summary OVER-reports. On the one game
-  // with Game Review truth (169869209718, genuinely 1) repeated reads never lost
-  // it, and every disagreement elsewhere is a lone 1 against multiple 0s. An
-  // earlier session saw the same thing from the other end: a summary reporting 2
-  // where Game Review found 1.
-  //
-  // So a 0 remains usable and a nonzero does not, which is precisely backwards
-  // from what this project needs. A poisoned positive is far more damaging than a
-  // missing one — it would teach a model that a move chess.com never starred is
-  // the thing to imitate. Only Game Review can promote these now.
-  //   72012130191  had inferred 23...Nd4+
-  //   72369273649  had inferred 23.Bc3
-  //   73742490905  had inferred 31...Nxf4+
-  "72012130191": { n: 1, src: "summary", note: "summary count unreliable — needs Game Review", half: "unscored" },
-  "72369273649": { n: 1, src: "summary", note: "summary count unreliable — needs Game Review", half: "unscored" },
-  "73742490905": { n: 1, src: "summary", note: "summary count unreliable — needs Game Review", half: "unscored" },
-  // — summary, zero: exact and complete. Ordered by id; fit/test alternating. —
-  "59328109305": { n: 0, src: "summary", half: "fit" },
-  "69023093493": { n: 0, src: "summary", half: "test" },
-  "69169474795": { n: 0, src: "summary", half: "fit" },
-  "71922350989": { n: 0, src: "summary", half: "test" },
-  "75090176179": { n: 0, src: "summary", half: "fit" },
-  "75729696237": { n: 0, src: "summary", half: "test" },
-  "78155551321": { n: 0, src: "summary", half: "fit" },
-  "123030583107": { n: 0, src: "summary", half: "test" },
-  "123984651203": { n: 0, src: "summary", half: "fit" },
-  "167769830480": { n: 0, src: "summary", half: "test" },
-  "169135347664": { n: 0, src: "summary", half: "fit" },
-  "170905472716": { n: 0, src: "summary", half: "test" },
-  "171329245690": { n: 0, src: "summary", half: "fit" },
-  "171473275764": { n: 0, src: "summary", half: "test" },
-  // — batch collected 2026-07-29, all exact zeros. Appended in id order and
-  //   alternated (test first, since fit was one ahead), so no existing game's
-  //   half is disturbed. Final balance: 14 fit / 13 test.
-  "69076347829": { n: 0, src: "summary", half: "test" },
-  "71533522913": { n: 0, src: "summary", half: "fit" },
-  "73056434083": { n: 0, src: "summary", half: "test" },
-  "123010260621": { n: 0, src: "summary", half: "fit" },
-  "123260503855": { n: 0, src: "summary", half: "test" },
-  "123448874857": { n: 0, src: "summary", half: "fit" },
-  "125086814631": { n: 0, src: "summary", half: "test" },
-  "166904355742": { n: 0, src: "summary", half: "fit" },
-  "166905127436": { n: 0, src: "summary", half: "test" },
-  "167779992358": { n: 0, src: "summary", half: "fit" },
-  "169264876272": { n: 0, src: "summary", half: "test" },
-  "169872260446": { n: 0, src: "summary", half: "fit" },
-  // — summary, one: a star exists, but not necessarily on the move we flag —
-  "172078598998": { n: 1, src: "summary", guess: "15...Nxd3+", half: "unscored" },
-  // Was recorded as 1 (guessing 41.Qf6+). Re-read on 2026-07-29: the summary
-  // shows NO brilliancy. The first reading was wrong, so this becomes an exact
-  // negative — three candidates, all confirmed not starred.
-  // New zero-count games are appended to the halves alternately (fit first) so
-  // the frozen assignments of existing games never shift underneath a result.
-  // Reads disagree (1, 1, then 0), so by the unanimity rule this is unresolved,
-  // not a zero. Kept out of the scored set until re-read under the protocol.
-  "170344245882": { n: 1, src: "summary", note: "reads disagree — needs re-reading", half: "unscored" },
-  "166907239486": { n: 1, src: "summary", guess: "11.Nxd5", half: "unscored" },
-};
-
-
-// A game is scoreable only when we know WHICH move chess.com starred: zero-count
-// games (nothing is starred) and Game-Review-confirmed games. A summary count of
-// 1 tells us a star exists but not where, so it stays null.
-const expected = (lab) => {
-  if (lab.n === 0) return "[]";
-  // `inferred` counts alongside `review`: the count was read, and the location
-  // follows because every other candidate in the game was losing. A `guess` on a
-  // `summary` row is NOT the same thing and stays unscored.
-  if ((lab.src === "review" || lab.src === "inferred") && lab.move) {
-    const m = lab.move.match(/^(\d+)\.+(.+)$/);
-    return `[{ moveNumber: ${m[1]}, san: "${m[2]}" }]`;
-  }
-  return "null";
-};
 
 async function getJson(url) {
   const res = await fetch(url, { headers: { Accept: "application/json" } });
@@ -133,36 +57,102 @@ async function getJson(url) {
   return res.json();
 }
 
-const months = (await getJson(`https://api.chess.com/pub/player/${USER}/games/archives`)).archives;
-const found = new Map();
+/** SAN tokens in play order, index 0 = white's first move (chess.com's ply). */
+function sanList(pgn) {
+  return pgn
+    .replace(/\{[^}]*\}/g, "")
+    .replace(/^\[.*$/gm, "")
+    .replace(/\d+\.(\.\.)?/g, " ")
+    .split(/\s+/)
+    .filter((t) => t && !/^(1-0|0-1|1\/2-1\/2|\*)$/.test(t));
+}
 
-for (let i = months.length - 1; i >= 0 && found.size < Object.keys(LABELS).length; i--) {
-  let games;
+const months = (await getJson(`https://api.chess.com/pub/player/${USER}/games/archives`)).archives;
+const games = new Map();
+
+for (const month of months) {
+  let batch;
   try {
-    ({ games } = await getJson(months[i]));
+    ({ games: batch } = await getJson(month));
   } catch {
     continue;
   }
-  for (const g of games ?? []) {
+  for (const g of batch ?? []) {
+    if (g.rules !== "chess") continue;
     const id = String(g.url).split("/").pop();
-    if (!LABELS[id] || found.has(id)) continue;
     const userColor = (g.white?.username ?? "").toLowerCase() === USER ? "w" : "b";
-    const moves = (g.pgn.split(/\n\n/)[1] ?? "")
-      .replace(/\{[^}]*\}/g, "")
-      .replace(/\d+\.\.\./g, "")
-      .replace(/\s+/g, " ")
-      .trim();
-    found.set(id, {
+    games.set(id, {
+      id,
       url: g.url,
+      rated: !!g.rated,
       userColor,
       opp: userColor === "w" ? g.black?.username : g.white?.username,
-      pgn: moves,
+      date: new Date(g.end_time * 1000).toISOString().slice(0, 10),
+      pgn: (g.pgn.split(/\n\n/)[1] ?? "").replace(/\{[^}]*\}/g, "").replace(/\d+\.\.\./g, "").replace(/\s+/g, " ").trim(),
     });
   }
 }
 
-const missing = Object.keys(LABELS).filter((id) => !found.has(id));
-if (missing.length) console.error("NOT FOUND in archives:", missing.join(", "));
+// ── Resolve every star against the real game, and refuse to emit a label we
+//    cannot verify. An off-by-one in the ply convention or a stale id would
+//    otherwise poison the entire negative set silently.
+const starsByGame = new Map();
+const problems = [];
+for (const star of brilliantMoves) {
+  const g = games.get(star.id);
+  if (!g) {
+    problems.push(`${star.id}: not in archives`);
+    continue;
+  }
+  if (!g.rated) problems.push(`${star.id}: listed as brilliant but the game is unrated`);
+  const { moveNumber, color } = plyToMove(star.ply);
+  const { san } = parseMove(star.move);
+  const actual = sanList(g.pgn)[star.ply];
+  if (color !== g.userColor) problems.push(`${star.id}: ply ${star.ply} is ${color} but ${USER} played ${g.userColor}`);
+  if (actual !== san) problems.push(`${star.id}: ply ${star.ply} is ${actual}, list says ${san}`);
+  starsByGame.set(star.id, [{ moveNumber, san }]);
+}
+for (const rev of unratedReviewMoves) {
+  const g = games.get(rev.id);
+  if (!g) {
+    problems.push(`${rev.id}: not in archives`);
+    continue;
+  }
+  const { moveNumber, san } = parseMove(rev.move);
+  const idx = 2 * (moveNumber - 1) + (g.userColor === "w" ? 0 : 1);
+  if (sanList(g.pgn)[idx] !== san) problems.push(`${rev.id}: move ${rev.move} is not ${sanList(g.pgn)[idx]}`);
+}
+if (problems.length) {
+  console.error("REFUSING to write labels — unverified stars:");
+  for (const p of problems) console.error(`  ${p}`);
+  process.exit(1);
+}
+
+// ── Halves. Stars and non-stars alternated separately, fit first, id-sorted.
+const byId = (a, b) => (a.id.length - b.id.length) || a.id.localeCompare(b.id);
+// LIVE games only — and the reason has changed, so read it before "fixing" this.
+// It was originally caution: nothing on the page said whether daily games were
+// indexed. They ARE — other accounts' lists contain /analysis/game/daily/ entries.
+// The exclusion stays anyway, because LouisMcdade has exactly one rated daily
+// game (two moves long, no candidates) and the split below is assigned by walking
+// an id-sorted list. Inserting a game in the MIDDLE of that list flips the half of
+// every game after it, which is precisely the silent re-roll the split is designed
+// to prevent. Appending later games is safe; inserting an old one is not. A
+// two-move game is not worth re-rolling 292 assignments for.
+const rated = [...games.values()].filter((g) => g.rated && g.url.includes("/game/live/"));
+const half = new Map();
+for (const group of [
+  rated.filter((g) => starsByGame.has(g.id)),
+  rated.filter((g) => !starsByGame.has(g.id)),
+]) {
+  group.sort(byId).forEach((g, i) => half.set(g.id, i % 2 === 0 ? "fit" : "test"));
+}
+for (const rev of unratedReviewMoves) half.set(rev.id, "guard");
+
+const emit = [
+  ...rated.sort(byId),
+  ...unratedReviewMoves.map((r) => games.get(r.id)),
+];
 
 const wrap = (s, indent = "      ") => {
   const out = [];
@@ -178,48 +168,72 @@ const wrap = (s, indent = "      ") => {
   return out.map((l) => `${indent}"${l} "`).join(" +\n").replace(/ "$/, '"');
 };
 
+const expectedFor = (g) => {
+  const stars = starsByGame.get(g.id);
+  if (stars) return `[${stars.map((m) => `{ moveNumber: ${m.moveNumber}, san: "${m.san}" }`).join(", ")}]`;
+  const rev = unratedReviewMoves.find((r) => r.id === g.id);
+  if (rev) {
+    const m = parseMove(rev.move);
+    return `[{ moveNumber: ${m.moveNumber}, san: "${m.san}" }]`;
+  }
+  return "[]";
+};
+
+const noteFor = (g) => {
+  if (starsByGame.has(g.id)) {
+    const star = brilliantMoves.find((s) => s.id === g.id);
+    return `chess.com stars ${star.move} here (Advanced Stats, all-time list). Complete: any OTHER move we flag in this game is a false positive.`;
+  }
+  const rev = unratedReviewMoves.find((r) => r.id === g.id);
+  if (rev) {
+    return `chess.com Game Review stars ${rev.move}. UNRATED, so the all-time list does not cover this game — the rest of it is unlabelled, not negative.`;
+  }
+  return "chess.com's all-time list has no brilliancy in this game. Exact — anything we flag here is a false positive.";
+};
+
 let out = `/**
  * chess.com's own labels for LouisMcdade's games — the ground truth this project
  * exists to approximate, and the only labels here that weren't written by us.
  *
- * Collected from chess.com Game Review and post-game summaries. The summary
- * over-counts relative to Game Review, so a count of 0 is exact and a count of 1
- * only means a star exists somewhere in the game. Games with a nonzero count are
- * therefore recorded but NOT turned into positive fixtures: claiming the star is
- * on the move we happened to flag would be assuming what we're trying to test.
+ * Derived from chess.com's all-time Brilliant Moves list (Advanced Stats), which
+ * publishes every starred move with its location. That list is exhaustive over
+ * RATED games, so a rated game with no entry is a complete negative: everything
+ * the detector flags in it is a false positive, and nothing has to be read by
+ * hand to establish that. See scripts/brilliant-moves-louismcdade.mjs.
  *
- * \`half\` is the fit/test split — see the note above LABELS in make-labels.mjs
- * for how it was assigned and why it is frozen in source rather than computed.
+ * The two \`guard\` games at the end are UNRATED and come from full Game Review.
+ * Their positives are solid; their negatives are unknown, because the all-time
+ * list does not cover unrated games.
  *
- *   fit       may be looked at freely when inventing a rule.
- *   test      held back. Look at it to REPORT a number, not to choose one.
- *   guard     confirmed positives; never fitted on, only used to catch a rule
- *             that destroys a known brilliancy.
- *   unscored  a star exists but its location is unknown, so the game cannot be
- *             scored either way.
+ * \`half\` is the fit/test split — see the note at the top of make-labels.mjs for
+ * the rule, why it is computed rather than hand-frozen, and what it costs.
  *
- * Generated by scripts/make-labels.mjs. Edit LABELS there, not this file.
+ *   fit    may be looked at freely when inventing a rule.
+ *   test   held back. Look at it to REPORT a number, not to choose one.
+ *   guard  confirmed positives; never fitted on, only used to catch a rule that
+ *          destroys a known brilliancy.
+ *
+ * Generated by scripts/make-labels.mjs — regenerate it, don't edit it.
  */
 export const chesscomLabels = [
 `;
 
-for (const [id, lab] of Object.entries(LABELS)) {
-  const g = found.get(id);
-  if (!g) continue;
-  const note =
-    lab.n === 0
-      ? "chess.com: zero brilliancies for this side. Exact — anything we flag here is a false positive."
-      : `chess.com: ${lab.n} brilliancy (${lab.src}).${lab.move ? ` Confirmed move: ${lab.move}.` : lab.guess ? ` We flag ${lab.guess}; unconfirmed which move chess.com starred.` : ""}${lab.note ? ` ${lab.note}` : ""}`;
+for (const g of emit) {
+  const stars = starsByGame.get(g.id);
+  const rev = unratedReviewMoves.find((r) => r.id === g.id);
+  const count = stars ? stars.length : rev ? 1 : 0;
   out += `  {
-    id: "${id}",
+    id: "${g.id}",
     url: "${g.url}",
-    name: "vs ${g.opp} — ${lab.n === 0 ? "no brilliancy" : `${lab.n} brilliancy`} (chess.com)",
+    name: "vs ${g.opp} — ${count === 0 ? "no brilliancy" : `${count} brilliancy`} (chess.com)",
     userColor: "${g.userColor}",
-    count: ${lab.n},
-    source: "${lab.src}",
-    half: "${lab.half}",
-    // ${note}
-    expected: ${expected(lab)},${lab.n > 0 && lab.src !== "review" ? " // unknown which move — not scoreable as a positive" : ""}
+    rated: ${g.rated},
+    date: "${g.date}",
+    count: ${count},
+    source: "${rev ? "review" : "advanced-stats"}",
+    half: "${half.get(g.id)}",
+    // ${noteFor(g)}
+    expected: ${expectedFor(g)},
     pgn:
 ${wrap(g.pgn)},
   },
@@ -228,4 +242,10 @@ ${wrap(g.pgn)},
 out += "];\n";
 
 writeFileSync("scripts/labels-louismcdade.mjs", out);
-console.error(`wrote ${found.size} labelled games`);
+
+const counts = { fit: 0, test: 0, guard: 0 };
+for (const g of emit) counts[half.get(g.id)]++;
+console.error(
+  `wrote ${emit.length} labelled games — ${counts.fit} fit / ${counts.test} test / ${counts.guard} guard, ` +
+    `${brilliantMoves.length + unratedReviewMoves.length} positives`,
+);

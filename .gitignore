@@ -22,3 +22,21 @@ scripts/shot-*.png
 
 # Local Netlify folder
 .netlify
+
+# Harvested chess.com data for OTHER people's accounts.
+#
+# The scripts are committed; the data they pull is not. Everything here comes
+# from public pages and the public API, but this repo is public, and compiling
+# other members' usernames and game history into someone else's git history
+# forever is a different act from reading a page that is already public. Anyone
+# who wants the data can regenerate it:
+#
+#   node scripts/find-accounts.mjs --club <club> --min 800 --max 1600
+#   node scripts/brilliant-list.mjs <user>…
+#   node scripts/harvest-multi.mjs <user>…
+#
+# louismcdade's own labels and dataset ARE committed — they are the fixtures the
+# harness scores against, and they are his to publish.
+scripts/brilliant-lists/
+scripts/harvest-multi.json
+scripts/dataset-multi.csv

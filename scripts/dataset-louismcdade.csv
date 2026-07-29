@@ -7,9 +7,6 @@ gameId,userColor,moveNumber,san,sacrifice,sacSquare,playedEval,evalLoss,quietAlt
 171329245690,b,20,a1=Q,4,a1,595,-12,490,105,promotion,true,,0
 171329245690,b,24,Bxf3+,3.2,f3,407,237,644,-237,direct,true,strong,0
 170905472716,w,19,Bb6+,3.2,b6,1025,37,685,340,direct,false,,0
-170344245882,w,9,Nxd4,3,d4,-323,410,87,-410,direct,true,sound,0
-170344245882,w,26,Bd3+,3,e3,99980,10,99990,-10,discovered,true,necessary,0
-170344245882,w,41,Qf6+,4,f6,99990,-10,99980,10,direct,false,necessary,0
 169999249810,w,7,Nxe5,5.8,d1,-530,675,145,-675,discovered,true,sound,0
 169999249810,w,19,Rxd6,2,d6,342,113,455,-113,direct,true,necessary,0
 169999249810,w,20,Rc6,3,c6,688,506,1194,-506,direct,true,strong,0
@@ -26,7 +23,6 @@ gameId,userColor,moveNumber,san,sacrifice,sacSquare,playedEval,evalLoss,quietAlt
 167779992358,b,17,Qb1+,3.2,e2,756,50,806,-50,discovered,true,necessary,0
 167779992358,b,23,Nd4+,2,d4,806,137,943,-137,direct,true,strong,0
 167769830480,b,26,Ne5+,3,e5,567,-25,542,25,direct,false,necessary,0
-166907239486,w,11,Nxd5,2,d5,86,5,-363,449,direct,false,,1
 166905127436,w,21,Ng5+,3,g5,793,22,815,-22,direct,false,necessary,0
 166904355742,w,23,Nb5,3,b5,691,66,757,-66,direct,false,necessary,0
 166904355742,w,35,Rxc7,5.8,e8,1098,98862,99960,-98862,discovered,true,strong,0
@@ -46,18 +42,12 @@ gameId,userColor,moveNumber,san,sacrifice,sacSquare,playedEval,evalLoss,quietAlt
 75729696237,w,29,Kd2,5,a1,617,-18,,,discovered,false,necessary,0
 75090176179,b,12,Nxd5,3,d5,25,66,91,-66,direct,false,necessary,0
 75090176179,b,41,Nf5+,3,f5,-99830,98741,-1089,-98741,direct,true,sound,0
-73742490905,b,31,Nxf4+,3,f4,375,64,439,-64,direct,true,necessary,1
 73657360419,b,15,Nxf3+,3,f3,152,187,339,-187,direct,true,strong,0
 73657360419,b,35,Bb1+,5,b3,99970,10,99980,-10,discovered,true,necessary,0
 73056434083,b,13,Ne3,3,e3,107,509,616,-509,direct,true,strong,0
 73056434083,b,14,Nc2+,3,c2,521,69,590,-69,direct,true,necessary,0
 73055868147,w,12,Nxb5,2,b5,690,257,947,-257,direct,false,strong,0
 73055868147,w,22,Qxd6+,3,a7,99980,0,99980,0,discovered,true,necessary,0
-72369273649,w,9,Bg5+,3.2,g5,-307,459,152,-459,direct,true,sound,0
-72369273649,w,16,Bf6+,3.2,f6,-333,459,126,-459,direct,true,sound,0
-72369273649,w,23,Bc3,3.2,c3,12,2,14,-2,direct,false,sound,1
-72012130191,b,12,Qg5,9,g5,-525,1304,779,-1304,direct,true,sound,0
-72012130191,b,23,Nd4+,3,d4,596,19,237,359,direct,true,,1
 71922350989,b,22,Qf3+,6.8,f3,1746,98244,99990,-98244,direct,true,strong,0
 71922350989,b,36,Rxh4,5,h4,99990,-10,99970,20,direct,true,necessary,0
 71533522913,b,13,Qxa2,5.8,a2,-752,309,-456,-296,direct,true,sound,0

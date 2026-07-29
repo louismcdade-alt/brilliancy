@@ -46,8 +46,23 @@ const CSV = `scripts/dataset-${USER}.csv`;
 /** chess.com's numeric game id, the key every label file in this repo uses. */
 const gameId = (url) => String(url).split("/").pop();
 
+/**
+ * Resolve an array of summary reads into a usable count.
+ *
+ * The summary is non-deterministic and over-reports, so only unanimous zeros are
+ * trustworthy. Anything else is unresolved and must wait for a Game Review —
+ * taking the max, the mode, or the most recent read would all manufacture a
+ * positive out of noise, and a wrong positive is the most expensive kind of
+ * label this project can hold.
+ */
+const resolveReads = (reads) => {
+  const arr = Array.isArray(reads) ? reads : [reads];
+  if (arr.length && arr.every((n) => n === 0)) return { count: 0, source: `summary×${arr.length}` };
+  return { count: Math.max(...arr), source: "summary-disputed", unresolved: true };
+};
+
 /** Counts from both sources. labels-louismcdade.mjs is richer, so it wins. */
-const knownCounts = new Map(Object.entries(COUNTS).map(([id, n]) => [id, { count: n, source: "summary" }]));
+const knownCounts = new Map(Object.entries(COUNTS).map(([id, reads]) => [id, resolveReads(reads)]));
 /** Games where we know WHICH move was starred — these give a positive directly. */
 const knownMove = new Map();
 /** Games where the two sources disagree about the count. Never silently merged. */
@@ -184,14 +199,19 @@ for (const g of games) {
 
   for (const c of g.candidates) {
     let label = null;
-    if (known.count === 0) label = 0; // exact: nothing starred, so nothing here is
-    else if (moves) label = moves.has(`${c.moveNumber} ${c.san}`) ? 1 : 0; // review-confirmed
-    else if (known.count === 1 && g.candidates.length === 1) label = 1; // only one thing it could be
+    // `moves` only ever comes from a full Game Review, so it is checked FIRST and
+    // is the only path that can produce a positive. The old "count 1 with exactly
+    // one candidate ⇒ that's the star" shortcut is gone: it inherited the
+    // summary's noise, and it manufactured three positives that had to be
+    // withdrawn.
+    if (moves) label = moves.has(`${c.moveNumber} ${c.san}`) ? 1 : 0;
+    else if (known.unresolved) label = null; // disputed reads ⇒ no label at all
+    else if (known.count === 0) label = 0; // unanimous zero: nothing here is starred
     if (label === null) continue;
     label ? pos++ : neg++;
     rows.push({ gameId: id, userColor: g.userColor, ...c, margin: c.quietAlt === null ? "" : c.playedEval - c.quietAlt, label });
   }
-  if (known.count > 0 && !moves && g.candidates.length > 1) unresolved.push(g);
+  if (!moves && (known.unresolved || known.count > 0)) unresolved.push(g);
 }
 
 // ─── dataset ─────────────────────────────────────────────────────────────────

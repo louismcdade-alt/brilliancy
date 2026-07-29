@@ -1,37 +1,69 @@
 /**
- * chess.com brilliancy COUNTS, keyed by game id — the cheap half of labelling.
+ * chess.com brilliancy readings, keyed by game id.
  *
- * The full Game Review is one a day on a free account and tells you WHICH move
- * was starred. The post-game summary is unlimited and tells you only HOW MANY.
- * This file is for the second kind, because counts are nearly free and, combined
- * with the candidate list, they pin down more than they look like they should:
+ * Each value is an ARRAY of independent reads, not a single number, because the
+ * post-game summary is NON-DETERMINISTIC. Reloading one game minutes apart can
+ * report 1 Brilliant on one load and none on the next; 172078598998 gave 0, 0
+ * and 1 across three reads. Storing a lone number threw that away and made a
+ * coin-flip look like a measurement.
  *
- *   count 0                        every candidate in that game is a confirmed
- *                                  NEGATIVE. One check, n labels.
- *   count 1, exactly 1 candidate   that candidate is a confirmed POSITIVE, with
- *                                  no Game Review spent.
- *   count 1, several candidates    ambiguous. Needs a Game Review.
- *   count >= 1, ZERO candidates    the sacrifice pre-filter missed it entirely.
- *                                  Rare and worth chasing — that is a whole class
- *                                  of blindness no threshold change can fix.
+ * WHAT THE NOISE LOOKS LIKE. It appears one-directional — the summary
+ * OVER-reports rather than missing things:
  *
- * The summary is known to OVER-count relative to Game Review (it reported 2 on a
- * game whose review showed 1), so a nonzero count is an upper bound. A 0 is exact.
+ *   - 169869209718 genuinely has 1 (confirmed in Game Review). Repeated reads
+ *     never lost it: 1, 1.
+ *   - Every disagreement seen so far is a lone 1 against several 0s.
+ *   - An earlier session saw a summary report 2 where Game Review found 1.
  *
- * Games already carried in labels-louismcdade.mjs do NOT need repeating here —
- * the harvester merges both and prefers the richer record.
+ * Two other traps, both of which produce wrong readings that look fine:
  *
- *   node scripts/harvest-labels.mjs louismcdade 250
+ *   - The panel RENDERS BEFORE IT FINISHES, briefly showing placeholder tiles
+ *     (??, ?, check) while it says "I'm creating your Game". Read then and you
+ *     get nonsense. Wait for that text to disappear.
+ *   - The tiles are the top three categories PRESENT, not a fixed set, so a
+ *     missing Brilliant tile means zero. And Great is a blue "!" while Brilliant
+ *     is a teal "!!" — easy to read one as the other.
+ *
+ * THE RULE THIS FILE ENCODES:
+ *
+ *   every read 0   ->  usable as an exact zero; each candidate becomes a negative
+ *   any read >= 1  ->  UNRESOLVED. Never promote to a positive from here; only a
+ *                      full Game Review can do that.
+ *
+ * That is deliberately lopsided, and it is the wrong way round for what this
+ * project needs — zeros give negatives, and negatives are the thing we already
+ * have too many of. It is still better than a poisoned positive, which would
+ * teach a model to imitate a move chess.com never starred.
+ *
+ * Reads require being LOGGED IN; logged out, the panel shows no counts at all.
+ *
+ *   node scripts/harvest-labels.mjs louismcdade 400
  */
 export const COUNTS = {
-  // Collected 2026-07-29 from the post-game summaries, in checklist order.
-  "72012130191": 1,
-  "170344245882": 0, // ⚠ conflicts with labels-louismcdade.mjs, which records 1
-  "172078598998": 1,
-  "73055868147": 0,
-  "68820772835": 0,
-  "172022142658": 0,
-  "73657360419": 0,
-  "72369273649": 1,
-  "69798477321": 0,
+  // Single historical reads, kept but weak — one read cannot distinguish a real
+  // zero from a lucky one. Worth re-reading before leaning on any of them.
+  "73055868147": [0],
+  "68820772835": [0],
+  "172022142658": [0],
+  "73657360419": [0],
+  "69798477321": [0],
+  "69076347829": [0],
+  "123448874857": [0],
+  "123260503855": [0],
+  "166905127436": [0],
+  "125086814631": [0],
+  "169872260446": [0],
+  "169264876272": [0],
+  "167779992358": [0],
+  "123010260621": [0],
+  "71533522913": [0],
+  "166904355742": [0],
+  "73056434083": [0],
+
+  // Disputed — these are the games that exposed the problem.
+  "172078598998": [1, 0, 0], // Louis read 1; two later reads showed no Brilliant tile
+  "170344245882": [1, 1, 0], // read 1 twice, then 0
+  "72012130191": [1],
+  "72369273649": [1],
+  "73742490905": [1],
 };

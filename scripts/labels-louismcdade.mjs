@@ -77,10 +77,10 @@ export const chesscomLabels = [
     name: "vs ybbbb235 — 1 brilliancy (chess.com)",
     userColor: "b",
     count: 1,
-    source: "inferred",
-    half: "guard",
-    // chess.com: 1 brilliancy (inferred). Confirmed move: 23...Nd4+.
-    expected: [{ moveNumber: 23, san: "Nd4+" }], // unknown which move — not scoreable as a positive
+    source: "summary",
+    half: "unscored",
+    // chess.com: 1 brilliancy (summary). summary count unreliable — needs Game Review
+    expected: null, // unknown which move — not scoreable as a positive
     pgn:
       "1. d4 d5 2. Nc3 Nc6 3. Nf3 Nf6 4. b3 e6 5. g3 Bb4 6. Bd2 e5 7. dxe5 d4 8. g4 " +
       "Nxg4 9. Rg1 h5 10. h3 Ngxe5 11. e3 dxc3 12. Bc1 Qg5 13. Rxg5 h4 14. Rxg7 Kf8 " +
@@ -97,10 +97,10 @@ export const chesscomLabels = [
     name: "vs alxgy1503 — 1 brilliancy (chess.com)",
     userColor: "w",
     count: 1,
-    source: "inferred",
-    half: "guard",
-    // chess.com: 1 brilliancy (inferred). Confirmed move: 23.Bc3.
-    expected: [{ moveNumber: 23, san: "Bc3" }], // unknown which move — not scoreable as a positive
+    source: "summary",
+    half: "unscored",
+    // chess.com: 1 brilliancy (summary). summary count unreliable — needs Game Review
+    expected: null, // unknown which move — not scoreable as a positive
     pgn:
       "1. e4 e5 2. Nf3 Nf6 3. Bc4 Bc5 4. d4 d5 5. dxc5 dxc4 6. Qxd8+ Kxd8 7. Nxe5 Rf8 " +
       "8. Nxc4 Nxe4 9. Bg5+ f6 10. Bh4 g5 11. Bg3 Re8 12. O-O Be6 13. b3 f5 14. Rd1+ " +
@@ -114,10 +114,10 @@ export const chesscomLabels = [
     name: "vs thiccmo — 1 brilliancy (chess.com)",
     userColor: "b",
     count: 1,
-    source: "inferred",
-    half: "guard",
-    // chess.com: 1 brilliancy (inferred). Confirmed move: 31...Nxf4+.
-    expected: [{ moveNumber: 31, san: "Nxf4+" }], // unknown which move — not scoreable as a positive
+    source: "summary",
+    half: "unscored",
+    // chess.com: 1 brilliancy (summary). summary count unreliable — needs Game Review
+    expected: null, // unknown which move — not scoreable as a positive
     pgn:
       "1. e4 e5 2. Nf3 Nc6 3. Nc3 d5 4. Bc4 dxc4 5. O-O Bg4 6. d3 cxd3 7. Qxd3 Nb4 8. " +
       "Qb5+ c6 9. Qxe5+ Be7 10. Bg5 f6 11. Qf4 fxg5 12. Qxg4 Nxc2 13. Rad1 Qb6 14. " +
@@ -626,13 +626,13 @@ export const chesscomLabels = [
   {
     id: "170344245882",
     url: "https://www.chess.com/game/live/170344245882",
-    name: "vs ibrahimmbaaayeh — no brilliancy (chess.com)",
+    name: "vs ibrahimmbaaayeh — 1 brilliancy (chess.com)",
     userColor: "w",
-    count: 0,
+    count: 1,
     source: "summary",
-    half: "fit",
-    // chess.com: zero brilliancies for this side. Exact — anything we flag here is a false positive.
-    expected: [],
+    half: "unscored",
+    // chess.com: 1 brilliancy (summary). reads disagree — needs re-reading
+    expected: null, // unknown which move — not scoreable as a positive
     pgn:
       "1. e4 e5 2. Qh5 Qf6 3. d3 Nh6 4. Bxh6 gxh6 5. Nc3 Nc6 6. O-O-O Rg8 7. Nf3 d6 " +
       "8. d4 exd4 9. Nxd4 Bg4 10. Qb5 Bc8 11. Nxc6 Rg5 12. Ne5+ c6 13. Qa4 Rb8 14. " +

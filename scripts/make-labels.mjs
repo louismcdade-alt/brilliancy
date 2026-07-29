@@ -44,25 +44,30 @@ const LABELS = {
   // consistent with the discovered pattern, though Légal's Mate already showed
   // that pattern can't be promoted to a rule.
   "169869209718": { n: 1, src: "review", move: "16...Qxc3", half: "guard" },
-  // — INFERRED, 2026-07-29 — the count is a real reading, the LOCATION is deduced.
+  // — WITHDRAWN 2026-07-29. These were inferred positives, and the inference is
+  //   no longer safe.
   //
-  // Each of these games has a summary count of 1 and several candidates, so the
-  // count alone doesn't say which move. What settles them is that every other
-  // candidate leaves Louis LOSING (-3.07 to -5.25), and chess.com's own criteria
-  // require a brilliant move not to be losing. That rules them out and leaves one
-  // move standing.
+  // All three rested on a post-game summary count of 1. That count turns out to
+  // be NON-DETERMINISTIC: the same game read minutes apart gives 1 Brilliant on
+  // one load and none on the next. Reloading 172078598998 produced 0, 0 and 1 on
+  // three separate reads.
   //
-  // Tagged `inferred` rather than `review` on purpose: this is an argument, not a
-  // reading, and it leans on our own evaluation. If either is ever contradicted
-  // by a real Game Review, this is the line to delete.
-  "72012130191": { n: 1, src: "inferred", move: "23...Nd4+", half: "guard" },
-  "72369273649": { n: 1, src: "inferred", move: "23.Bc3", half: "guard" },
-  // Count 1 with exactly ONE candidate, so the star is that move — provided the
-  // star is among our candidates at all. That proviso is real: if chess.com
-  // starred something our sacrifice pre-filter never considered, this candidate
-  // is a negative AND we have a pre-filter miss. At 83% recall the assumption is
-  // usually safe, which is why this is `inferred` and not `review`.
-  "73742490905": { n: 1, src: "inferred", move: "31...Nxf4+", half: "guard" },
+  // The noise looks one-directional — the summary OVER-reports. On the one game
+  // with Game Review truth (169869209718, genuinely 1) repeated reads never lost
+  // it, and every disagreement elsewhere is a lone 1 against multiple 0s. An
+  // earlier session saw the same thing from the other end: a summary reporting 2
+  // where Game Review found 1.
+  //
+  // So a 0 remains usable and a nonzero does not, which is precisely backwards
+  // from what this project needs. A poisoned positive is far more damaging than a
+  // missing one — it would teach a model that a move chess.com never starred is
+  // the thing to imitate. Only Game Review can promote these now.
+  //   72012130191  had inferred 23...Nd4+
+  //   72369273649  had inferred 23.Bc3
+  //   73742490905  had inferred 31...Nxf4+
+  "72012130191": { n: 1, src: "summary", note: "summary count unreliable — needs Game Review", half: "unscored" },
+  "72369273649": { n: 1, src: "summary", note: "summary count unreliable — needs Game Review", half: "unscored" },
+  "73742490905": { n: 1, src: "summary", note: "summary count unreliable — needs Game Review", half: "unscored" },
   // — summary, zero: exact and complete. Ordered by id; fit/test alternating. —
   "59328109305": { n: 0, src: "summary", half: "fit" },
   "69023093493": { n: 0, src: "summary", half: "test" },
@@ -100,7 +105,9 @@ const LABELS = {
   // negative — three candidates, all confirmed not starred.
   // New zero-count games are appended to the halves alternately (fit first) so
   // the frozen assignments of existing games never shift underneath a result.
-  "170344245882": { n: 0, src: "summary", half: "fit" },
+  // Reads disagree (1, 1, then 0), so by the unanimity rule this is unresolved,
+  // not a zero. Kept out of the scored set until re-read under the protocol.
+  "170344245882": { n: 1, src: "summary", note: "reads disagree — needs re-reading", half: "unscored" },
   "166907239486": { n: 1, src: "summary", guess: "11.Nxd5", half: "unscored" },
 };
 

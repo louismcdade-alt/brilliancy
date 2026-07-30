@@ -1,5 +1,5 @@
 import type { Brilliancy } from "../types";
-import { formatEval, timeClassLabel } from "./format";
+import { formatEval, sacrificeLabel, timeClassLabel, whyLabel } from "./format";
 
 /**
  * Renders a brilliancy as a self-contained 1080×1350 PNG "card" — the board with
@@ -285,12 +285,18 @@ export async function renderBrilliancyCard(b: Brilliancy, username: string): Pro
     ctx.fillText(value, x + 18, rowY + 74);
   });
 
-  // footer, set as printed small caps
+  // footer, set as printed small caps. When the move has a measured story —
+  // a forced mate, a mate that landed, material that came back — the annotator's
+  // note replaces the brand line: a share card that says WHY travels further
+  // than a slogan, and the slogan still covers the quiet cases.
+  const why = whyLabel(b);
   ctx.fillStyle = C.dim;
   ctx.font = `400 22px ${display}`;
   ctx.textAlign = "center";
   ctx.fillText(
-    `${timeClassLabel(b.game.timeClass)} · every move gets written down. almost none get circled.`,
+    why
+      ? `${timeClassLabel(b.game.timeClass)} · ${sacrificeLabel(b.sacPiece, b.sacSquare, b.sacrifice)}, ${why}.`
+      : `${timeClassLabel(b.game.timeClass)} · every move gets written down. almost none get circled.`,
     W / 2,
     H - 40,
   );

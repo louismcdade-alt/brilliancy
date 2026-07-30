@@ -93,6 +93,13 @@ export interface Brilliancy {
   /** Plies of real continuation behind regain6; < 6 means the game ended first. */
   regainPlies: number;
   /**
+   * The learned scorer's confidence, 0–1. Used to ORDER results, not shown: a
+   * bare "0.83" means nothing to a reader and inviting them to compare two
+   * decimals would imply a precision this model does not have. What it can
+   * honestly do is put the likeliest brilliancies first.
+   */
+  score: number;
+  /**
    * Centipawns by which this move beat the best QUIET alternative — the
    * `necessary` gate's measurement, and the most explanatory number we have.
    * "Nothing quieter came close" is the difference between a brilliancy and a

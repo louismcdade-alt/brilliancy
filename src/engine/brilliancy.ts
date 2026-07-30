@@ -439,7 +439,8 @@ export async function scanGame(
     // 37.5%) and recall (35.2% -> 56.5%), winning 17 of 22 comparable accounts.
     // The gates are still computed above, so `rejectedBy` keeps meaning what it
     // always meant and the old rule stays A/B-able from one engine pass.
-    const passes = useGates ? sound && strong && necessary : brilliancyScore(candidate) >= SCORE_CUT;
+    const score = brilliancyScore(candidate);
+    const passes = useGates ? sound && strong && necessary : score >= SCORE_CUT;
 
     // An allow candidate is never flagged, whatever the score says: the model
     // was trained on offer-candidates only, so an allow row is out of its
@@ -467,6 +468,7 @@ export async function scanGame(
         kingRingDelta: kp.kingRingDelta,
         regain6: regain.regain6,
         regainPlies: regain.regainPlies,
+        score,
       });
     }
   }

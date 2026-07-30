@@ -83,10 +83,21 @@ export function App() {
 
   const cancelScan = useRef(false);
 
+  /**
+   * Likeliest first, not biggest first.
+   *
+   * Ordering by sacrifice size answers "which gave up the most material", which
+   * is not the question a reader has. The learned scorer is trained to predict
+   * exactly the thing they care about — whether chess.com would call this
+   * brilliant — so it is the better ranking, and it matters more than it used to:
+   * the model flags roughly twice as many moves as the old rule at around 30%
+   * precision, so what sits at the top of the list is most of what gets read.
+   * Sacrifice size stays as the tie-break.
+   */
   const sortedBrilliancies = useMemo(
     () =>
       [...brilliancies].sort(
-        (a, b) => b.sacrifice - a.sacrifice || b.evalAfter - a.evalAfter,
+        (a, b) => b.score - a.score || b.sacrifice - a.sacrifice || b.evalAfter - a.evalAfter,
       ),
     [brilliancies],
   );

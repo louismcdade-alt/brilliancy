@@ -100,6 +100,32 @@ export function sacrificeLabel(
   return `sacrifices the ${name} on ${sacSquare}`;
 }
 
+/**
+ * The annotator's one-line verdict — WHY the sacrifice works, not just what it
+ * gave up. Phrases are deliberately in the terse voice of a scoresheet margin
+ * note, and each one is backed by a measured field rather than adjectives:
+ * a forced mate outranks everything, then a king with no squares, then an
+ * attack the move itself opened, then material that comes straight back.
+ * Null when none of them holds — an honest silence beats a vague flourish.
+ */
+export function whyLabel(b: {
+  mateIn: number | null;
+  mateSoonPlies: number | null;
+  kingMoves: number;
+  kingRingDelta: number;
+  regain6: number;
+}): string | null {
+  if (b.mateIn !== null) return b.mateIn === 1 ? "forcing mate next move" : `forcing mate in ${b.mateIn}`;
+  if (b.mateSoonPlies !== null) {
+    const m = Math.ceil(b.mateSoonPlies / 2);
+    return b.mateSoonPlies <= 1 ? "delivering mate" : m === 1 ? "and mate came next move" : `and mate followed ${m} moves later`;
+  }
+  if (b.kingMoves === 0 && b.kingRingDelta > 0) return "and the king has nowhere to run";
+  if (b.kingRingDelta >= 2) return "tearing open the king's cover";
+  if (b.regain6 >= -0.5) return "and the material comes straight back";
+  return null;
+}
+
 /** Engine cp (player POV) → compact label like "+2.4" / "M3". */
 export function formatEval(cp: number, mate: number | null): string {
   if (mate !== null) return `M${Math.abs(mate)}`;

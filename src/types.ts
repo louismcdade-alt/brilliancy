@@ -75,6 +75,21 @@ export interface Brilliancy {
   sacSquare: string | null;
   /** Type of the sacrificed piece ("n", "r", …). Never "k": kings can't be sacrificed. */
   sacPiece: string | null;
+  /** Forced mate the player has after the move (in full moves), else null. */
+  mateIn: number | null;
+  /**
+   * Plies from this move to the player's checkmate at the END of this game, when
+   * that end is near (≤8 plies); else null. Game truth rather than engine truth:
+   * Légal's Nxe5 forces nothing — the mate only exists if the queen is taken —
+   * but the queen WAS taken and the mate DID land, and that is worth saying.
+   */
+  mateSoonPlies: number | null;
+  /** Legal king moves the opponent has left after the move. */
+  kingMoves: number;
+  /** Squares round the enemy king this move newly attacks. */
+  kingRingDelta: number;
+  /** Material vs before the move, six plies later in the actual game. */
+  regain6: number;
 }
 
 export interface ReplayMove {

@@ -1,7 +1,7 @@
 import type { Brilliancy } from "../types";
 import { Board } from "./Board";
 import { InkCircle } from "./BoardViewer";
-import { formatEval, sacrificeLabel, timeAgo } from "../lib/format";
+import { formatEval, sacrificeLabel, timeAgo, whyLabel } from "../lib/format";
 
 function moveLabel(b: Brilliancy): string {
   // "23." for white, "23…" for black
@@ -34,7 +34,10 @@ function SpecCard({ b, onOpen }: { b: Brilliancy; onOpen: (b: Brilliancy) => voi
         <span className="spec-movenum">{moveLabel(b)}</span>
       </div>
       <div className="spec-stats">
-        <span>{sacrificeLabel(b.sacPiece, b.sacSquare, b.sacrifice)}</span>
+        <span>
+          {sacrificeLabel(b.sacPiece, b.sacSquare, b.sacrifice)}
+          {whyLabel(b) ? `, ${whyLabel(b)}` : ""}
+        </span>
         <span>
           eval <b>{formatEval(b.evalAfter, null)}</b>
         </span>

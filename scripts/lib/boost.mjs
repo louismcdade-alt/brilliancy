@@ -24,41 +24,53 @@
 
 const sigmoid = (x) => 1 / (1 + Math.exp(-x));
 
-function thresholds(rows, key) {
-  const vals = [...new Set(rows.map((r) => r.f[key]))].sort((a, b) => a - b);
-  if (vals.length < 2) return [];
-  if (vals.length <= 12) return vals.slice(0, -1).map((v, i) => (v + vals[i + 1]) / 2);
-  const out = [];
-  for (let q = 1; q < 20; q++) {
-    const i = Math.floor((q / 20) * vals.length);
-    const a = vals[i];
-    const b = vals[Math.min(vals.length - 1, i + 1)];
-    if (a !== b) out.push((a + b) / 2);
-  }
-  return [...new Set(out)];
-}
-
+/**
+ * Split finding by prefix sums over sorted order — the standard exact algorithm.
+ *
+ * The first version generated ~20 candidate thresholds per feature and filtered
+ * the rows for each: O(features × thresholds × n) per node. Fine for one fit,
+ * ruinous for leave-one-account-out at 27 accounts × a hyperparameter grid ×
+ * hundreds of boosting rounds — north of five hours of pure JS. Sorting once per
+ * (node, feature) and sweeping cumulative G/H makes every distinct value a
+ * candidate threshold in O(n log n), which is both ~20× faster AND slightly
+ * better, since no threshold is skipped by quantisation.
+ */
 function buildStump(rows, features, maxDepth, minLeaf, lambda, gamma) {
-  const G = (rs) => rs.reduce((a, r) => a + r._g, 0);
-  const H = (rs) => rs.reduce((a, r) => a + r._h, 0);
-  const leafWeight = (rs) => -G(rs) / (H(rs) + lambda);
-  const objective = (rs) => (G(rs) * G(rs)) / (H(rs) + lambda);
-
   function build(rs, depth) {
-    if (depth >= maxDepth || rs.length < 2 * minLeaf) return { leaf: true, w: leafWeight(rs) };
-    const parent = objective(rs);
+    let Gt = 0;
+    let Ht = 0;
+    for (const r of rs) {
+      Gt += r._g;
+      Ht += r._h;
+    }
+    const leaf = () => ({ leaf: true, w: -Gt / (Ht + lambda) });
+    if (depth >= maxDepth || rs.length < 2 * minLeaf) return leaf();
+
+    const parent = (Gt * Gt) / (Ht + lambda);
     let best = null;
     for (const key of features) {
-      for (const t of thresholds(rs, key)) {
-        const L = rs.filter((r) => r.f[key] <= t);
-        const R = rs.filter((r) => r.f[key] > t);
-        if (L.length < minLeaf || R.length < minLeaf) continue;
-        const gain = 0.5 * (objective(L) + objective(R) - parent) - gamma;
-        if (gain > 0 && (!best || gain > best.gain)) best = { key, t, gain, L, R };
+      const sorted = rs.slice().sort((a, b) => a.f[key] - b.f[key]);
+      let GL = 0;
+      let HL = 0;
+      for (let i = 0; i < sorted.length - 1; i++) {
+        GL += sorted[i]._g;
+        HL += sorted[i]._h;
+        if (sorted[i].f[key] === sorted[i + 1].f[key]) continue;
+        const nL = i + 1;
+        if (nL < minLeaf || sorted.length - nL < minLeaf) continue;
+        const GR = Gt - GL;
+        const HR = Ht - HL;
+        const gain = 0.5 * ((GL * GL) / (HL + lambda) + (GR * GR) / (HR + lambda) - parent) - gamma;
+        if (gain > 0 && (!best || gain > best.gain)) {
+          best = { key, t: (sorted[i].f[key] + sorted[i + 1].f[key]) / 2, gain };
+        }
       }
     }
-    if (!best) return { leaf: true, w: leafWeight(rs) };
-    return { leaf: false, key: best.key, t: best.t, left: build(best.L, depth + 1), right: build(best.R, depth + 1) };
+    if (!best) return leaf();
+    const L = [];
+    const R = [];
+    for (const r of rs) (r.f[best.key] <= best.t ? L : R).push(r);
+    return { leaf: false, key: best.key, t: best.t, left: build(L, depth + 1), right: build(R, depth + 1) };
   }
   return build(rows, 0);
 }

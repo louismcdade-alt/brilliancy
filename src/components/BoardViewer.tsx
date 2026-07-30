@@ -10,6 +10,7 @@ import {
   resultLetter,
   resultReasonLabel,
   sacrificeLabel,
+  whyLabel,
   timeClassLabel,
 } from "../lib/format";
 
@@ -95,7 +96,8 @@ export function BoardViewer({ game, brilliancies, initialPly, username, onClose 
               <>
                 <span>
                   Brilliant — <b>{brilNow.san}!!</b> ·{" "}
-                  {sacrificeLabel(brilNow.sacPiece, brilNow.sacSquare, brilNow.sacrifice)} · eval{" "}
+                  {sacrificeLabel(brilNow.sacPiece, brilNow.sacSquare, brilNow.sacrifice)}
+                  {whyLabel(brilNow) ? `, ${whyLabel(brilNow)}` : ""} · eval{" "}
                   {formatEval(brilNow.evalAfter, null)}
                 </span>
                 <button

@@ -289,6 +289,12 @@ export async function scanGame(
 
   const found: Brilliancy[] = [];
 
+  // Does this game end with the player delivering mate? Checked once; each
+  // candidate then measures its distance to that mate. `#` in the final SAN is
+  // the whole test — chess.js wrote these moves, so the suffix is reliable.
+  const last = moves[moves.length - 1];
+  const endsInPlayerMate = !!last && last.color === game.userColor && last.san.includes("#");
+
   for (let ply = 0; ply < moves.length; ply++) {
     if (isCancelled()) break;
     const move = moves[ply];
@@ -380,6 +386,15 @@ export async function scanGame(
     // a bigger window would turn some of these into real comparisons.
     const necessary = isFinite(quietAlt) && playedEval - quietAlt >= NECESSARY_MARGIN;
 
+    // Relative to BEFORE the move: the material is not gone yet immediately
+    // after a sacrifice — it goes when the opponent takes it — so measuring
+    // against fenAfter would read every offer as costing nothing.
+    const regain = regainAt(moves, ply, game.userColor);
+    const kp = kingPressure(move.fenBefore, move.fenAfter, game.userColor);
+    // `post` is searched from fenAfter with the OPPONENT to move, so a negative
+    // mate score is the opponent being mated — i.e. the player's forced mate.
+    const mateIn = post.mate !== null && post.mate < 0 ? -post.mate : null;
+
     opts.onCandidate?.({
       moveNumber: move.moveNumber,
       san: move.san,
@@ -397,11 +412,8 @@ export async function scanGame(
           ? null
           : post.bestMove.slice(2, 4) === focusSquare,
       admitted: isOffer ? "offer" : "allow",
-      // Relative to BEFORE the move: the material is not gone yet immediately
-      // after a sacrifice — it goes when the opponent takes it — so measuring
-      // against fenAfter would read every offer as costing nothing.
-      ...regainAt(moves, ply, game.userColor),
-      ...kingPressure(move.fenBefore, move.fenAfter, game.userColor),
+      ...regain,
+      ...kp,
       fresh: allow ? Math.round(allow.fresh.value * 10) / 10 : 0,
       freshSquare: allow?.fresh.square ?? null,
       standing: allow ? Math.round(allow.standing.value * 10) / 10 : 0,
@@ -427,6 +439,12 @@ export async function scanGame(
         sacrifice: Math.round(sacrifice * 10) / 10,
         sacSquare: offered.square,
         sacPiece: offered.square ? (after.get(offered.square as Square)?.type ?? null) : null,
+        mateIn,
+        mateSoonPlies:
+          endsInPlayerMate && moves.length - 1 - ply <= 8 ? moves.length - 1 - ply : null,
+        kingMoves: kp.kingMoves,
+        kingRingDelta: kp.kingRingDelta,
+        regain6: regain.regain6,
       });
     }
   }

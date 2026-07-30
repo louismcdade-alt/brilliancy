@@ -12,3 +12,26 @@ albump                   1  |    0.500      0.500     0.667    (d3/150)
 alun_elderbrownesq      53  |    0.213      0.194     0.315    (d3/150)
 alvin-jiang             27  |    0.426      0.426     0.452    (d3/150)
 angelsenvy88            29  |    0.478      0.567     0.567    (d3/150)
+apesquared              35  |    0.211      0.311     0.328    (d3/150)
+arango82                35  |    0.421      0.400     0.421    (d2/150)
+artmarkham              30  |    0.372      0.420     0.462    (d2/150)
+askindale               14  |    0.621      0.581     0.538    (d3/300)
+atikinwarhammer         35  |    0.412      0.412     0.556    (d2/150)
+atterberry              18  |    0.438      0.444     0.526    (d3/300)
+aussieaoe                3  |      n/a        n/a     0.400    (d2/150)
+australianson            4  |      n/a        n/a       n/a    (d2/150)
+blackmancer             23  |      n/a        n/a       n/a    (d3/300)
+blaserf3                23  |      n/a        n/a       n/a    (d3/150)
+bluecane                30  |    0.300      0.286     0.511    (d2/150)
+budgie_empire           15  |    0.182      0.205       n/a    (d2/150)
+cathal64                 3  |    0.190      0.190     0.308    (d3/150)
+jay_781                 27  |    0.352      0.345     0.436    (d3/300)
+judeahardy              30  |    0.429      0.394     0.462    (d3/300)
+louismcdade              5  |    0.667      0.667       n/a    (d2/150)
+
+mean F1 across accounts:   hand 0.329   hybrid 0.342   boost 0.367
+
+POOLED across held-out accounts (every row scored by a model that never saw its player):
+  hand     TP 273  FN 327  randTP  67  FP 134   P  33.3%  R  45.5%
+  hybrid   TP 300  FN 300  randTP  73  FP 148   P  33.0%  R  50.0%
+  boost    TP 374  FN 226  randTP  78  FP 134   P  36.8%  R  62.3%

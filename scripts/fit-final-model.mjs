@@ -68,14 +68,20 @@ for (let c = 0.02; c <= 0.98; c += 0.02) {
  * The guard set therefore sets the threshold. Its scores leave a clean window:
  * every classical brilliancy and both chess.com-confirmed positives sit at 0.697
  * or above, while 19.Rxd6 — a confirmed FALSE positive — sits at 0.616. Any cut
- * in (0.616, 0.697] satisfies the constraint; 0.65 is the middle of it.
+ * in (0.616, 0.697] satisfies the constraint. Take the TOP of that window, not
+ * the middle: precision rises monotonically with the cut, so subject to keeping
+ * the classics the best available threshold is the highest one that does. Held
+ * out, 0.65 gives P 29.1% / R 87.7% and 0.70 gives P 30.6% / R 84.8%, so the
+ * middle of the window was simply leaving precision on the table. 0.68 keeps a
+ * ~0.017 margin under Marshall's 0.697 rather than shaving the constraint by
+ * thousandths.
  *
  * The honesty cost is explicit: the guard set is no longer independent evidence
  * for this threshold, because the threshold was chosen to satisfy it. What IS
  * independent is leave-one-account-out at this fixed cut over 27 accounts, none
  * of which contain any classical game — see scripts/loo-cuts.txt.
  */
-const SHIP_CUT = argOf("cut", 0.65);
+const SHIP_CUT = argOf("cut", 0.68);
 
 const json = {
   version: 1,

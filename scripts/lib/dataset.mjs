@@ -60,6 +60,7 @@ export function loadRows(path = "scripts/harvest-multi.json") {
           // needs no re-scan. 0 means "no forced mate", which sorts below every
           // real mate — the shorter the mate, the larger the number.
           mateIn: Math.abs(c.playedEval) > 90000 ? Math.max(0, 1000 - Math.round((100000 - Math.abs(c.playedEval)) / 10)) * Math.sign(c.playedEval) : 0,
+          regainPlies: c.regainPlies ?? 0,
           regain2: c.regain2 ?? 0,
           regain4: c.regain4 ?? 0,
           regain6: c.regain6 ?? 0,
@@ -75,7 +76,7 @@ export function loadRows(path = "scripts/harvest-multi.json") {
 export const FEATURES = [
   "sacrifice", "playedEval", "evalLoss", "margin", "hasQuietAlt", "fresh",
   "standing", "accepted", "isDirect", "isPromotion", "isOffer",
-  "regain2", "regain4", "regain6", "kingRing", "kingRingDelta", "kingMoves",
+  "regain2", "regain4", "regain6", "regainPlies", "kingRing", "kingRingDelta", "kingMoves",
   "mateIn", "moveNumber", "rating",
 ];
 

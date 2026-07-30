@@ -50,7 +50,16 @@ const hybridRule = (r) =>
   r.f.isOffer === 1 && r.f.isPromotion === 0 && r.f.playedEval >= -77.5 &&
   r.f.evalLoss <= 95.5 && r.f.hasQuietAlt === 1 && r.f.margin >= 50;
 
-const rows = loadRows(CACHE);
+/**
+ * `--offers-only` restricts to candidates the SHIPPING pre-filter admits.
+ *
+ * The harvest ran with `admitAllow: true` so the dataset could price that rule;
+ * the app does not. Evaluating on rows the app will never see would report a
+ * recall it cannot deliver, so the configuration being shipped has to be the
+ * configuration being measured.
+ */
+const OFFERS_ONLY = process.argv.includes("--offers-only");
+const rows = loadRows(CACHE).filter((r) => !OFFERS_ONLY || r.f.isOffer === 1);
 const byUser = new Map();
 for (const r of rows) {
   if (!byUser.has(r.user)) byUser.set(r.user, { rows: 0, pos: 0, random: 0 });
@@ -104,7 +113,20 @@ function fitPick(train) {
   return { model, cut, cfg };
 }
 
+/**
+ * `--cuts a,b,c` also reports the boosted model at FIXED thresholds.
+ *
+ * The per-fold cut is swept to maximise F1 on training rows, which knows nothing
+ * about the guard set — and at that cut the shipped model dropped Marshall's
+ * 23...Qg3 and Lasker-Thomas 11.Qxh7+, two of the most famous brilliancies in
+ * chess. Keeping those is a product constraint, not a metric, so the honest way
+ * to price it is to measure the fixed cut that keeps them rather than to quote
+ * numbers from a cut nobody will ship.
+ */
+const FIXED_CUTS = (argOf("cuts", "") || "").split(",").filter(Boolean).map(Number);
+
 const f1s = { hand: [], hybrid: [], boost: [] };
+const fixed = new Map(FIXED_CUTS.map((c) => [c, { tp: 0, fn: 0, tpRandom: 0, fp: 0, f1s: [] }]));
 const pooled = {
   hand: { tp: 0, fn: 0, tpRandom: 0, fp: 0 },
   hybrid: { tp: 0, fn: 0, tpRandom: 0, fp: 0 },
@@ -131,6 +153,12 @@ for (const user of holdable) {
   addTo(pooled.hand, hand);
   addTo(pooled.hybrid, hyb);
   addTo(pooled.boost, boost);
+  for (const c of FIXED_CUTS) {
+    const s2 = evaluate(test, (r) => model.score(r) >= c);
+    const acc = fixed.get(c);
+    addTo(acc, s2);
+    acc.f1s.push(s2.F1 ?? 0);
+  }
   const f = (x) => (x.F1 === null ? "  n/a" : x.F1.toFixed(3));
   console.log(
     `${user.padEnd(22)} ${String(byUser.get(user).pos).padStart(3)}  |    ${f(hand)}      ${f(hyb)}     ${f(boost)}    (d${cfg.depth}/${cfg.rounds})`,
@@ -144,4 +172,7 @@ console.log(`\nmean F1 across accounts:   hand ${mean(f1s.hand).toFixed(3)}   hy
 console.log("\nPOOLED across held-out accounts (every row scored by a model that never saw its player):");
 for (const [name, s] of Object.entries(pooled)) {
   console.log(`  ${name.padEnd(8)} TP ${String(s.tp).padStart(3)}  FN ${String(s.fn).padStart(3)}  randTP ${String(s.tpRandom).padStart(3)}  FP ${String(s.fp).padStart(3)}   P ${pct(P(s)).padStart(6)}  R ${pct(R(s)).padStart(6)}`);
+}
+for (const [c, s] of fixed) {
+  console.log(`  cut ${c.toFixed(2)}  TP ${String(s.tp).padStart(3)}  FN ${String(s.fn).padStart(3)}  randTP ${String(s.tpRandom).padStart(3)}  FP ${String(s.fp).padStart(3)}   P ${pct(P(s)).padStart(6)}  R ${pct(R(s)).padStart(6)}   meanF1 ${mean(s.f1s).toFixed(3)}`);
 }

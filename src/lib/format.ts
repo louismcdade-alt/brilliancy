@@ -114,6 +114,7 @@ export function whyLabel(b: {
   kingMoves: number;
   kingRingDelta: number;
   regain6: number;
+  regainPlies: number;
 }): string | null {
   if (b.mateIn !== null) return b.mateIn === 1 ? "forcing mate next move" : `forcing mate in ${b.mateIn}`;
   if (b.mateSoonPlies !== null) {
@@ -122,7 +123,10 @@ export function whyLabel(b: {
   }
   if (b.kingMoves === 0 && b.kingRingDelta > 0) return "and the king has nowhere to run";
   if (b.kingRingDelta >= 2) return "tearing open the king's cover";
-  if (b.regain6 >= -0.5) return "and the material comes straight back";
+  // Only claim recovery when there was enough game left to observe it. A game
+  // that ends on the sacrifice leaves the material offered but untaken, which
+  // reads as recovered and is the opposite of true.
+  if (b.regainPlies >= 4 && b.regain6 >= -0.5) return "and the material comes straight back";
   return null;
 }
 
@@ -153,6 +157,7 @@ export function reasonLines(b: {
   kingMoves: number;
   kingRingDelta: number;
   regain6: number;
+  regainPlies: number;
   quietMargin: number | null;
   evalLoss: number;
 }): string[] {

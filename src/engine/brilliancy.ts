@@ -5,6 +5,7 @@ import { parseGame } from "../chess/replay";
 import { engine } from "./engine";
 import { allowedMaterial, materialBalance, newMaterialOffered, VALUE } from "./see";
 import { kingPressure } from "./king";
+import { brilliancyScore, SCORE_CUT } from "./score";
 
 /**
  * Heuristic for a "brilliant" move, in the spirit of chess.com's !! (we told the
@@ -216,6 +217,8 @@ export interface Candidate {
   regain2: number;
   regain4: number;
   regain6: number;
+  /** Plies of real continuation behind the regain figures; < 6 means clipped. */
+  regainPlies: number;
   /**
    * What the sacrifice was FOR — pressure on the enemy king, counted statically.
    *
@@ -262,6 +265,13 @@ export interface ScanOptions {
    */
   admitAllow?: boolean;
   /**
+   * Use the hand-written eval gates instead of the learned scorer. Off by
+   * default — the model ships. Calibration tooling sets this to score the old
+   * rule against the new one from a single engine pass, which is the only way an
+   * A/B stays affordable.
+   */
+  useGates?: boolean;
+  /**
    * Fires for every move that clears the static sacrifice filter, whether or not
    * the engine gates pass. Lets the calibration scripts see *why* a move was
    * dropped — the only way to chase a false negative without guessing.
@@ -279,6 +289,7 @@ export async function scanGame(
   const minSac = opts.minSacrifice ?? MIN_SACRIFICE;
   const rejectShapes = opts.rejectShapes ?? REJECT_SHAPES;
   const admitAllow = opts.admitAllow ?? false;
+  const useGates = opts.useGates ?? false;
 
   let moves;
   try {
@@ -395,7 +406,7 @@ export async function scanGame(
     // mate score is the opponent being mated — i.e. the player's forced mate.
     const mateIn = post.mate !== null && post.mate < 0 ? -post.mate : null;
 
-    opts.onCandidate?.({
+    const candidate: Candidate = {
       moveNumber: move.moveNumber,
       san: move.san,
       sacrifice: Math.round(sacrifice * 10) / 10,
@@ -419,12 +430,21 @@ export async function scanGame(
       standing: allow ? Math.round(allow.standing.value * 10) / 10 : 0,
       standingSquare: allow?.standing.square ?? null,
       rejectedBy: !sound ? "sound" : !strong ? "strong" : !necessary ? "necessary" : null,
-    });
+    };
+    opts.onCandidate?.(candidate);
 
-    // An allow candidate is never flagged, whatever the engine says about it.
-    // Admitting one costs a search and yields a labelled row; flagging one would
-    // be asserting a rule this project has not earned yet.
-    if (isOffer && sound && strong && necessary && !rejectShapes.includes(shape)) {
+    // The verdict. The learned scorer replaced `sound && strong && necessary` on
+    // 2026-07-30: measured leave-one-account-out over 27 accounts and 775
+    // labelled brilliancies, it beats those gates on BOTH precision (33.3% ->
+    // 37.5%) and recall (35.2% -> 56.5%), winning 17 of 22 comparable accounts.
+    // The gates are still computed above, so `rejectedBy` keeps meaning what it
+    // always meant and the old rule stays A/B-able from one engine pass.
+    const passes = useGates ? sound && strong && necessary : brilliancyScore(candidate) >= SCORE_CUT;
+
+    // An allow candidate is never flagged, whatever the score says: the model
+    // was trained on offer-candidates only, so an allow row is out of its
+    // distribution rather than merely low-scoring.
+    if (isOffer && passes && !rejectShapes.includes(shape)) {
       found.push({
         game,
         ply,
@@ -446,6 +466,7 @@ export async function scanGame(
         kingMoves: kp.kingMoves,
         kingRingDelta: kp.kingRingDelta,
         regain6: regain.regain6,
+        regainPlies: regain.regainPlies,
       });
     }
   }
@@ -454,25 +475,33 @@ export async function scanGame(
 }
 
 /**
- * Material relative to the position before move `ply`, 2 / 4 / 6 plies later.
+ * Material relative to the position before move `ply`, 2 / 4 / 6 plies later,
+ * plus how many plies were ACTUALLY available to look at.
  *
- * Clipped to the final position when the game ends inside the horizon, which is
- * the right reading rather than a missing value: if the game finished, the
- * material situation is whatever it finished as. A mating sacrifice therefore
- * shows as still-down material, correctly — nothing came back, the game just
- * stopped mattering.
+ * `regainPlies` is not bookkeeping, it is the difference between a measurement
+ * and an artefact. When a game ends inside the horizon the readings clamp to the
+ * final position, and that position flatters the sacrificer: the material has
+ * been offered but not yet taken, so a move that hangs a bishop reads as +1 for
+ * the pawn it grabbed. The site said "the material comes straight back" about
+ * 6...Bxf2+ in a game whose PGN ENDS on that move — nothing came back, play
+ * simply stopped, and Kxf2 would have won the piece.
+ *
+ * This matters beyond the wording. Brilliancies end games far more often than
+ * ordinary moves do (mate, resignation), so a clipped horizon is correlated with
+ * the label, and any apparent "positives recover their material" signal has to
+ * be checked against `regainPlies` before it is believed.
  */
 function regainAt(
   moves: ReplayMove[],
   ply: number,
   color: Game["userColor"],
-): { regain2: number; regain4: number; regain6: number } {
+): { regain2: number; regain4: number; regain6: number; regainPlies: number } {
   const base = materialBalance(moves[ply].fenBefore, color);
   const at = (k: number) => {
     const m = moves[Math.min(ply + k, moves.length - 1)];
     return Math.round((materialBalance(m.fenAfter, color) - base) * 10) / 10;
   };
-  return { regain2: at(2), regain4: at(4), regain6: at(6) };
+  return { regain2: at(2), regain4: at(4), regain6: at(6), regainPlies: moves.length - 1 - ply };
 }
 
 /** Value of a captured piece for netting against a sac — pawns don't count. */

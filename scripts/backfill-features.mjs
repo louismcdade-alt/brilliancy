@@ -102,6 +102,7 @@ for (let i = 0; i < games.length; i += BATCH) {
         };
         values[`${want.moveNumber} ${want.san}`] = {
           regain2: at(2), regain4: at(4), regain6: at(6),
+          regainPlies: moves.length - 1 - ply,
           ...kingPressure(moves[ply].fenBefore, moves[ply].fenAfter, r.userColor),
         };
       }
@@ -125,7 +126,7 @@ for (let i = 0; i < games.length; i += BATCH) {
 }
 
 await browser.close();
-cache.schema = 3;
+cache.schema = 4;
 writeFileSync(CACHE, JSON.stringify(cache, null, 1));
 
 const total = games.reduce((n, g) => n + g.candidates.length, 0);

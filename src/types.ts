@@ -90,6 +90,8 @@ export interface Brilliancy {
   kingRingDelta: number;
   /** Material vs before the move, six plies later in the actual game. */
   regain6: number;
+  /** Plies of real continuation behind regain6; < 6 means the game ended first. */
+  regainPlies: number;
   /**
    * Centipawns by which this move beat the best QUIET alternative — the
    * `necessary` gate's measurement, and the most explanatory number we have.

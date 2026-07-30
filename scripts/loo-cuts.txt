@@ -1,0 +1,7 @@
+4171 rows · 600 positive · 27 accounts · 27 holdable
+
+account                pos  |   hand F1   hybrid F1  boost F1   (boost cfg)
+1kevt                   37  |    0.443      0.520     0.459    (d2/150)
+33_ad                   19  |      n/a        n/a       n/a    (d3/150)
+64squarepawncocktail     8  |    0.333      0.333       n/a    (d3/150)
+876543z1                34  |    0.505      0.555     0.633    (d2/150)

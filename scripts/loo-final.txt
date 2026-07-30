@@ -24,3 +24,14 @@ blackmancer             27  |      n/a        n/a       n/a    (d3/150)
 blaserf3                31  |      n/a        n/a       n/a    (d3/300)
 bluecane                42  |    0.250      0.240     0.418    (d3/150)
 budgie_empire           18  |    0.167      0.190     0.606    (d3/300)
+cathal64                 3  |    0.190      0.190     0.190    (d3/300)
+jay_781                 30  |    0.340      0.333     0.264    (d3/150)
+judeahardy              41  |    0.379      0.353     0.577    (d3/150)
+louismcdade              8  |    0.500      0.500     0.400    (d3/150)
+
+mean F1 across accounts:   hand 0.282   hybrid 0.294   boost 0.388
+
+POOLED across held-out accounts (every row scored by a model that never saw its player):
+  hand     TP 273  FN 502  randTP  67  FP 134   P  33.3%  R  35.2%
+  hybrid   TP 300  FN 475  randTP  73  FP 148   P  33.0%  R  38.7%
+  boost    TP 438  FN 337  randTP  96  FP 160   P  37.5%  R  56.5%

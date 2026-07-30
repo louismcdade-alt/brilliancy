@@ -172,10 +172,21 @@ export function reasonLines(b: {
   const bought = whyLabel(b);
   if (bought) lines.push(bought.replace(/^and /, "").replace(/^./, (c) => c.toUpperCase()));
 
+  // Mate scores are encoded near ±100000, so a margin against one is not a
+  // number of pawns and must never be printed as one — "no quiet move came
+  // within 995.16 of it" is gibberish dressed as precision. Above ten pawns the
+  // gap has stopped being a quantity a reader can picture anyway, so say the
+  // qualitative thing instead.
   if (b.quietMargin !== null && b.quietMargin > 0) {
-    lines.push(`No quiet move came within ${(b.quietMargin / 100).toFixed(2)} of it`);
+    lines.push(
+      b.quietMargin >= 1000
+        ? "No quiet move came anywhere close"
+        : `No quiet move came within ${(b.quietMargin / 100).toFixed(2)} of it`,
+    );
   }
 
+  // Eval loss needs no mate guard: the tests below are upper bounds, so a
+  // mate-scale value simply matches neither and adds no line.
   if (b.evalLoss <= 0) lines.push("The engine's own first choice");
   else if (b.evalLoss <= 40) lines.push(`Within ${(b.evalLoss / 100).toFixed(2)} of the engine's best`);
 

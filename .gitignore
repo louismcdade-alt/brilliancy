@@ -40,3 +40,6 @@ scripts/shot-*.png
 scripts/brilliant-lists/
 scripts/harvest-multi.json
 scripts/dataset-multi.csv
+
+# Cached chess.com monthly archives (immutable months only; regenerable)
+scripts/.cache/

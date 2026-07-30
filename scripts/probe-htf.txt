@@ -1,0 +1,10 @@
+probing 140 candidates (569 positives available, 3231 negatives)
+
+DEEP(14) MINUS SHALLOW(6), player POV — positive means the move looks BETTER the deeper you look
+
+  brilliancies  n= 70  median     32  mean     88
+  negatives     n= 70  median     -9  mean     38
+
+  swing >= +50     brilliancies  45.7%   negatives  25.7%
+  swing >= +100    brilliancies  32.9%   negatives  17.1%
+  swing >= +200    brilliancies  18.6%   negatives   7.1%

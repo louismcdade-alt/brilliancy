@@ -7,6 +7,45 @@
  * produces labels nobody can trust.
  */
 
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+
+/**
+ * On-disk cache of monthly archive responses.
+ *
+ * Every script here re-fetched an account's entire history on every run — 27
+ * accounts of archives before a probe could compute anything, which is slow,
+ * rude to a free API, and the reason a probe died mid-run on a transient DNS
+ * failure after doing all that work.
+ *
+ * A FINISHED month never changes, so it is cached forever. The CURRENT month is
+ * always refetched, because games are still being added to it. That distinction
+ * is the whole design: cache what is immutable, never cache what is not.
+ */
+const CACHE_DIR = "scripts/.cache";
+const monthKey = (url) => url.replace(/[^a-z0-9]/gi, "_") + ".json";
+const currentMonth = () => {
+  const d = new Date();
+  return `/${d.getUTCFullYear()}/${String(d.getUTCMonth() + 1).padStart(2, "0")}`;
+};
+
+async function getMonth(url) {
+  const stale = url.endsWith(currentMonth());
+  const path = `${CACHE_DIR}/${monthKey(url)}`;
+  if (!stale && existsSync(path)) {
+    try {
+      return JSON.parse(readFileSync(path, "utf8"));
+    } catch {
+      /* corrupt entry — refetch */
+    }
+  }
+  const data = await getJson(url);
+  if (!stale) {
+    mkdirSync(CACHE_DIR, { recursive: true });
+    writeFileSync(path, JSON.stringify(data));
+  }
+  return data;
+}
+
 export async function getJson(url) {
   const res = await fetch(url, { headers: { Accept: "application/json", "User-Agent": "brilliancy-calibration" } });
   if (!res.ok) throw new Error(`${res.status} ${url}`);
@@ -52,7 +91,7 @@ export async function fetchArchive(user) {
   for (const month of archives) {
     let batch;
     try {
-      ({ games: batch } = await getJson(month));
+      ({ games: batch } = await getMonth(month));
     } catch {
       continue;
     }

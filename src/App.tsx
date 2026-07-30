@@ -84,6 +84,29 @@ export function App() {
   const cancelScan = useRef(false);
 
   /**
+   * Games already scanned this session, keyed by chess.com game id.
+   *
+   * Widening the scope was re-buying work already paid for: "Last 30" then
+   * "Last 100" rescanned the first thirty, and at roughly 2.7s a game that is a
+   * wasted minute and a half in front of someone who is watching a progress bar.
+   * Scanning is deterministic — engine.ts issues `ucinewgame` before every
+   * search precisely so the same position always returns the same evaluation —
+   * so a cached result is not merely similar to a fresh one, it is identical.
+   *
+   * In memory only, never localStorage: the site's claim is that nothing leaves
+   * the page, and a cache that survives the tab would make that harder to say
+   * plainly. It empties on reload, which is the correct trade.
+   *
+   * KEYED BY GAME **AND COLOUR**. A scan only judges one side, so the same game
+   * has two different answers depending on whose moves are being looked at — and
+   * both players can be searched in one session, since a game id is shared
+   * between them. Keying on the id alone would serve White's brilliancies to
+   * someone who searched Black.
+   */
+  const scanCache = useRef(new Map<string, Brilliancy[]>());
+  const cacheKey = (g: Game) => `${g.id}:${g.userColor}`;
+
+  /**
    * Likeliest first, not biggest first.
    *
    * Ordering by sacrifice size answers "which gave up the most material", which
@@ -234,7 +257,17 @@ export function App() {
     for (let i = 0; i < toScan.length; i++) {
       if (cancelScan.current) break;
       try {
-        const found = await scanGame(toScan[i], { depth: SCAN_DEPTH }, () => cancelScan.current);
+        const game = toScan[i];
+        const cached = scanCache.current.get(cacheKey(game));
+        // Re-point `game` on a cache hit: the id is the same but the object came
+        // from an earlier fetch, and the UI reads b.game for opponent and date.
+        const found = cached
+          ? cached.map((b) => ({ ...b, game }))
+          : await scanGame(game, { depth: SCAN_DEPTH }, () => cancelScan.current);
+        // Never cache a cancelled game: scanGame returns whatever it found
+        // before the abort, which is a partial answer wearing a complete one's
+        // clothes.
+        if (!cached && !cancelScan.current) scanCache.current.set(cacheKey(game), found);
         if (found.length) setBrilliancies((prev) => [...prev, ...found]);
       } catch {
         // skip a game that fails to analyze; keep the scan going

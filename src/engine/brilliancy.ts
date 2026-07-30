@@ -439,6 +439,7 @@ export async function scanGame(
         sacrifice: Math.round(sacrifice * 10) / 10,
         sacSquare: offered.square,
         sacPiece: offered.square ? (after.get(offered.square as Square)?.type ?? null) : null,
+        quietMargin: isFinite(quietAlt) ? Math.round(playedEval - quietAlt) : null,
         mateIn,
         mateSoonPlies:
           endsInPlayerMate && moves.length - 1 - ply <= 8 ? moves.length - 1 - ply : null,

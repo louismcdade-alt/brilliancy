@@ -190,7 +190,12 @@ for (let i = 0; i < plan.length; i++) {
   const key = `${p.game.id}@${DEPTH}`;
   if (cache.games[key]) continue;
   try {
-    const candidates = await page.evaluate(
+    // One retry after re-navigating. A Vite HMR full-reload (an edit to any
+    // src/ module while a harvest is running) destroys the evaluate context and
+    // killed a 3,695-game overnight run at 2,300. The state lost is nothing —
+    // the page holds no state between games — so reload-and-retry is exactly
+    // right, and the second failure is a real error.
+    const evalOnce = () => page.evaluate(
       async ({ game, depth }) => {
         const bril = await import("/src/engine/brilliancy.ts");
         const seen = [];
@@ -211,6 +216,15 @@ for (let i = 0; i < plan.length; i++) {
       },
       { game: { id: p.game.id, url: p.game.url, pgn: p.game.pgn, userColor: p.game.userColor, timeClass: p.game.timeClass }, depth: DEPTH },
     );
+    let candidates;
+    try {
+      candidates = await evalOnce();
+    } catch (e) {
+      if (!String(e).includes("Execution context was destroyed")) throw e;
+      console.error("  page reloaded under us — re-navigating and retrying once");
+      await page.goto("http://localhost:5173/", { waitUntil: "networkidle" });
+      candidates = await evalOnce();
+    }
     cache.games[key] = {
       user: p.user, id: p.game.id, url: p.game.url, userColor: p.game.userColor,
       rating: p.game.rating, timeClass: p.game.timeClass, date: p.game.date,

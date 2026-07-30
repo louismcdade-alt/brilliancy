@@ -90,6 +90,14 @@ export interface Brilliancy {
   kingRingDelta: number;
   /** Material vs before the move, six plies later in the actual game. */
   regain6: number;
+  /**
+   * Centipawns by which this move beat the best QUIET alternative — the
+   * `necessary` gate's measurement, and the most explanatory number we have.
+   * "Nothing quieter came close" is the difference between a brilliancy and a
+   * strong move that happened to give up material. null when MultiPV found no
+   * quiet alternative at all.
+   */
+  quietMargin: number | null;
 }
 
 export interface ReplayMove {

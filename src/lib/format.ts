@@ -126,6 +126,57 @@ export function whyLabel(b: {
   return null;
 }
 
+/**
+ * The full case for a move, as separate lines — the detector's own argument in
+ * plain English, in the order it actually reasons.
+ *
+ * A single clause ("sacrifices the queen on b8") points AT the move; it never
+ * says why that is brilliant rather than merely losing material. Each line here
+ * is one gate the move had to clear, phrased from the number that cleared it, so
+ * a reader can disagree with a specific claim instead of trusting a verdict:
+ *
+ *   1. what was given up          the sacrifice itself
+ *   2. what it bought             mate, a trapped king, an opened attack
+ *   3. why nothing quieter did    the margin over the best quiet alternative
+ *   4. that it was still best     eval loss against the engine's top move
+ *
+ * Line 3 is the one that distinguishes a brilliancy from a strong move that
+ * happened to cost material, and it is the gate this project spent the most
+ * evidence on.
+ */
+export function reasonLines(b: {
+  sacPiece: string | null;
+  sacSquare: string | null;
+  sacrifice: number;
+  mateIn: number | null;
+  mateSoonPlies: number | null;
+  kingMoves: number;
+  kingRingDelta: number;
+  regain6: number;
+  quietMargin: number | null;
+  evalLoss: number;
+}): string[] {
+  const lines: string[] = [];
+  const name = b.sacPiece ? PIECE_NAME[b.sacPiece] : null;
+  lines.push(
+    name && b.sacSquare
+      ? `Gives up the ${name} on ${b.sacSquare} — ${b.sacrifice} pawns of material`
+      : `Gives up ${b.sacrifice} pawns of material`,
+  );
+
+  const bought = whyLabel(b);
+  if (bought) lines.push(bought.replace(/^and /, "").replace(/^./, (c) => c.toUpperCase()));
+
+  if (b.quietMargin !== null && b.quietMargin > 0) {
+    lines.push(`No quiet move came within ${(b.quietMargin / 100).toFixed(2)} of it`);
+  }
+
+  if (b.evalLoss <= 0) lines.push("The engine's own first choice");
+  else if (b.evalLoss <= 40) lines.push(`Within ${(b.evalLoss / 100).toFixed(2)} of the engine's best`);
+
+  return lines;
+}
+
 /** Engine cp (player POV) → compact label like "+2.4" / "M3". */
 export function formatEval(cp: number, mate: number | null): string {
   if (mate !== null) return `M${Math.abs(mate)}`;

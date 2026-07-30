@@ -9,8 +9,8 @@ import {
   resultClass,
   resultLetter,
   resultReasonLabel,
-  sacrificeLabel,
-  whyLabel,
+  reasonLines,
+
   timeClassLabel,
 } from "../lib/format";
 
@@ -95,9 +95,7 @@ export function BoardViewer({ game, brilliancies, initialPly, username, onClose 
             {brilNow ? (
               <>
                 <span>
-                  Brilliant — <b>{brilNow.san}!!</b> ·{" "}
-                  {sacrificeLabel(brilNow.sacPiece, brilNow.sacSquare, brilNow.sacrifice)}
-                  {whyLabel(brilNow) ? `, ${whyLabel(brilNow)}` : ""} · eval{" "}
+                  Brilliant — <b>{brilNow.san}!!</b> · eval{" "}
                   {formatEval(brilNow.evalAfter, null)}
                 </span>
                 <button
@@ -145,6 +143,16 @@ export function BoardViewer({ game, brilliancies, initialPly, username, onClose 
               ⏭
             </button>
           </div>
+          {brilNow ? (
+            <div className="why-block">
+              <div className="why-head">why it&rsquo;s brilliant</div>
+              <ul className="why-list">
+                {reasonLines(brilNow).map((line) => (
+                  <li key={line}>{line}</li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
         </div>
 
         <div className="viewer-side">

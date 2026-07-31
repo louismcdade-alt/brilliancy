@@ -1,0 +1,3 @@
+4165 rows · 599 positive · 27 accounts · 27 holdable
+
+account                pos  |   hand F1   hybrid F1  boost F1   (boost cfg)

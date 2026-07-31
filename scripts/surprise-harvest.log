@@ -1,0 +1,279 @@
+=== pass 1: 27 accounts @120 random / 30 stars ===
+27 usable · skipped 39 with no section, 13 incomplete, 2 with <4 moves
+cache schema 4 < 5 — rescanning everything
+1kevt: 30 star games (capped from 49) + 120 random, of 729 rated
+33_ad: 30 star games (capped from 57) + 120 random, of 2405 rated
+64squarepawncocktail: 15 star games + 120 random, of 1144 rated
+876543z1: 30 star games (capped from 183) + 120 random, of 2051 rated
+99syzygy99: 24 star games + 120 random, of 968 rated
+adhvik_arun11: 30 star games (capped from 165) + 120 random, of 3320 rated
+agoat67chess: 8 star games + 120 random, of 425 rated
+albump: 3 star games + 120 random, of 521 rated
+alun_elderbrownesq: 30 star games (capped from 184) + 120 random, of 2741 rated
+alvin-jiang: 30 star games (capped from 38) + 120 random, of 923 rated
+angelsenvy88: 30 star games (capped from 132) + 120 random, of 2910 rated
+apesquared: 30 star games (capped from 55) + 120 random, of 1267 rated
+arango82: 30 star games (capped from 61) + 120 random, of 791 rated
+artmarkham: 30 star games (capped from 37) + 120 random, of 617 rated
+askindale: 18 star games + 120 random, of 371 rated
+atikinwarhammer: 30 star games (capped from 154) + 120 random, of 1928 rated
+atterberry: 22 star games + 120 random, of 848 rated
+aussieaoe: 0 star games + 105 random, of 105 rated
+australianson: 5 star games + 120 random, of 525 rated
+blackmancer: 30 star games (capped from 201) + 120 random, of 5587 rated
+blaserf3: 30 star games (capped from 90) + 120 random, of 3321 rated
+bluecane: 30 star games (capped from 44) + 120 random, of 814 rated
+budgie_empire: 13 star games + 120 random, of 678 rated
+cathal64: 3 star games + 120 random, of 243 rated
+jay_781: 30 star games (capped from 159) + 120 random, of 4245 rated
+judeahardy: 30 star games (capped from 220) + 120 random, of 3139 rated
+louismcdade: 3 star games + 120 random, of 297 rated
+6: no list — run scripts/brilliant-list.mjs 6 first
+
+scanning 3819 games at depth 14 across 6 workers…
+  …25/3819
+  …50/3819
+  …75/3819
+  …100/3819
+  …125/3819
+  …150/3819
+  …175/3819
+  …200/3819
+  …225/3819
+  …250/3819
+  …275/3819
+  …300/3819
+  …325/3819
+  …350/3819
+  …375/3819
+  …400/3819
+  …425/3819
+  …450/3819
+  …475/3819
+  …500/3819
+  …525/3819
+  …550/3819
+  …575/3819
+  …600/3819
+  …625/3819
+  …650/3819
+  …675/3819
+  …700/3819
+  …725/3819
+  …750/3819
+  …775/3819
+  …800/3819
+  …825/3819
+  …850/3819
+  …875/3819
+  …900/3819
+  …925/3819
+  …950/3819
+  …975/3819
+  …1000/3819
+  …1025/3819
+  …1050/3819
+  …1075/3819
+  …1100/3819
+  …1125/3819
+  …1150/3819
+  …1175/3819
+  …1200/3819
+  …1225/3819
+  …1250/3819
+  …1275/3819
+  …1300/3819
+  …1325/3819
+  …1350/3819
+  …1375/3819
+  …1400/3819
+  …1425/3819
+  …1450/3819
+  …1475/3819
+  …1500/3819
+  …1525/3819
+  …1550/3819
+  …1575/3819
+  …1600/3819
+  …1625/3819
+  …1650/3819
+  …1675/3819
+  …1700/3819
+  …1725/3819
+  …1750/3819
+  …1775/3819
+  …1800/3819
+  …1825/3819
+  …1850/3819
+  …1875/3819
+  …1900/3819
+  …1925/3819
+  …1950/3819
+  …1975/3819
+  …2000/3819
+  …2025/3819
+  …2050/3819
+  …2075/3819
+  …2100/3819
+  …2125/3819
+  …2150/3819
+  …2175/3819
+  …2200/3819
+  …2225/3819
+  …2250/3819
+  …2275/3819
+  …2300/3819
+  …2325/3819
+  …2350/3819
+  …2375/3819
+  …2400/3819
+  …2425/3819
+  …2450/3819
+  …2475/3819
+  …2500/3819
+  …2525/3819
+  …2550/3819
+  …2575/3819
+  …2600/3819
+  …2625/3819
+  …2650/3819
+  …2675/3819
+  …2700/3819
+  …2725/3819
+  …2750/3819
+  …2775/3819
+  …2800/3819
+  …2825/3819
+  …2850/3819
+  …2875/3819
+  …2900/3819
+  …2925/3819
+  …2950/3819
+  …2975/3819
+  …3000/3819
+  …3025/3819
+  …3050/3819
+  …3075/3819
+  …3100/3819
+  …3125/3819
+  …3150/3819
+  …3175/3819
+  …3200/3819
+  …3225/3819
+  …3250/3819
+  …3275/3819
+  …3300/3819
+  …3325/3819
+  …3350/3819
+  …3375/3819
+  …3400/3819
+  …3425/3819
+  …3450/3819
+  …3475/3819
+  …3500/3819
+  …3525/3819
+  …3550/3819
+  …3575/3819
+  …3600/3819
+  …3625/3819
+  …3650/3819
+  …3675/3819
+  …3700/3819
+  …3725/3819
+  …3750/3819
+  …3775/3819
+  …3800/3819
+
+3819 newly scanned · 7615 labelled candidates → scripts/dataset-multi.csv
+
+user                 star  rand   pos   neg   pre-filter misses
+1kevt                  30   120    42   178        0  7
+33_ad                  30   120    26   270        0  7
+64squarepawncocktail   15   120    17   385        0  3
+876543z1               30   120    43   158        0  6
+99syzygy99             24   120    27   460        0  2
+adhvik_arun11          30   120    36   261        0  3
+agoat67chess            8   120    15   181        0  0
+albump                  3   120     4   369        0  0
+alun_elderbrownesq     30   120    33   307        0  6
+alvin-jiang            30   120    32   247        0  5
+angelsenvy88           30   120    37   386        0  4
+apesquared             30   120    31   270        0  8
+arango82               30   120    40   197        0  6
+artmarkham             30   120    38   188        0  6
+askindale              18   120    17   274        0  6
+atikinwarhammer        30   120    39   283        0  2
+atterberry             22   120    23   207        0  4
+aussieaoe               0   105     4   119        0  0
+australianson           5   120     5   312        0  1
+blackmancer            30   120    27   314        0  7
+blaserf3               30   120    31   302        0  3
+bluecane               30   120    29   207        0  4
+budgie_empire          13   120    18   187        0  2
+cathal64                3   120     3   155        0  1
+jay_781                30   120    30   166        0  3
+judeahardy             30   120    41   224        0  3
+louismcdade             3   120     8   312        0  1
+TOTAL                             696  6919   100
+
+⚠ precision must be computed on sample="random" rows only — star games are enriched.
+
+=== pass 2: top-up the five deep accounts @300 / 60 ===
+alun_elderbrownesq: 60 star games (capped from 179) + 300 random, of 2741 rated
+apesquared: 44 star games + 300 random, of 1267 rated
+askindale: 3 star games + 300 random, of 371 rated
+bluecane: 35 star games + 300 random, of 814 rated
+louismcdade: 0 star games + 297 random, of 297 rated
+6: no list — run scripts/brilliant-list.mjs 6 first
+
+scanning 928 games at depth 14 across 6 workers…
+  …25/928
+  …50/928
+  …75/928
+  …100/928
+  …125/928
+  …150/928
+  …175/928
+  …200/928
+  …225/928
+  …250/928
+  …275/928
+  …300/928
+  …325/928
+  …350/928
+  …375/928
+  …400/928
+  …425/928
+  …450/928
+  …475/928
+  …500/928
+  …525/928
+  …550/928
+  …575/928
+  …600/928
+  …625/928
+  …650/928
+  …675/928
+  …700/928
+  …725/928
+  …750/928
+  …775/928
+  …800/928
+  …825/928
+  …850/928
+  …875/928
+  …900/928
+  …925/928
+
+928 newly scanned · 3365 labelled candidates → scripts/dataset-multi.csv
+
+user                 star  rand   pos   neg   pre-filter misses
+alun_elderbrownesq     60   300    72   664        0  12
+apesquared             44   300    56   557        0  11
+askindale               3   300    17   569        0  6
+bluecane               35   300    42   532        0  5
+louismcdade             0   297     8   848        0  1
+TOTAL                             195  3170   35
+
+⚠ precision must be computed on sample="random" rows only — star games are enriched.
+HARVEST COMPLETE

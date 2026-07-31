@@ -79,6 +79,18 @@ const NECESSARY_MARGIN = 50; // cp the sacrifice must BEAT the best quiet altern
 // entry, and the fix waits for more labelled brilliancies — specifically ones
 // the engine scores BELOW a quiet alternative, which is the class 24.Ne6 is in
 // and the class we currently have exactly one of.
+/**
+ * Depth for the "would you have seen it?" probe. A sacrifice whose point only
+ * emerges when you look deeper is, in a real sense, hard to find — at shallow
+ * depth it just looks like hanging a piece. That is the half of chess.com's
+ * label nothing here has ever measured: their Brilliant is not purely soundness,
+ * it is soundness a player might MISS.
+ *
+ * 6 rather than something shallower: below about 5 the search is too blind to
+ * distinguish a real refutation from noise, and the gap stops meaning anything.
+ */
+const SHALLOW_DEPTH = 6;
+
 const MULTI_PV = 3; // lines to search: played/best + enough to find a quiet alt
 
 // Opening/book guard: ignore theoretical pawn gambits (Queen's Gambit, Smith-Morra,
@@ -237,6 +249,20 @@ export interface Candidate {
   kingRing: number;
   kingRingDelta: number;
   kingMoves: number;
+  /**
+   * How much better the move looks at full depth than at SHALLOW_DEPTH, in cp
+   * from the player's point of view. Large and positive = the justification is
+   * deep, i.e. hard to find; near zero = a shallow search already saw it.
+   *
+   * null unless `measureSurprise` was set, because it costs an extra search.
+   * Probed before it was built: on 70 per class the median swing was +32 for
+   * brilliancies against −9 for negatives, and the ≥+200 tail held 18.6% of
+   * brilliancies against 7.1% of negatives — roughly 2x at every threshold.
+   *
+   * Mate scores make this astronomic rather than meaningless; trees split on it
+   * happily, so the raw value is recorded rather than clamped.
+   */
+  surprise: number | null;
   /** Which EVAL gate rejected it, or null if all three passed. */
   rejectedBy: "sound" | "strong" | "necessary" | null;
 }
@@ -272,6 +298,12 @@ export interface ScanOptions {
    */
   useGates?: boolean;
   /**
+   * Compute `surprise` — one extra shallow search per candidate. Off by default
+   * so a user's scan does not pay for a feature the shipped model does not yet
+   * use; the harvester turns it on so the dataset can price it.
+   */
+  measureSurprise?: boolean;
+  /**
    * Fires for every move that clears the static sacrifice filter, whether or not
    * the engine gates pass. Lets the calibration scripts see *why* a move was
    * dropped — the only way to chase a false negative without guessing.
@@ -290,6 +322,7 @@ export async function scanGame(
   const rejectShapes = opts.rejectShapes ?? REJECT_SHAPES;
   const admitAllow = opts.admitAllow ?? false;
   const useGates = opts.useGates ?? false;
+  const measureSurprise = opts.measureSurprise ?? false;
 
   let moves;
   try {
@@ -368,6 +401,9 @@ export async function scanGame(
     const lines = await engine.analyzeMultiPV(move.fenBefore, depth, MULTI_PV); // player to move
     if (isCancelled()) break;
     const post = await engine.analyze(move.fenAfter, depth); // opponent to move
+    // Same position, shallower eyes. Both are from the opponent's side after the
+    // move, so both are negated identically and the difference is clean.
+    const shallow = measureSurprise ? await engine.analyze(move.fenAfter, SHALLOW_DEPTH) : null;
 
     const bestEval = lines[0]?.cp ?? 0; // best the player could achieve
     const playedEval = -post.cp; // value of the move actually played, player POV
@@ -409,6 +445,9 @@ export async function scanGame(
     const candidate: Candidate = {
       moveNumber: move.moveNumber,
       san: move.san,
+      // Deep minus shallow, both from the opponent's side after the move, so the
+      // two negations cancel and the difference is clean.
+      surprise: shallow ? Math.round(-post.cp - -shallow.cp) : null,
       sacrifice: Math.round(sacrifice * 10) / 10,
       sacSquare: offered.square,
       playedEval: Math.round(playedEval),

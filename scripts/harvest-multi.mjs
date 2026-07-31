@@ -34,7 +34,9 @@ import { chromium } from "playwright";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { fetchArchive, sanList, stableSample } from "./lib/chesscom.mjs";
 
-const SCHEMA = 1;
+// 5: candidates carry `surprise` (deep-minus-shallow eval), which needs a new
+// search and therefore a full rescan — older caches cannot be upgraded in place.
+const SCHEMA = 5;
 const args = process.argv.slice(2);
 const flag = (name, fallback) => {
   const i = args.indexOf(`--${name}`);
@@ -215,7 +217,7 @@ async function scanOne(page, p) {
         // the rules it was built under.
         await bril.scanGame(
           { ...game, timeControl: "", rated: true, endTime: 0, result: "win", resultReason: "", oppUsername: "opponent" },
-          { depth, rejectShapes: [], admitAllow: true, onCandidate: (c) => seen.push(c) },
+          { depth, rejectShapes: [], admitAllow: true, measureSurprise: true, onCandidate: (c) => seen.push(c) },
         );
         // Spread, never a hand-listed field set. This map used to enumerate
         // columns, and it silently stopped copying regain*/king* when those were

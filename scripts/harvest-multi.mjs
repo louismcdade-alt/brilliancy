@@ -183,19 +183,30 @@ for (const p of plan) {
 }
 
 // ── scan ────────────────────────────────────────────────────────────────────
-console.error(`\nscanning ${plan.length} games at depth ${DEPTH}…`);
+//
+// PARALLEL, because the bottleneck is one CPU core out of sixteen. Stockfish
+// here is single-threaded WASM (chosen so the SITE needs no SharedArrayBuffer
+// headers), and the harvester scanned games one at a time, so a machine sat 94%
+// idle for hours. Games are independent — nothing is shared between them and the
+// engine issues `ucinewgame` before every search — so running N pages against
+// the same dev server is a pure throughput win with identical output.
+//
+// Not 16 workers: each page loads its own copy of the 40 MB network and competes
+// for the same cores, so the last few add memory pressure rather than speed.
+// Default 6, override with --workers.
+const WORKERS = Math.max(1, Math.min(flag("workers", 6), 16));
+const todo = plan.filter((p) => !cache.games[`${p.game.id}@${DEPTH}`]);
+console.error(`
+scanning ${todo.length} games at depth ${DEPTH} across ${WORKERS} workers…`);
+
 let scanned = 0;
-for (let i = 0; i < plan.length; i++) {
-  const p = plan[i];
-  const key = `${p.game.id}@${DEPTH}`;
-  if (cache.games[key]) continue;
-  try {
-    // One retry after re-navigating. A Vite HMR full-reload (an edit to any
-    // src/ module while a harvest is running) destroys the evaluate context and
-    // killed a 3,695-game overnight run at 2,300. The state lost is nothing —
-    // the page holds no state between games — so reload-and-retry is exactly
-    // right, and the second failure is a real error.
-    const evalOnce = () => page.evaluate(
+let done = 0;
+let next = 0;
+let lastCheckpoint = 0;
+
+async function scanOne(page, p) {
+  const evalOnce = () =>
+    page.evaluate(
       async ({ game, depth }) => {
         const bril = await import("/src/engine/brilliancy.ts");
         const seen = [];
@@ -206,39 +217,66 @@ for (let i = 0; i < plan.length; i++) {
           { ...game, timeControl: "", rated: true, endTime: 0, result: "win", resultReason: "", oppUsername: "opponent" },
           { depth, rejectShapes: [], admitAllow: true, onCandidate: (c) => seen.push(c) },
         );
-        return seen.map((c) => ({
-          moveNumber: c.moveNumber, san: c.san, sacrifice: c.sacrifice, sacSquare: c.sacSquare,
-          playedEval: c.playedEval, evalLoss: c.evalLoss,
-          quietAlt: isFinite(c.quietAlt) ? c.quietAlt : null,
-          shape: c.shape, accepted: c.accepted, admitted: c.admitted,
-          fresh: c.fresh, standing: c.standing, rejectedBy: c.rejectedBy,
-        }));
+        // Spread, never a hand-listed field set. This map used to enumerate
+        // columns, and it silently stopped copying regain*/king* when those were
+        // added to Candidate — a rescan dropped them, loadRows filled the gap
+        // with 0, and nothing anywhere threw. Any future feature now flows
+        // through automatically; only quietAlt needs transforming, because
+        // -Infinity has no JSON representation.
+        return seen.map((c) => ({ ...c, quietAlt: isFinite(c.quietAlt) ? c.quietAlt : null }));
       },
       { game: { id: p.game.id, url: p.game.url, pgn: p.game.pgn, userColor: p.game.userColor, timeClass: p.game.timeClass }, depth: DEPTH },
     );
-    let candidates;
-    try {
-      candidates = await evalOnce();
-    } catch (e) {
-      if (!String(e).includes("Execution context was destroyed")) throw e;
-      console.error("  page reloaded under us — re-navigating and retrying once");
-      await page.goto("http://localhost:5173/", { waitUntil: "networkidle" });
-      candidates = await evalOnce();
-    }
-    cache.games[key] = {
-      user: p.user, id: p.game.id, url: p.game.url, userColor: p.game.userColor,
-      rating: p.game.rating, timeClass: p.game.timeClass, date: p.game.date,
-      sample: p.sample, expected: p.expected, trustNegatives: p.trustNegatives, candidates,
-    };
-    scanned++;
+
+  try {
+    return await evalOnce();
   } catch (e) {
-    console.error(`ERR ${p.game.url} — ${String(e).split(/\r?\n/)[0]}`);
-  }
-  if ((i + 1) % 25 === 0) {
-    console.error(`  …${i + 1}/${plan.length}`);
-    writeFileSync(CACHE, JSON.stringify(cache, null, 1)); // checkpoint: a long scan must survive a crash
+    // One retry after re-navigating. A Vite HMR full-reload (an edit to any src/
+    // module while a harvest is running) destroys the evaluate context and killed
+    // a 3,695-game overnight run at 2,300. The page holds no state between games,
+    // so reload-and-retry is exactly right; a second failure is a real error.
+    if (!String(e).includes("Execution context was destroyed")) throw e;
+    console.error("  page reloaded under us — re-navigating and retrying once");
+    await page.goto("http://localhost:5173/", { waitUntil: "networkidle" });
+    return evalOnce();
   }
 }
+
+async function worker(page) {
+  for (;;) {
+    const i = next++;
+    if (i >= todo.length) return;
+    const p = todo[i];
+    try {
+      const candidates = await scanOne(page, p);
+      cache.games[`${p.game.id}@${DEPTH}`] = {
+        user: p.user, id: p.game.id, url: p.game.url, userColor: p.game.userColor,
+        rating: p.game.rating, timeClass: p.game.timeClass, date: p.game.date,
+        sample: p.sample, expected: p.expected, trustNegatives: p.trustNegatives, candidates,
+      };
+      scanned++;
+    } catch (e) {
+      console.error(`ERR ${p.game.url} — ${String(e).slice(0, 140)}`);
+    }
+    done++;
+    // Checkpoint from the coordinator only — concurrent writers would interleave
+    // and a half-written cache is worse than a stale one.
+    if (done - lastCheckpoint >= 25) {
+      lastCheckpoint = done;
+      console.error(`  …${done}/${todo.length}`);
+      writeFileSync(CACHE, JSON.stringify(cache, null, 1));
+    }
+  }
+}
+
+const pages = [page];
+for (let i = 1; i < WORKERS; i++) {
+  const extra = await browser.newPage();
+  extra.on("pageerror", (e) => console.log("PAGEERROR:", e.message));
+  await extra.goto("http://localhost:5173/", { waitUntil: "networkidle" });
+  pages.push(extra);
+}
+await Promise.all(pages.map((pg) => worker(pg)));
 await browser.close();
 writeFileSync(CACHE, JSON.stringify(cache, null, 1));
 

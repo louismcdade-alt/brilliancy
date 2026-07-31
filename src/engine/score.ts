@@ -63,6 +63,12 @@ export function featureVector(c: Candidate): Record<string, number> {
     kingRing: c.kingRing,
     kingRingDelta: c.kingRingDelta,
     kingMoves: c.kingMoves,
+    // How much better the move looks at full depth than at depth 6 — the
+    // "would you have found it?" signal, and the largest single-feature gain
+    // this detector has had (precision 36.8% -> 40.7% held out). 0 when the
+    // scan did not measure it, which reads as "a shallow search already saw
+    // it"; scanGame computes it by default precisely so that never happens.
+    surprise: c.surprise ?? 0,
     // DERIVED, not stored — and it must match scripts/lib/dataset.mjs exactly,
     // because that is the definition the model was trained against. engine.ts
     // encodes a forced mate as MATE_CP (100000) minus 10 per ply; 0 means no

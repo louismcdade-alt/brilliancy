@@ -35,3 +35,7 @@ POOLED across held-out accounts (every row scored by a model that never saw its 
   hand     TP 272  FN 327  randTP  67  FP 133   P  33.5%  R  45.4%
   hybrid   TP 299  FN 300  randTP  73  FP 147   P  33.2%  R  49.9%
   boost    TP 368  FN 231  randTP  74  FP 108   P  40.7%  R  61.4%
+  cut 0.61  TP 536  FN  63  randTP 121  FP 281   P  30.1%  R  89.5%   meanF1 0.414
+  cut 0.63  TP 535  FN  64  randTP 121  FP 273   P  30.7%  R  89.3%   meanF1 0.421
+  cut 0.68  TP 515  FN  84  randTP 117  FP 240   P  32.8%  R  86.0%   meanF1 0.432
+  cut 0.75  TP 488  FN 111  randTP 108  FP 200   P  35.1%  R  81.5%   meanF1 0.458

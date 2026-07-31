@@ -298,9 +298,13 @@ export interface ScanOptions {
    */
   useGates?: boolean;
   /**
-   * Compute `surprise` — one extra shallow search per candidate. Off by default
-   * so a user's scan does not pay for a feature the shipped model does not yet
-   * use; the harvester turns it on so the dataset can price it.
+   * Compute `surprise`. ON by default since 2026-07-31, because the shipped
+   * model consumes it: leaving it null would make featureVector fall back to 0,
+   * the model would read "a shallow search already saw it" for every move, and
+   * nothing would throw. A feature the scorer depends on cannot be optional.
+   *
+   * Costs one extra depth-6 search per candidate — measured at +5.3% scan time,
+   * which bought 26 fewer false positives per 599 positives held out.
    */
   measureSurprise?: boolean;
   /**
@@ -322,7 +326,7 @@ export async function scanGame(
   const rejectShapes = opts.rejectShapes ?? REJECT_SHAPES;
   const admitAllow = opts.admitAllow ?? false;
   const useGates = opts.useGates ?? false;
-  const measureSurprise = opts.measureSurprise ?? false;
+  const measureSurprise = opts.measureSurprise ?? true;
 
   let moves;
   try {

@@ -489,6 +489,31 @@ button {
   border: 0;
 }
 
+/* Off the page until it is focused, then an inked box in the corner — the same
+   treatment any other control on the sheet gets, square corners included. The
+   game list is one tab stop per row, so on a wide scope this is the only way
+   past it without pressing Tab a few hundred times. */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  background: var(--stock);
+  color: var(--text-hi);
+  border: 1px solid var(--text-hi);
+  padding: 10px 16px;
+  font-family: var(--font-display);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  left: 12px;
+  top: 12px;
+}
+
 /* the only red above the fold */
 .hero h1 .hero-bangs {
   font-family: var(--font-display);

@@ -27,8 +27,21 @@ function GameRow({
   onOpen: (g: Game) => void;
 }) {
   const reason = resultReasonLabel(game.resultReason);
+  /**
+   * Spelled out rather than left to the spans, which ran together into
+   * "WINvs Tunartank(3052)WhiteBlitz3 min93.7%2h ago" and never said what the
+   * row would DO. Every row is a replay control; the label has to lead with the
+   * verb or a listener has no idea what pressing it achieves.
+   */
+  const label =
+    `Replay ${game.result} as ${game.userColor === "w" ? "White" : "Black"} ` +
+    `versus ${game.oppUsername}${game.oppRating ? `, rated ${game.oppRating}` : ""}` +
+    (brilliancies
+      ? `, ${brilliancies} brilliant ${brilliancies === 1 ? "move" : "moves"}`
+      : "");
+
   return (
-    <button className="game-row" onClick={() => onOpen(game)}>
+    <button className="game-row" onClick={() => onOpen(game)} aria-label={label}>
       <span className={`game-result ${resultClass(game.result)}`}>{resultLetter(game.result)}</span>
       <span className="game-main">
         <span className="game-opp">
@@ -43,8 +56,12 @@ function GameRow({
         </span>
       </span>
       <span className="game-side">
+        {/* The row's aria-label already carries the count, so this is decoration
+            to a screen reader. The `title` went with it: it was the only tooltip
+            on the page, it duplicated the label, and it was the one place the
+            copy said "move(s)". */}
         {brilliancies > 0 && (
-          <span className="game-bril-count" title={`${brilliancies} brilliant move(s)`}>
+          <span className="game-bril-count" aria-hidden="true">
             <span style={{ fontWeight: 700 }}>!!</span>
             {brilliancies}
           </span>

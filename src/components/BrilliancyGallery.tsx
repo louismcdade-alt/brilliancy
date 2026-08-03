@@ -10,8 +10,22 @@ function moveLabel(b: Brilliancy): string {
 
 function SpecCard({ b, onOpen }: { b: Brilliancy; onOpen: (b: Brilliancy) => void }) {
   return (
-    <button className="spec" onClick={() => onOpen(b)}>
-      <div className="spec-board">
+    /* The card is a summary and the viewer is where the position gets examined,
+       so the whole sheet gets one spoken sentence rather than the board's full
+       description followed by the SAN, the glyph as punctuation, and the stats
+       line. The diagram inside is hidden for the same reason a thumbnail is:
+       it is the same information, and repeating it makes the card longer to
+       listen to than it is to look at. */
+    <button
+      className="spec"
+      onClick={() => onOpen(b)}
+      aria-label={`${moveLabel(b)} ${b.san}, brilliant — ${sacrificeLabel(
+        b.sacPiece,
+        b.sacSquare,
+        b.sacrifice,
+      )}${whyLabel(b) ? `, ${whyLabel(b)}` : ""}. Versus ${b.game.oppUsername}. Open this game.`}
+    >
+      <div className="spec-board" aria-hidden="true">
         <Board
           fen={b.fenBefore}
           orientation={b.game.userColor === "w" ? "white" : "black"}
@@ -23,7 +37,7 @@ function SpecCard({ b, onOpen }: { b: Brilliancy; onOpen: (b: Brilliancy) => voi
           coords={false}
         />
       </div>
-      <div className="spec-head">
+      <div className="spec-head" aria-hidden="true">
         <span className="spec-move">
           <span className="circled">
             {b.san}

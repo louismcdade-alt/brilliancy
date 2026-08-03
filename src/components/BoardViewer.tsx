@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Brilliancy, Game } from "../types";
 import { parseGame, START_FEN } from "../chess/replay";
 import { shareBrilliancy } from "../lib/shareImage";
@@ -37,6 +37,7 @@ type ShareState =
 
 export function BoardViewer({ game, brilliancies, initialPly, username, onClose }: BoardViewerProps) {
   const [share, setShare] = useState<ShareState>({ kind: null });
+  const viewerRef = useRef<HTMLDivElement>(null);
   const moves = useMemo(() => {
     try {
       return parseGame(game.pgn);
@@ -95,6 +96,11 @@ export function BoardViewer({ game, brilliancies, initialPly, username, onClose 
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      // Bound to window rather than scoped to the move list, deliberately: the
+      // board is the thing being stepped through and focus could reasonably be
+      // anywhere in the dialog. preventDefault because these keys also scroll,
+      // and stepping a game while the page slides underneath is disorienting.
+      if (["ArrowLeft", "ArrowRight", "Home", "End"].includes(e.key)) e.preventDefault();
       if (e.key === "ArrowLeft") go(pos - 1);
       else if (e.key === "ArrowRight") go(pos + 1);
       else if (e.key === "Home") go(0);
@@ -105,9 +111,87 @@ export function BoardViewer({ game, brilliancies, initialPly, username, onClose 
     return () => window.removeEventListener("keydown", onKey);
   }, [pos, go, moves.length, onClose]);
 
+  /**
+   * Open and close the dialog properly.
+   *
+   * None of this existed: the overlay had no dialog role, focus stayed on the
+   * game row *behind* it, the background still scrolled, and closing after
+   * clicking anything inside dropped focus on <body> — leaving a keyboard user
+   * at the top of the document, tabbing past forty-odd controls to get back.
+   *
+   * The trigger is captured before focus moves, because it is the thing focus
+   * has to return to. Escape already worked; it only appeared to restore focus
+   * correctly because focus had never left the trigger in the first place.
+   */
+  useEffect(() => {
+    const trigger = document.activeElement as HTMLElement | null;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    viewerRef.current?.focus();
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      trigger?.focus?.();
+    };
+  }, []);
+
+  /**
+   * Keep Tab inside the dialog.
+   *
+   * This matters more here than in most modals: the move list is one focusable
+   * cell per ply, so a long game is 50–100 tab stops, and without a loop Tab
+   * simply walks out the back of the dialog into a page the user cannot see
+   * (the overlay covers it, but every control behind it is still reachable and
+   * still clickable).
+   */
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Tab") return;
+      const box = viewerRef.current;
+      if (!box) return;
+      const focusable = [
+        ...box.querySelectorAll<HTMLElement>(
+          'a[href],button:not([disabled]),input,select,textarea,[tabindex]:not([tabindex="-1"])',
+        ),
+      ].filter((el) => el.offsetParent !== null);
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  // Follow the board. Opening a 50-move game showed the list scrolled to move 1
+  // while the diagram showed move 50 — the current cell was simply off-screen.
+  // "auto" rather than "smooth" so it needs no reduced-motion carve-out.
+  useEffect(() => {
+    viewerRef.current
+      ?.querySelector(".move-cell.is-current")
+      ?.scrollIntoView({ block: "nearest", behavior: "auto" });
+  }, [pos]);
+
   return (
     <div className="overlay" onClick={onClose}>
-      <div className="viewer" onClick={(e) => e.stopPropagation()}>
+      <div
+        className="viewer"
+        ref={viewerRef}
+        tabIndex={-1}
+        role="dialog"
+        aria-modal="true"
+        aria-label={`Game against ${game.oppUsername}${
+          brilliancies.length
+            ? `, ${brilliancies.length} brilliant ${brilliancies.length === 1 ? "move" : "moves"}`
+            : ""
+        }`}
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="viewer-board">
           <Board
             fen={fen}
@@ -118,7 +202,12 @@ export function BoardViewer({ game, brilliancies, initialPly, username, onClose 
             seal={brilNow ? "!!" : null}
             arrow={brilNow ? { from: brilNow.from, to: brilNow.to } : null}
           />
-          <div className="eval-readout">
+          {/* This line already said the right thing on every step — the move
+              number, the SAN, the evaluation — it just wasn't saying it out
+              loud, so arrowing through a game was silent. Polite rather than
+              assertive: someone holding Right to scrub should not have each
+              intermediate move interrupt the last. */}
+          <div className="eval-readout" aria-live="polite" aria-atomic="true">
             {brilNow ? (
               <>
                 <span>
@@ -207,7 +296,8 @@ export function BoardViewer({ game, brilliancies, initialPly, username, onClose 
                 )}
               </div>
             </div>
-            <button className="viewer-close" onClick={onClose} aria-label="Close">
+            {/* "Close" alone is ambiguous among the 57-plus controls in here. */}
+            <button className="viewer-close" onClick={onClose} aria-label="Close game viewer">
               ✕
             </button>
           </div>
@@ -278,7 +368,11 @@ function MoveCell({
       ) : (
         san
       )}
-      {bril && <span className="mini-bang">!!</span>}
+      {bril && (
+        <span className="mini-bang" aria-hidden="true">
+          !!
+        </span>
+      )}
     </button>
   );
 }

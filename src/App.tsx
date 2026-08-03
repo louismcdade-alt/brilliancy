@@ -25,11 +25,6 @@ const GAMES_TO_LOAD = 30; // opening view: enough to render fast, not the scan l
 const SCAN_DEPTH = 14;
 
 /**
- * How far back to look. Brilliant moves are rare, so a month of games can easily
- * contain none — the scan window is the difference between "you have no
- * brilliancies" and "we didn't look at the games that had them".
- */
-/**
  * The ceiling on "Everything", and it is a real ceiling rather than a tidy-up.
  *
  * This used to be `Infinity`, which chesscom.ts faithfully turned into "walk
@@ -50,6 +45,11 @@ const SCAN_DEPTH = 14;
  */
 const MAX_SCAN_GAMES = 1000;
 
+/**
+ * How far back to look. Brilliant moves are rare, so a month of games can easily
+ * contain none — the scan window is the difference between "you have no
+ * brilliancies" and "we didn't look at the games that had them".
+ */
 const SCOPES = [
   { games: 30, label: "Last 30" },
   { games: 100, label: "Last 100" },
@@ -412,10 +412,22 @@ export function App() {
 
   return (
     <div className="shell">
+      {/* 46 tab stops in the loaded state, and hundreds once the scope is wide —
+          the game list alone is one stop per row. Without this a keyboard user
+          has no way past it. */}
+      <a className="skip-link" href="#main">
+        Skip to content
+      </a>
       <header className="topbar">
         <div className="wrap topbar-inner">
-          <button className="mark" onClick={reset}>
-            <span className="mark-glyph">!!</span>
+          {/* The h1 got this treatment and the logo never did, so the first
+              control a screen reader reaches was announcing "exclamation mark
+              exclamation mark Brilliancy chess.com & lichess". Same fix, plus a
+              real name: this button resets to the search and nothing said so. */}
+          <button className="mark" onClick={reset} aria-label="Brilliancy — back to search">
+            <span className="mark-glyph" aria-hidden="true">
+              !!
+            </span>
             <span>Brilliancy</span>
             <span className="mark-sub">chess.com &amp; lichess</span>
           </button>
@@ -435,7 +447,35 @@ export function App() {
         </div>
       </header>
 
-      <main>
+      <main id="main" tabIndex={-1}>
+        {/* Mounted unconditionally, and that is the whole trick: aria-live only
+            announces CHANGES to a region already in the tree, so a live region
+            that appears at the same moment as its first message says nothing at
+            all. Polite, because a scan runs for minutes and must not interrupt
+            someone reading the page; throttled to every fifth game, because
+            announcing all 250 would bury the speech queue under its own
+            progress. Before this, pressing "Find brilliancies" produced total
+            silence for one to five minutes with no way to tell working from
+            broken — on the site's primary action. */}
+        <div className="sr-only" aria-live="polite" aria-atomic="true">
+          {scanState === "running"
+            ? engineWarming
+              ? "Loading the chess engine. This happens once, then it is cached."
+              : progress.done % 5 === 0 || progress.done === progress.total
+                ? `Analysed ${progress.done} of ${progress.total} games. ${brilliancies.length} brilliant ${brilliancies.length === 1 ? "move" : "moves"} found so far.`
+                : ""
+            : ""}
+        </div>
+        {/* Assertive, because this one is the answer to the question the user
+            asked and there is nothing left to interrupt. */}
+        <div className="sr-only" aria-live="assertive" aria-atomic="true">
+          {scanState === "done"
+            ? sortedBrilliancies.length
+              ? `Scan complete. ${sortedBrilliancies.length} brilliant ${sortedBrilliancies.length === 1 ? "move" : "moves"} found in ${scanCount} games.`
+              : `Scan complete. No brilliant moves found in ${scanCount} games.`
+            : ""}
+        </div>
+
         {showHero && (
           <section className="hero">
             <div className="wrap hero-grid">
@@ -491,8 +531,12 @@ export function App() {
                     ))}
                   </div>
                 </div>
+                {/* role="alert" implies assertive: this is a direct answer to
+                    the user's own keypress, so interrupting is correct. Without
+                    it a typo'd username produced a visible error and complete
+                    silence. */}
                 {error && (
-                  <div className="error-box" style={{ marginTop: 18 }}>
+                  <div className="error-box" role="alert" id="search-error" style={{ marginTop: 18 }}>
                     {error}
                   </div>
                 )}
@@ -514,10 +558,18 @@ export function App() {
         {profile && (
           <>
             <section className="wrap">
+              {/* showHero is !profile, so searching unmounts the hero and takes
+                  the only h1 on the page with it — the document then started at
+                  h2 and heading navigation had no top-level anchor. Naming the
+                  player is better copy than the hero's line anyway, because by
+                  this point the page is about someone specific. */}
+              <h1 className="sr-only">
+                Brilliant moves in @{profile.username}'s {activeSite} games
+              </h1>
               <ProfileHeader profile={profile} />
             </section>
 
-            <section className="wrap section">
+            <section className="wrap section" aria-labelledby="h-ratings">
               {/* Printed label above, written value below — the way a field on a
                   form is filled in, not a row of oversized statistics. */}
               <div className="summary-strip">
@@ -545,17 +597,19 @@ export function App() {
 
               <div className="section-head">
                 <div className="section-title">
-                  <h2>Ratings &amp; record</h2>
+                  <h2 id="h-ratings">Ratings &amp; record</h2>
                 </div>
               </div>
               <StatsDashboard stats={stats} source={profile.source} />
             </section>
 
-            <section className="wrap section">
+            <section className="wrap section" aria-labelledby="h-brilliancies">
               <div className="section-head">
                 <div className="section-title">
-                  <span className="section-index">!!</span>
-                  <h2>Brilliancies</h2>
+                  <span className="section-index" aria-hidden="true">
+                    !!
+                  </span>
+                  <h2 id="h-brilliancies">Brilliancies</h2>
                 </div>
                 <p className="section-note">
                   Sound sacrifices detected by Stockfish. An approximation of chess.com's !!.
@@ -589,11 +643,16 @@ export function App() {
 
                   <div className="scope-row">
                     <span className="scope-label">How far back</span>
-                    <div className="scope-seg">
+                    {/* Which option is selected was carried only by the `is-on`
+                        class, which assistive tech cannot see — so all four
+                        announced identically and there was no way to tell what
+                        the current scope was. */}
+                    <div className="scope-seg" role="group" aria-label="How far back to scan">
                       {SCOPES.map((s) => (
                         <button
                           key={s.label}
                           className={`scope-opt ${scope === s.games ? "is-on" : ""}`}
+                          aria-pressed={scope === s.games}
                           onClick={() => changeScope(s.games)}
                           disabled={loadingMore}
                         >
@@ -638,7 +697,11 @@ export function App() {
                       {singleState === "working" ? <span className="spinner" /> : "Analyse"}
                     </button>
                   </div>
-                  {singleError && <p className="single-error">{singleError}</p>}
+                  {singleError && (
+                    <p className="single-error" role="alert">
+                      {singleError}
+                    </p>
+                  )}
                 </div>
               )}
 
@@ -659,7 +722,17 @@ export function App() {
                     </button>
                   </div>
                   <div className="progress">
-                    <div className="progress-track">
+                    {/* aria-valuetext rather than bare numbers: "142 of 250
+                        games analysed" is what the bar means, and a screen
+                        reader left to itself would announce a bare percentage. */}
+                    <div
+                      className="progress-track"
+                      role="progressbar"
+                      aria-valuemin={0}
+                      aria-valuemax={progress.total}
+                      aria-valuenow={progress.done}
+                      aria-valuetext={`${progress.done} of ${progress.total} games analysed`}
+                    >
                       <div
                         className="progress-fill"
                         style={{
@@ -704,10 +777,10 @@ export function App() {
                 ) : null)}
             </section>
 
-            <section className="wrap section">
+            <section className="wrap section" aria-labelledby="h-games">
               <div className="section-head">
                 <div className="section-title">
-                  <h2>Recent games</h2>
+                  <h2 id="h-games">Recent games</h2>
                 </div>
                 <p className="section-note">Newest first. Click any game to replay it.</p>
               </div>

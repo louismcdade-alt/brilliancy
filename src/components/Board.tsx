@@ -59,6 +59,63 @@ function parseFen(fen: string): Map<string, { type: string; color: "w" | "b" }> 
   return map;
 }
 
+const PIECE_WORD: Record<string, string> = {
+  k: "king",
+  q: "queen",
+  r: "rook",
+  b: "bishop",
+  n: "knight",
+  p: "pawn",
+};
+
+/**
+ * What the board says to a screen reader.
+ *
+ * `role="img"` makes the whole grid presentational, so before this the entire
+ * diagram — pieces, coordinates, and the `!!` seal itself — collapsed to a
+ * single node labelled "Chess position". The product's own output was the part
+ * that wasn't reaching a blind player, and chess has a long tradition of being
+ * played and read without sight.
+ *
+ * Reading out all 32 pieces is the obvious idea and the wrong one: it is a
+ * paragraph nobody wants spoken, every time the position changes. What a player
+ * actually asks of a diagram is whose move it is, what just happened, what is
+ * hanging, and roughly how much material is left. So the label answers those,
+ * in that order, and the move list beside it carries the full game for anyone
+ * who wants to walk it.
+ */
+function describePosition({
+  fen,
+  lastMove,
+  brilliantSquare,
+  sacSquare,
+  seal,
+}: Pick<BoardProps, "fen" | "lastMove" | "brilliantSquare" | "sacSquare" | "seal">): string {
+  const pieces = parseFen(fen);
+  const turn = fen.split(" ")[1] === "b" ? "Black" : "White";
+  const parts = [`Chess position, ${turn} to move.`];
+
+  if (lastMove) {
+    const moved = pieces.get(lastMove.to);
+    parts.push(
+      `Last move: ${moved ? PIECE_WORD[moved.type] : "piece"} ${lastMove.from} to ${lastMove.to}.`,
+    );
+  }
+  if (seal && brilliantSquare) parts.push(`Marked brilliant on ${brilliantSquare}.`);
+  if (sacSquare) {
+    const offered = pieces.get(sacSquare);
+    parts.push(`${offered ? PIECE_WORD[offered.type] : "Piece"} offered on ${sacSquare}.`);
+  }
+
+  // Kings excluded: they are always both present, so counting them tells the
+  // listener nothing and makes every board sound two pieces heavier.
+  const count = (c: "w" | "b") =>
+    [...pieces.values()].filter((p) => p.color === c && p.type !== "k").length;
+  parts.push(`${count("w")} white pieces, ${count("b")} black pieces remaining.`);
+
+  return parts.join(" ");
+}
+
 /** Center of a square in board-percentage coordinates, respecting orientation. */
 function squareCenter(square: string, orientation: Orientation) {
   const fileIdx = FILES.indexOf(square[0]);
@@ -118,7 +175,11 @@ export function Board({
 
   return (
     <div className="board-frame">
-      <div className="board" role="img" aria-label="Chess position">
+      <div
+        className="board"
+        role="img"
+        aria-label={describePosition({ fen, lastMove, brilliantSquare, sacSquare, seal })}
+      >
         {cells.map((c) => {
           const isFrom = lastMove?.from === c.square;
           const isTo = lastMove?.to === c.square;

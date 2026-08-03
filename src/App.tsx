@@ -110,6 +110,26 @@ function parseQuery(raw: string, fallback: Source): { source: Source; username: 
   return { source: fallback, username: text.replace(/^@+/, "") };
 }
 
+/**
+ * Turn an adapter error into something worth showing a reader.
+ *
+ * Both adapters throw `ApiError("not-found", 404)` — an internal sentinel that
+ * exists so isNotFound() can recognise a 404, not a sentence. It has reached the
+ * screen twice now, so the filter lives in one place: anything the adapter wrote
+ * for a human is passed through, anything that looks like a sentinel (empty, or
+ * a single word with no space in it) is replaced by `fallback`.
+ *
+ * A 404 from a games endpoint is deliberately NOT special-cased into "no such
+ * player". Measured against the live API: Lichess's game export answers a
+ * throttled IP with 404 as readily as with 429, on an account whose profile had
+ * just loaded 200. So a 404 here means "the export refused us", and "try again
+ * shortly" is both the honest reading and the useful one.
+ */
+function humanError(e: unknown, fallback: string): string {
+  const raw = e instanceof Error ? e.message : "";
+  return !raw || !/\s/.test(raw) ? fallback : raw;
+}
+
 type Status = "idle" | "loading" | "loaded" | "error";
 
 interface ViewerState {
@@ -233,8 +253,17 @@ export function App() {
     return counts;
   }, [brilliancies]);
 
-  /** Games the scan will actually cover: the window, capped by what history exists. */
+  /** Games the NEXT scan will cover: the window, capped by what history exists. */
   const scanCount = Math.min(scope, games.length);
+
+  /**
+   * Games the scan that just FINISHED actually covered. Deliberately separate
+   * from scanCount: analysing a single pasted game leaves scanCount at 30, so
+   * every "in N games" claim after a one-game scan named a number that had
+   * nothing to do with what was examined — including in an assertive live
+   * region, which announces it to a screen reader as the answer.
+   */
+  const [scannedCount, setScannedCount] = useState(0);
 
   const summary = useMemo(() => {
     const total = games.length;
@@ -243,7 +272,12 @@ export function App() {
     const avgAcc = accs.length ? accs.reduce((s, a) => s + a, 0) / accs.length : null;
     return {
       total,
-      winRate: total ? Math.round((wins / total) * 100) : 0,
+      // null, not 0, when there are no games to compute it from. The Accuracy
+      // and Circled cells already render "—" in that case; Won was the one that
+      // invented a number, so a failed games request (a Lichess throttle, say)
+      // printed a confident "Won 0%" above the fold while the error explaining
+      // the empty list sat further down the page.
+      winRate: total ? Math.round((wins / total) * 100) : null,
       avgAcc,
     };
   }, [games]);
@@ -288,16 +322,10 @@ export function App() {
       const [st, gms] = await Promise.all([
         api.fetchStats(username).catch(() => ({}) as Stats),
         api.fetchRecentGames(username, GAMES_TO_LOAD).catch((e) => {
-          // `not-found` is an internal sentinel, not a sentence: both adapters
-          // throw it so isNotFound() can recognise a 404, and it reached the
-          // screen verbatim the first time a real 404 came back. Anything the
-          // adapter wrote for a human is passed through; anything that looks
-          // like a sentinel is replaced.
-          const raw = e instanceof Error ? e.message : "";
-          gamesError =
-            api.isNotFound(e) || !raw || !/\s/.test(raw)
-              ? `Couldn't load games from ${SOURCE_LABEL[site]}. Try again shortly.`
-              : raw;
+          gamesError = humanError(
+            e,
+            `Couldn't load games from ${SOURCE_LABEL[site]}. Try again shortly.`,
+          );
           return [] as Game[];
         }),
       ]);
@@ -332,11 +360,15 @@ export function App() {
     } catch (e) {
       // Surface the adapter's own message when it has one — Lichess's 429 tells
       // the user to wait a minute, which is actionable; a generic "try again
-      // shortly" would throw that away.
+      // shortly" would throw that away. But it has to go through the same
+      // sentinel filter loadUser uses: widening the scope is the single most
+      // likely way to trip Lichess's export throttle, and a bare `e.message`
+      // printed the word "not-found" on screen when it did.
       setScanError(
-        e instanceof Error && e.message
-          ? e.message
-          : `Couldn't load more games from ${SOURCE_LABEL[profile.source]}. Try again shortly.`,
+        humanError(
+          e,
+          `Couldn't load more games from ${SOURCE_LABEL[profile.source]}. Try again shortly.`,
+        ),
       );
     } finally {
       setLoadingMore(false);
@@ -383,6 +415,8 @@ export function App() {
       ]);
       setNearMisses((prev) => [...prev.filter((n) => n.game.id !== game.id), ...near]);
       setGames((prev) => (prev.some((g) => g.id === game.id) ? prev : [game, ...prev]));
+      // Exactly one game was examined; every "in N games" claim reads this.
+      setScannedCount(1);
       setScanState("done");
       setViewer({ game, brilliancies: found, initialPly: found[0]?.ply });
       if (!found.length) {
@@ -418,8 +452,13 @@ export function App() {
     }
     setEngineWarming(false);
 
+    // `scanned` counts games actually reached, so a cancelled scan reports the
+    // window it covered rather than the one it was aiming at.
+    let scanned = 0;
+    let failures = 0;
     for (let i = 0; i < toScan.length; i++) {
       if (cancelScan.current) break;
+      scanned++;
       try {
         const game = toScan[i];
         const cached = scanCache.current.get(cacheKey(game));
@@ -460,11 +499,28 @@ export function App() {
         if (found.length) setBrilliancies((prev) => [...prev, ...found]);
         if (near.length) setNearMisses((prev) => [...prev, ...near]);
       } catch {
-        // skip a game that fails to analyze; keep the scan going
+        // Skip a game that fails to analyze and keep the scan going — but COUNT
+        // it. Swallowing these silently meant a scan in which the engine died
+        // after init (a dead worker, OOM on a phone) reached "done" with zero
+        // brilliancies and reported "nothing even reached the engine", which is
+        // a confident conclusion about the player's chess drawn from a failure
+        // of ours.
+        failures++;
       }
       setProgress({ done: i + 1, total: toScan.length });
     }
 
+    setScannedCount(scanned);
+    if (failures > 0 && failures === scanned) {
+      // Every single game failed: report the failure, not a result.
+      setScanError(
+        "The engine stopped responding partway through, so none of these games were analysed. Reload the page and try again.",
+      );
+    } else if (failures > 0) {
+      setScanError(
+        `${failures} of ${scanned} games couldn't be analysed and were skipped, so this list may be incomplete.`,
+      );
+    }
     if (!cancelScan.current) setScanState("done");
     else setScanState("idle");
   }
@@ -532,6 +588,20 @@ export function App() {
             progress. Before this, pressing "Find brilliancies" produced total
             silence for one to five minutes with no way to tell working from
             broken — on the site's primary action. */}
+        {/* Loading a profile is the FIRST thing anyone does here and it
+            announced nothing between submit and the profile appearing — the
+            same "working or broken?" silence the scan region exists to fix.
+            Its failure path is already covered by the role="alert" error box,
+            so this only has to speak for the states that aren't errors. */}
+        <div className="sr-only" aria-live="polite" aria-atomic="true">
+          {status === "loading"
+            ? "Loading profile…"
+            : status === "loaded" && profile
+              ? `Loaded ${profile.username}. ${games.length} ${games.length === 1 ? "game" : "games"} ready to scan.`
+              : loadingMore
+                ? "Loading more games…"
+                : ""}
+        </div>
         <div className="sr-only" aria-live="polite" aria-atomic="true">
           {scanState === "running"
             ? engineWarming
@@ -546,8 +616,8 @@ export function App() {
         <div className="sr-only" aria-live="assertive" aria-atomic="true">
           {scanState === "done"
             ? sortedBrilliancies.length
-              ? `Scan complete. ${sortedBrilliancies.length} brilliant ${sortedBrilliancies.length === 1 ? "move" : "moves"} found in ${scanCount} games.`
-              : `Scan complete. No brilliant moves found in ${scanCount} games.`
+              ? `Scan complete. ${sortedBrilliancies.length} brilliant ${sortedBrilliancies.length === 1 ? "move" : "moves"} found in ${scannedCount} ${scannedCount === 1 ? "game" : "games"}.`
+              : `Scan complete. No brilliant moves found in ${scannedCount} ${scannedCount === 1 ? "game" : "games"}.`
             : ""}
         </div>
 
@@ -592,6 +662,10 @@ export function App() {
                       <button
                         key={ex}
                         className="hero-chip"
+                        // Every other control on the page announces a verb; these
+                        // announced a bare handle ("Hikaru, button"), and the
+                        // "Try" label beside them is not associated with them.
+                        aria-label={`Try the example ${SOURCE_LABEL[source]} account ${ex}`}
                         onClick={() => {
                           setQuery(ex);
                           // Pass the source explicitly rather than relying on the
@@ -654,7 +728,9 @@ export function App() {
                 </div>
                 <div className="summary-cell">
                   <div className="summary-label">Won</div>
-                  <div className="summary-num">{summary.winRate}%</div>
+                  <div className="summary-num">
+                    {summary.winRate === null ? "—" : `${summary.winRate}%`}
+                  </div>
                 </div>
                 <div className="summary-cell">
                   <div className="summary-label">Accuracy</div>
@@ -768,6 +844,7 @@ export function App() {
                       className="btn btn-ghost"
                       onClick={scanOneGame}
                       disabled={!gameUrl.trim() || singleState === "working"}
+                      aria-label={singleState === "working" ? "Analysing that game" : undefined}
                     >
                       {singleState === "working" ? <span className="spinner" /> : "Analyse"}
                     </button>
@@ -803,6 +880,7 @@ export function App() {
                     <div
                       className="progress-track"
                       role="progressbar"
+                      aria-label="Scan progress"
                       aria-valuemin={0}
                       aria-valuemax={progress.total}
                       aria-valuenow={progress.done}
@@ -824,7 +902,7 @@ export function App() {
               )}
 
               {scanError && (
-                <div className="error-box" style={{ marginTop: 14 }}>
+                <div className="error-box" role="alert" style={{ marginTop: 14 }}>
                   {scanError}
                 </div>
               )}
@@ -848,7 +926,8 @@ export function App() {
                   // weighed something, the pencil tier below says so and this
                   // paragraph would be contradicting it.
                   <p className="empty-note">
-                    No brilliancies in {scanCount === 1 ? "that game" : `these ${scanCount} games`} —
+                    No brilliancies in{" "}
+                    {scannedCount === 1 ? "that game" : `these ${scannedCount} games`} —
                     nothing even reached the engine. Brilliant moves are rare, and a short window can
                     easily hold none: try widening the scan before concluding you've never played
                     one.

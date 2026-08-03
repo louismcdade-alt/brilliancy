@@ -53,7 +53,7 @@ function SpecCard({ b, onOpen }: { b: Brilliancy; onOpen: (b: Brilliancy) => voi
           {whyLabel(b) ? `, ${whyLabel(b)}` : ""}
         </span>
         <span>
-          eval <b>{formatEval(b.evalAfter, null)}</b>
+          eval <b>{formatEval(b.evalAfter, b.mateIn)}</b>
         </span>
       </div>
       <div className="spec-foot">

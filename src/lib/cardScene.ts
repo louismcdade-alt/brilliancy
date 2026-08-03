@@ -580,7 +580,7 @@ export function drawCard(
     ["PLAYER", username ? `@${username}` : "—"],
     ["OPPONENT", b.game.oppUsername],
     ["OFFERED", String(b.sacrifice)],
-    ["EVAL", formatEval(b.evalAfter, null)],
+    ["EVAL", formatEval(b.evalAfter, b.mateIn)],
   ];
   const colW = (W - PAD * 2) / fields.length;
   fields.forEach(([label, value], i) => {

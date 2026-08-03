@@ -386,7 +386,26 @@ export async function fetchRecentGames(
     `${ORIGIN}/api/games/user/${encodeURIComponent(u)}` +
     `?max=${max}&pgnInJson=true&clocks=false&evals=false&opening=false&sort=dateDesc`;
 
-  const res = await get(url, "application/x-ndjson");
+  // A 404 from THIS endpoint does not mean "no such player", and treating it as
+  // one would be a lie the caller then repeats. Measured against the live API:
+  // with the IP under an export throttle, the same URL returned 429 and 404
+  // alternately across requests 45 seconds apart, while `/api/user/{u}` for the
+  // same account answered 200 throughout. Since App.tsx only ever gets here
+  // after fetchProfile resolved, the account provably exists — so the only
+  // reading left is that the export is refusing us, and the remedy is the same
+  // one the 429 gives.
+  let res: Response;
+  try {
+    res = await get(url, "application/x-ndjson");
+  } catch (e) {
+    if (isNotFound(e)) {
+      throw new ApiError(
+        "Lichess wouldn't return this game list — its export endpoint throttles hard. Wait a minute and try again.",
+        404,
+      );
+    }
+    throw e;
+  }
   const text = await res.text();
 
   const out: Game[] = [];

@@ -93,7 +93,15 @@ export function SearchBar({
             aria-label={`${site} username`}
           />
         </label>
-        <button type="submit" className="btn btn-bril" disabled={loading || !value.trim()}>
+        {/* The spinner is an empty span, so swapping the label for it left the
+            site's primary control with no accessible name for the whole load.
+            aria-label keeps one throughout. */}
+        <button
+          type="submit"
+          className="btn btn-bril"
+          disabled={loading || !value.trim()}
+          aria-label={loading ? `Loading ${site} profile` : undefined}
+        >
           {loading ? <span className="spinner" /> : variant === "hero" ? "Reveal" : "Go"}
         </button>
       </form>

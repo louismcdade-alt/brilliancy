@@ -71,8 +71,15 @@
 
   --text-hi: #22201c;
   --text: #3c382f;
-  --text-dim: #6b6558;
-  --text-faint: #8b8474;
+  /* Both were tuned against --stock (the panel/sheet ground) and both FAIL on
+     --desk (#d8d0c0), the darker ground the topbar, hero, section heads and
+     footer actually sit on: dim measured 3.78 and faint 2.43, where 2.43 is
+     below even the large-text threshold. Same shape as the invisible-!! bug —
+     two independently-correct decisions composing into something unreadable.
+     Retuned against --desk, the worst ground, so they pass everywhere:
+     dim 5.41 / faint 4.78 on desk, 7.16 / 6.32 on stock. */
+  --text-dim: #524e44;
+  --text-faint: #5a564b;
 
   /* --bril is the app's "this is the accent" token. On paper the accent that
      does the work is the pen; the red is rationed to the !! itself. */
@@ -98,6 +105,9 @@
      into their own tokens. On paper the values are identical. */
   --board-pen: var(--pen);
   --board-mark: var(--mark);
+  /* Graphite, and pinned like the other two board inks — a printed diagram's
+     coordinates do not change when the desk lamp goes off. */
+  --board-coord: #454b49;
 
   --font-display: "Newsreader", Georgia, "Times New Roman", serif;
   --font-body: "Newsreader", Georgia, "Times New Roman", serif;
@@ -130,14 +140,21 @@
     --text-hi: #e9e3d5;
     --text: #cec7b7;
     --text-dim: #9c9382;
-    --text-faint: #7a7365;
+    /* 3.40 on --stock, below AA. Raised to 4.92 / 5.28 on carbon. */
+    --text-faint: #968e7e;
     --bril-bright: #a8bee8;
     --bril-glow: rgba(138, 166, 220, 0.28);
     --bril-wash: rgba(138, 166, 220, 0.08);
     --gold: #c9a24f;
     --good: #7bbf6a;
     --warn: #d8a851;
-    --bad: #e2604f;
+    /* NOT #e2604f — that is --mark, the annotator's pen. Lightening each token
+       for dark paper landed them on the identical hex, so a lost game holding a
+       brilliancy drew both marks in the same red and the "red means the !! and
+       nothing else" rule quietly stopped being true in one theme. Light keeps
+       them distinct (#bc2e24 vs #a8352c); this restores that in dark as a
+       duller, less saturated brick. 5.99 on --stock. */
+    --bad: #d98a7a;
 
     /* THE DIAGRAM DOES NOT CHANGE INK WHEN YOU TURN THE LAMP DOWN.
        This block used to dim the squares (#efe9db -> #cfc6b2, #b6c5cb -> #6f8189)
@@ -627,20 +644,24 @@ button {
 .sq-light { background: var(--sq-light); }
 .sq-dark { background: var(--sq-dark); }
 
+/* Coordinates are printed on the diagram in ONE ink, like every printed board.
+   They used to take the opposite square's colour AND 0.6 opacity — each choice
+   defensible, together 1.25:1 on light squares and 1.27:1 on dark, i.e. very
+   nearly invisible in both themes. That is the same composition failure as the
+   dark-mode !!, and it landed on the viewer, the one place a reader actually
+   needs to read a square name. A single graphite ink measures 7.36 on the light
+   square and 5.03 on the dark one, so it passes AA on both. */
 .sq-coord {
   position: absolute;
   font-family: var(--font-mono);
   font-size: clamp(7px, 1.1vw, 10px);
   font-weight: 500;
-  opacity: 0.6;
+  color: var(--board-coord);
   pointer-events: none;
 }
 
 .sq-coord-file { right: 3px; bottom: 1px; }
 .sq-coord-rank { left: 3px; top: 1px; }
-
-.sq-light .sq-coord { color: var(--sq-dark); }
-.sq-dark .sq-coord { color: var(--sq-light); }
 
 .piece {
   width: 92%;
@@ -1826,15 +1847,25 @@ button {
   color: var(--text-dim);
 }
 
+/* `min-width: 0` so the 1fr track can shrink below its content instead of
+   forcing the row wider — the same fix .game-main and .profile-id already use. */
 .pencil-why {
   font-size: 13.5px;
   color: var(--text-dim);
+  min-width: 0;
 }
 
+/* Usernames are chosen by other people, so a hostile length is the ordinary
+   case, not the edge case — this is the same input class that overflowed the
+   share card. `nowrap` on an `auto` grid track sizes to the whole string and
+   pushes the row wide instead of truncating, so cap it and ellipsize. */
 .pencil-vs {
   font-size: 12px;
   color: var(--text-faint);
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 22ch;
 }
 
 .pencil-more {

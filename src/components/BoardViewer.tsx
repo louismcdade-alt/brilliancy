@@ -207,12 +207,17 @@ export function BoardViewer({ game, brilliancies, initialPly, username, onClose 
               loud, so arrowing through a game was silent. Polite rather than
               assertive: someone holding Right to scrub should not have each
               intermediate move interrupt the last. */}
-          <div className="eval-readout" aria-live="polite" aria-atomic="true">
+          {/* aria-live sits on the TEXT, not on this wrapper. It used to wrap
+              the Share buttons too, so a GIF render — whose label ticks once per
+              frame — mutated an atomic live region dozens of times and made a
+              screen reader re-read the whole line, buttons included, on every
+              percent. Focusable controls do not belong inside a live region. */}
+          <div className="eval-readout">
             {brilNow ? (
               <>
-                <span>
+                <span aria-live="polite" aria-atomic="true">
                   Brilliant — <b>{brilNow.san}!!</b> · eval{" "}
-                  {formatEval(brilNow.evalAfter, null)}
+                  {formatEval(brilNow.evalAfter, brilNow.mateIn)}
                 </span>
                 <button
                   className="btn btn-bril btn-share"
@@ -231,12 +236,14 @@ export function BoardViewer({ game, brilliancies, initialPly, username, onClose 
                 </button>
               </>
             ) : current ? (
-              <span>
+              <span aria-live="polite" aria-atomic="true">
                 {Math.floor(idx / 2) + 1}
                 {current.color === "w" ? "." : "…"} <b>{current.san}</b>
               </span>
             ) : (
-              <span>Starting position</span>
+              <span aria-live="polite" aria-atomic="true">
+                Starting position
+              </span>
             )}
           </div>
           <div className="viewer-controls">
@@ -288,7 +295,14 @@ export function BoardViewer({ game, brilliancies, initialPly, username, onClose 
               <div className="game-sub">
                 <span>{timeClassLabel(game.timeClass)}</span>
                 <span>{formatTimeControl(game.timeControl)}</span>
-                {game.result !== "win" && <span>by {resultReasonLabel(game.resultReason)}</span>}
+                {/* The reason must be non-empty as well as a non-win — GameList
+                    has always guarded both. Lichess emits "" for every draw
+                    (it collapses agreement, repetition, the 50-move rule and
+                    insufficient material into one status), so without this the
+                    viewer printed a dangling "by" on every Lichess draw. */}
+                {game.result !== "win" && resultReasonLabel(game.resultReason) && (
+                  <span>by {resultReasonLabel(game.resultReason)}</span>
+                )}
                 {game.url && (
                   <a href={game.url} target="_blank" rel="noreferrer" style={{ color: "var(--bril)" }}>
                     open ↗

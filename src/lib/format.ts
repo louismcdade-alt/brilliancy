@@ -108,6 +108,13 @@ export function sacrificeLabel(
  * attack the move itself opened, then material that comes straight back.
  * Null when none of them holds — an honest silence beats a vague flourish.
  */
+/**
+ * Above any real evaluation, below MATE_CP (100000). engine.ts encodes a forced
+ * mate as MATE_CP minus 10 per ply, and those scores reach several UI paths that
+ * would otherwise render them as a ~1000-pawn advantage.
+ */
+export const MATE_SCALE = 90_000;
+
 export function whyLabel(b: {
   mateIn: number | null;
   mateSoonPlies: number | null;
@@ -126,7 +133,14 @@ export function whyLabel(b: {
   // Only claim recovery when there was enough game left to observe it. A game
   // that ends on the sacrifice leaves the material offered but untaken, which
   // reads as recovered and is the opposite of true.
-  if (b.regainPlies >= 4 && b.regain6 >= -0.5) return "and the material comes straight back";
+  //
+  // The guard must match the horizon of the value it gates. This read `>= 4`
+  // while testing `regain6`, and regainAt CLAMPS to the final position — so at
+  // 4 or 5 plies the clamp was still active and regain6 was still a
+  // final-position reading. That is the original bug surviving in a narrower
+  // window: a game ending 4 plies after an UNTAKEN sacrifice still read as
+  // recovered. Six plies of `regain6` needs six plies of game.
+  if (b.regainPlies >= 6 && b.regain6 >= -0.5) return "and the material comes straight back";
   return null;
 }
 
@@ -229,14 +243,38 @@ export function nearMissLine(c: {
   // No quiet alternative existed to compare against — a gap in what was
   // measured, and said as such rather than dressed up as a verdict.
   if (margin === null) return "Nothing quiet to compare it against";
-  if (c.playedEval < 0) return "The position was already lost";
+  // "Lost" has to mean lost. playedEval is centipawns AFTER the move, so a bare
+  // `< 0` fires on -1 — a dead level position — and the engine's own word for
+  // roughly equal reaches to -20. Use a real losing margin (2 pawns), and say
+  // "was losing" rather than "was already lost": "already" attributes the state
+  // to the position BEFORE the move, while the number measures the position
+  // after, so the sacrifice itself may be what put it there.
+  if (c.playedEval <= -200) return "The position was losing either way";
+  // Unlike reasonLines' eval tests, this one is a LOWER bound, so a mate-scale
+  // value DOES match it — when the engine's best line is a forced mate and this
+  // sacrifice isn't, evalLoss is ~100000 and this printed "Cost 999.70".
+  if (c.evalLoss >= MATE_SCALE) return "The engine had a forced mate instead";
   if (c.evalLoss > 40) return `Cost ${(c.evalLoss / 100).toFixed(2)} against the engine's best`;
   return "Close, but not clear enough";
 }
 
-/** Engine cp (player POV) → compact label like "+2.4" / "M3". */
+/**
+ * Engine cp (player POV) → compact label like "+2.4" / "M3".
+ *
+ * The `mate` argument is authoritative when supplied. When it isn't, the score
+ * is still checked for mate scale: engine.ts encodes a forced mate as
+ * MATE_CP (100000) minus 10 per ply, so a caller passing `null` for a mating
+ * line would otherwise print "+999.7" — a thousand-pawn advantage — next to a
+ * footer reading "forcing mate in 3". Every call site did exactly that.
+ *
+ * Deriving the ply count here would duplicate engine.ts's encoding in a third
+ * place, so the fallback deliberately prints a bare "M" rather than guessing a
+ * number: it is honest about being mate without inventing a distance. Callers
+ * that know the distance pass it and get "M3".
+ */
 export function formatEval(cp: number, mate: number | null): string {
   if (mate !== null) return `M${Math.abs(mate)}`;
+  if (Math.abs(cp) >= MATE_SCALE) return cp > 0 ? "M" : "-M";
   const pawns = cp / 100;
   return (pawns >= 0 ? "+" : "") + pawns.toFixed(1);
 }

@@ -107,6 +107,13 @@ node scripts/verify-detect.mjs    # runs the real detector on Légal's Mate (5.N
 node scripts/visual.mjs           # screenshots hero, game viewer, and a live scan
 ```
 
+One runs with no server and no network at all — it drives the chess.com adapter
+against a scripted API so it can count requests and force a 429 on demand:
+
+```bash
+node scripts/verify-single-game.mjs   # "Or analyse one game": bounded, honest on failure
+```
+
 Two more for chasing detector disagreements against real games:
 
 ```bash

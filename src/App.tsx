@@ -423,9 +423,14 @@ export function App() {
         setSingleError("No brilliancy in that game — opened it so you can look for yourself.");
       }
     } catch (e) {
-      setSingleError(
-        e instanceof Error ? e.message : "Couldn't analyze that game.",
-      );
+      // Through humanError for the same reason changeScope is: the adapters
+      // throw a bare "not-found" sentinel for a 404, and a raw `e.message` here
+      // printed that word on screen. Everything else the adapters throw is
+      // already a sentence written for a reader — the chess.com rate-limit line,
+      // and the one saying how far back the archive walk actually looked — and
+      // those are exactly the messages that must survive rather than be flattened
+      // into a generic apology.
+      setSingleError(humanError(e, "Couldn't analyze that game. Try again shortly."));
     } finally {
       setSingleState("idle");
     }

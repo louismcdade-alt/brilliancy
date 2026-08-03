@@ -11,6 +11,7 @@
     "verify:static": "node scripts/verify-static-hero.mjs",
     "verify:contrast": "node scripts/verify-contrast.mjs",
     "verify:lichess": "node scripts/verify-lichess.mjs",
+    "verify:single": "node scripts/verify-single-game.mjs",
     "verify:csp": "npm run build && node scripts/csp-check.mjs",
     "verify": "npm run verify:static && npm run verify:contrast && npm run verify:lichess"
   },

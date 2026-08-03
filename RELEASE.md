@@ -10,15 +10,36 @@ bottom; each step says what "done" looks like.
 
 ```bash
 npm run build                      # tsc --noEmit + vite build
+npm run verify                     # static hero + contrast + Lichess (needs npm run dev)
+npm run verify:csp                 # builds, then serves dist/ under the real CSP
+CSP_SOURCE=lichess node scripts/csp-check.mjs   # the SAME policy, driven via Lichess
 node scripts/sac-attribution.mjs   # sacrifice pre-filter, ~1s   (needs npm run dev)
 node scripts/test-harness.mjs      # precision/recall on fixtures (needs npm run dev)
-node scripts/csp-check.mjs         # serves dist/ under the real CSP and drives it
 node scripts/net-audit.mjs         # what a session actually talks to (needs npm run preview)
 ```
 
-**Done when:** build clean, 14/14 attribution, 100%/100% harness, 0 CSP
-violations, and `net-audit` reports **0 requests carrying a body** with no third
-party other than `api.chess.com` and `images.chesscomfiles.com`.
+**Done when:** build clean, `npm run verify` green, 0 CSP violations on **both**
+sources, 14/14 attribution, 100%/100% harness, and `net-audit` reports **0
+requests carrying a body** with no third party other than `api.chess.com` and
+`images.chesscomfiles.com`.
+
+Notes on the three verifiers, each of which exists because something shipped
+broken that reading the code did not catch:
+
+- **`verify:static`** — the ~470 words of crawler copy live *inside* `#root`,
+  which React empties on first render. It asserts both directions: with JS on,
+  one `<h1>` and none of the three static `<h2>`s survive; with JS off, all
+  three sections are present. Run it after **any** `index.html` change.
+- **`verify:contrast`** — measures both themes against the ground each element
+  actually sits on. Two separate bugs here were *compositions* of individually
+  correct colour decisions (the `!!` at 1.16:1 in dark, coordinates at 1.25:1 in
+  both), and neither was visible by reading the CSS.
+- **`verify:lichess`** — drives the real app through the Lichess adapter and
+  prints every `lichess.org` request with its status. ⚠ `/api/games/user/`
+  throttles hard: roughly 15 requests earns a block outlasting 35 minutes, so do
+  not loop it. It also pins a real Chrome User-Agent, because **Lichess 404s any
+  request whose UA contains `HeadlessChrome`** — that one word cost two sessions
+  of debugging.
 
 ---
 

@@ -7,7 +7,12 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "verify:static": "node scripts/verify-static-hero.mjs",
+    "verify:contrast": "node scripts/verify-contrast.mjs",
+    "verify:lichess": "node scripts/verify-lichess.mjs",
+    "verify:csp": "npm run build && node scripts/csp-check.mjs",
+    "verify": "npm run verify:static && npm run verify:contrast && npm run verify:lichess"
   },
   "dependencies": {
     "chess.js": "^1.0.0",

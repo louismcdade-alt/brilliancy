@@ -1,4 +1,5 @@
 import type { Brilliancy } from "../types";
+import { SOURCE_LABEL } from "../types";
 import { formatEval, sacrificeLabel, timeClassLabel, whyLabel } from "./format";
 
 /**
@@ -195,6 +196,34 @@ export function bakePieces(
 
 const clamp01 = (v: number) => (v < 0 ? 0 : v > 1 ? 1 : v);
 const smooth = (v: number) => v * v * (3 - 2 * v);
+
+/**
+ * Canvas has no letter-spacing, so the printed small caps on this sheet are
+ * spaced by inserting the gaps. Written out rather than left as literals so the
+ * masthead can be built from the game's source.
+ */
+function spaced(text: string): string {
+  return text.split("").join(" ").replace(/\s{3}/g, "   ");
+}
+
+/**
+ * Cut a value to fit its column, with an ellipsis.
+ *
+ * Usernames are chosen by other people and are not short. "ibrahimmbaaayeh" ran
+ * straight through the OFFERED column and printed on top of its value, which is
+ * the sort of thing that only shows up when you look at the rendered artifact —
+ * the code has no idea it overflowed. `fillText`'s own maxWidth argument is not
+ * the fix: it CONDENSES the glyphs to fit, which on a monospace face reads as a
+ * rendering fault rather than as a truncation.
+ */
+function fitText(ctx: CanvasRenderingContext2D, text: string, maxWidth: number): string {
+  if (ctx.measureText(text).width <= maxWidth) return text;
+  let cut = text;
+  while (cut.length > 1 && ctx.measureText(cut + "…").width > maxWidth) {
+    cut = cut.slice(0, -1);
+  }
+  return cut + "…";
+}
 
 function moveLabel(b: Brilliancy): string {
   return b.game.userColor === "w" ? `${b.moveNumber}.` : `${b.moveNumber}…`;
@@ -420,7 +449,11 @@ export function drawCard(
   ctx.fillStyle = C.dim;
   ctx.font = `400 22px ${display}`;
   ctx.textAlign = "right";
-  ctx.fillText("F O R   C H E S S . C O M", W - PAD, 104);
+  // Named from the game, not hardcoded: this card is the artifact that leaves
+  // the site, and a Lichess brilliancy going out under "FOR CHESS.COM" is a
+  // plain factual error printed on the one thing strangers see. Letter-spaced by
+  // hand because canvas has no letter-spacing.
+  ctx.fillText(spaced(`FOR ${SOURCE_LABEL[b.game.source].toUpperCase()}`), W - PAD, 104);
   ctx.textAlign = "left";
   ctx.fillStyle = C.textHi;
   ctx.fillRect(PAD, 122, W - PAD * 2, 3);
@@ -564,7 +597,8 @@ export function drawCard(
     ctx.fillText(label, x + 18, rowY + 34);
     ctx.fillStyle = C.bril;
     ctx.font = `600 30px ${mono}`;
-    ctx.fillText(value, x + 18, rowY + 74);
+    // 18px of padding each side, and clear of the next column's rule.
+    ctx.fillText(fitText(ctx, value, colW - 36), x + 18, rowY + 74);
   });
 
   // footer, set as printed small caps. When the move has a measured story —

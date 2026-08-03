@@ -1,0 +1,18 @@
+# Netlify redirects.
+#
+# The deploy subdomain still serves a complete, working copy of the site, so
+# there are two hosts answering 200 for every page. Both already declare
+# brilliancychess.com as canonical, which is enough to stop them competing in
+# search — but a canonical is a hint and a 301 is not, and there is no reason
+# for the second host to exist at all now that the custom domain is live.
+#
+# This matters more here than on most sites: the whole SEO position rests on
+# brilliancychess.com being an exact-match domain for "brilliancy chess", and an
+# earlier version of the head tags pointed the canonical at this subdomain
+# instead -- which would have told Google to index the subdomain and left the
+# custom domain competing with a host it had itself nominated. That is fixed,
+# and this closes the remaining ambiguity rather than relying on the fix.
+#
+# `!` forces the rule even though a file exists at the path, which is exactly
+# the case here: every path on the subdomain resolves.
+https://brilliancy-chess.netlify.app/*  https://brilliancychess.com/:splat  301!

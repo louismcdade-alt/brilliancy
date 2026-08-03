@@ -264,10 +264,16 @@ export function App() {
       const [st, gms] = await Promise.all([
         api.fetchStats(username).catch(() => ({}) as Stats),
         api.fetchRecentGames(username, GAMES_TO_LOAD).catch((e) => {
+          // `not-found` is an internal sentinel, not a sentence: both adapters
+          // throw it so isNotFound() can recognise a 404, and it reached the
+          // screen verbatim the first time a real 404 came back. Anything the
+          // adapter wrote for a human is passed through; anything that looks
+          // like a sentinel is replaced.
+          const raw = e instanceof Error ? e.message : "";
           gamesError =
-            e instanceof Error && e.message
-              ? e.message
-              : `Couldn't load games from ${SOURCE_LABEL[site]}. Try again shortly.`;
+            api.isNotFound(e) || !raw || !/\s/.test(raw)
+              ? `Couldn't load games from ${SOURCE_LABEL[site]}. Try again shortly.`
+              : raw;
           return [] as Game[];
         }),
       ]);

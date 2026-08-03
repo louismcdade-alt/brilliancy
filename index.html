@@ -54,8 +54,17 @@
         "alternateName": "Brilliancy Chess",
         "url": "https://brilliancychess.com/",
         "applicationCategory": "GameApplication",
+        "applicationSubCategory": "Chess analysis",
         "operatingSystem": "Any (runs in a web browser)",
+        "browserRequirements": "Requires JavaScript and WebAssembly",
+        "inLanguage": "en",
+        "image": "https://brilliancychess.com/og.png",
         "description": "Finds the brilliant moves in your chess.com and Lichess games by running a chess engine locally in the browser.",
+        "featureList": [
+          "Finds brilliant moves (!!) in chess.com and Lichess games",
+          "Runs Stockfish 16 NNUE locally in the browser",
+          "No account, no login, no backend — nothing leaves the page"
+        ],
         "offers": { "@type": "Offer", "price": "0", "priceCurrency": "GBP" },
         "isAccessibleForFree": true
       }
@@ -74,7 +83,98 @@
     <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin />
   </head>
   <body>
-    <div id="root"></div>
+    <!-- ================================================================
+         THE CRAWLER'S COPY OF THE PAGE, and the only copy anyone gets
+         without JavaScript.
+
+         Until this existed, the served document's body was 42 bytes —
+         `<div id="root"></div>` and nothing else. Every word on this site,
+         including the .sr-only span in the h1 that the whole SEO pass was
+         written for, only came into existence once React ran. So the
+         first-pass crawl saw a blank page; rendering is a second, deferred
+         queue, and on a domain with no backlinks there is nothing to justify
+         prioritising it. Bing, DuckDuckGo and most LLM crawlers never render
+         at all. Measured at the time: `site:brilliancychess.com` returned
+         nothing, and the domain had no mentions anywhere on the web.
+         brilliancychess.com is an exact-match domain for "brilliancy chess"
+         and it was worth nothing, because there was nothing on it to read.
+
+         It lives INSIDE #root deliberately. React 18's createRoot() empties
+         its container on first render, so this is replaced the moment the app
+         boots — it is the pre-hydration paint and the crawler's copy, not a
+         second thing that has to be kept alive alongside the app.
+
+         The cost is real and worth stating: the hero copy now exists twice,
+         here and in App.tsx, and they can drift. The alternative was a
+         framework or a build step, which is a much larger cost on a site whose
+         entire deploy is `vite build`.
+         ================================================================ -->
+    <div id="root">
+      <main>
+        <p>Sound sacrifices, found by an engine</p>
+
+        <h1>
+          Find your <span aria-hidden="true">!!</span>
+          <span class="sr-only">brilliant moves — Brilliancy for chess.com and Lichess</span>
+        </h1>
+
+        <p>
+          <strong>Brilliancy</strong> finds the <strong>brilliant moves</strong> in your chess
+          games. Type any <strong>chess.com</strong> or <strong>Lichess</strong> username and a
+          chess engine runs <em>in your browser</em> over your recent games, looking for the
+          sound sacrifices — the moves chess.com's Game Review marks <b>!!</b>. There is no
+          login, no account and no backend: your games are analysed on your own machine and
+          nothing leaves the page.
+        </p>
+
+        <h2>What is a brilliant move in chess?</h2>
+        <p>
+          A brilliant move is a <strong>sacrifice that works</strong>. You give up material —
+          a knight, a rook, sometimes a queen — and the position is still winning, because the
+          material buys something worth more than itself: a mating attack, a decisive tempo, a
+          king dragged into the open. It is not simply the best move in the position. chess.com
+          ranks Brilliant above Best and Excellent precisely because a strong move that costs
+          nothing is not brilliant; giving something up is what makes it one.
+        </p>
+        <p>
+          The other half of the label is that it should be <em>hard to see</em>. A sacrifice
+          whose point only emerges several moves deep is brilliant in a way that an obvious
+          recapture is not.
+        </p>
+
+        <h2>How Brilliancy finds them</h2>
+        <p>
+          Every move you played is checked for whether it puts material on offer, using a
+          static exchange evaluation — so a piece that merely looks loose does not count, and
+          neither does a capture that wins material outright. Moves that pass are handed to
+          <strong>Stockfish 16</strong>, compiled to WebAssembly and running in a background
+          thread in your browser, which is asked three things: is the position still good after
+          the sacrifice, how much better is it than the best quiet alternative, and how much
+          better does the move look at depth than it does at a glance. A small learned model
+          weighs those answers together.
+        </p>
+
+        <h2>Is this the same as chess.com's !! ?</h2>
+        <p>
+          No, and it is worth being plain about it. chess.com's Brilliant label comes from
+          their own Game Review and is not published in their public API, so this is a
+          <strong>reconstruction</strong> of it, not the same number. It agrees with them often
+          enough to be useful and disagrees often enough that you should look at the position
+          yourself — every result shows the board, the move, and the reasons it was flagged, so
+          you can judge each one on its merits. Brilliancy is not affiliated with, endorsed by,
+          or connected to chess.com or Lichess.
+        </p>
+
+        <noscript>
+          <p>
+            <strong>Brilliancy needs JavaScript.</strong> The chess engine that finds your
+            brilliant moves runs in your browser rather than on a server — that is what lets
+            the site work without an account and without your games leaving your machine — so
+            there is nothing for it to do with scripting switched off.
+          </p>
+        </noscript>
+      </main>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

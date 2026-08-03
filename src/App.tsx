@@ -138,6 +138,15 @@ export function App() {
   const [progress, setProgress] = useState({ done: 0, total: 0 });
   const [engineWarming, setEngineWarming] = useState(false);
   const [scanError, setScanError] = useState<string | null>(null);
+  /**
+   * Did the games request FAIL, as opposed to returning nothing?
+   *
+   * `games: []` is produced by both, and the two need opposite copy: "this
+   * player has no recent standard games" is a conclusion about the player, and
+   * printing it when the request was actually refused states as fact something
+   * we do not know — directly under a banner saying the request failed.
+   */
+  const [gamesFailed, setGamesFailed] = useState(false);
 
   const [scope, setScope] = useState<number>(GAMES_TO_LOAD);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -241,6 +250,7 @@ export function App() {
     setBrilliancies([]);
     setScanState("idle");
     setScanError(null);
+    setGamesFailed(false);
     setScope(GAMES_TO_LOAD);
     setGameUrl("");
     setSingleError(null);
@@ -281,6 +291,9 @@ export function App() {
       setStats(st);
       setGames(gms);
       setScanError(gamesError);
+      // Remembered separately from the message, because an empty list means two
+      // completely different things and the list is what has to say which.
+      setGamesFailed(gamesError !== null);
       setStatus("loaded");
     } catch (e) {
       setStatus("error");
@@ -792,6 +805,7 @@ export function App() {
               </div>
               <GameList
                 games={games}
+                loadFailed={gamesFailed}
                 brilliancyCounts={brilliancyCounts}
                 source={profile.source}
                 onOpen={(g) =>

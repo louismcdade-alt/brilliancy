@@ -14,6 +14,8 @@ interface GameListProps {
   brilliancyCounts: Record<string, number>;
   /** Only used for the empty-state wording — every row already carries its own. */
   source: Source;
+  /** The request failed, rather than the player having no games. */
+  loadFailed?: boolean;
   onOpen: (game: Game) => void;
 }
 
@@ -75,11 +77,24 @@ function GameRow({
   );
 }
 
-export function GameList({ games, brilliancyCounts, source, onOpen }: GameListProps) {
+export function GameList({
+  games,
+  brilliancyCounts,
+  source,
+  loadFailed,
+  onOpen,
+}: GameListProps) {
   if (games.length === 0) {
+    // An empty list has two causes and they need opposite sentences. Saying
+    // "this player has no recent standard games" when the request was actually
+    // refused asserts something we do not know, directly underneath a banner
+    // saying the request failed — and Lichess makes this common rather than
+    // theoretical, since its export endpoint allows one request at a time.
     return (
       <p className="empty-note">
-        No recent standard-chess games on {SOURCE_LABEL[source]} for this player.
+        {loadFailed
+          ? `Couldn't load this player's games from ${SOURCE_LABEL[source]}, so there's nothing to show here yet. It's worth trying again in a moment.`
+          : `No recent standard-chess games on ${SOURCE_LABEL[source]} for this player.`}
       </p>
     );
   }

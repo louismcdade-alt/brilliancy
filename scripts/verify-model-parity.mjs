@@ -21,6 +21,10 @@ import { chromium } from "playwright";
 import { readFileSync } from "node:fs";
 import { loadRows } from "./lib/dataset.mjs";
 
+// Override to aim at a second dev server while 5173 is taken by a hand-driven
+// one — vite picks 5174 for the second `npm run dev`. Default unchanged.
+const BASE = process.env.BASE_URL || "http://localhost:5173/";
+
 const model = JSON.parse(readFileSync("src/engine/model.json", "utf8"));
 const cache = JSON.parse(readFileSync("scripts/harvest-multi.json", "utf8"));
 
@@ -49,7 +53,7 @@ for (const r of rows) {
 const browser = await chromium.launch({ channel: "msedge", headless: true });
 const page = await browser.newPage();
 page.on("pageerror", (e) => console.log("PAGEERROR:", e.message));
-await page.goto("http://localhost:5173/", { waitUntil: "networkidle" });
+await page.goto(BASE, { waitUntil: "networkidle" });
 
 const got = await page.evaluate(async (rows) => {
   const { brilliancyScore, SCORE_CUT } = await import("/src/engine/score.ts");

@@ -23,6 +23,12 @@ sources, 14/14 attribution, 100%/100% harness, and `net-audit` reports **0
 requests carrying a body** with no third party other than `api.chess.com` and
 `images.chesscomfiles.com`.
 
+Every browser-driven script above defaults to `http://localhost:5173/` and takes
+`BASE_URL` to point somewhere else. That matters when 5173 is already busy: a
+second `npm run dev` lands on 5174, so `BASE_URL=http://localhost:5174/ npm run
+verify` checks *your* tree instead of silently measuring whichever server got
+5173 first. (`verify:lichess` still honours `LICHESS_BASE` first, if you set it.)
+
 Notes on the three verifiers, each of which exists because something shipped
 broken that reading the code did not catch:
 

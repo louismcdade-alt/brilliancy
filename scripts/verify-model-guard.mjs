@@ -20,10 +20,14 @@ import { fixtures } from "./fixtures.mjs";
 
 const guard = fixtures.filter((f) => (f.half ?? "guard") === "guard");
 
+// Override to aim at a second dev server while 5173 is taken by a hand-driven
+// one — vite picks 5174 for the second `npm run dev`. Default unchanged.
+const BASE = process.env.BASE_URL || "http://localhost:5173/";
+
 const browser = await chromium.launch({ channel: "msedge", headless: true });
 const page = await browser.newPage();
 page.on("pageerror", (e) => console.log("PAGEERROR:", e.message));
-await page.goto("http://localhost:5173/", { waitUntil: "networkidle" });
+await page.goto(BASE, { waitUntil: "networkidle" });
 
 let misses = 0;
 let extras = 0;

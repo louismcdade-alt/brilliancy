@@ -6,7 +6,9 @@
  */
 import { chromium } from "playwright";
 
-const BASE = "http://localhost:5173/";
+// Override to aim at a second dev server while 5173 is taken by a hand-driven
+// one — vite picks 5174 for the second `npm run dev`. Default unchanged.
+const BASE = process.env.BASE_URL || "http://localhost:5173/";
 
 /**
  * The headings that exist ONLY in the static crawler copy inside #root. React

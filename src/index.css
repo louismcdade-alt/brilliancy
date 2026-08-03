@@ -93,6 +93,12 @@
   --sq-light: #efe9db;
   --sq-dark: #b6c5cb;
 
+  /* The two pens AS USED ON THE DIAGRAM, which is not the same thing as the two
+     pens as used on the sheet — see the dark block for why they had to be split
+     into their own tokens. On paper the values are identical. */
+  --board-pen: var(--pen);
+  --board-mark: var(--mark);
+
   --font-display: "Newsreader", Georgia, "Times New Roman", serif;
   --font-body: "Newsreader", Georgia, "Times New Roman", serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
@@ -132,8 +138,30 @@
     --good: #7bbf6a;
     --warn: #d8a851;
     --bad: #e2604f;
-    --sq-light: #cfc6b2;
-    --sq-dark: #6f8189;
+
+    /* THE DIAGRAM DOES NOT CHANGE INK WHEN YOU TURN THE LAMP DOWN.
+       This block used to dim the squares (#efe9db -> #cfc6b2, #b6c5cb -> #6f8189)
+       while ALSO lightening both pens above for dark paper. The two moves pull in
+       opposite directions and met in the middle: pale blue ink on pale tan board.
+       Measured against the squares they are actually drawn on —
+
+         red !! seal and sac circle on the dark squares   1.16 : 1
+         pen box on the brilliant square, and the arrow   1.44 : 1
+
+       — which is to say the !! itself, the one mark on the sheet the player did
+       not make and the entire point of the product, was invisible in dark mode.
+       Light theme was fine throughout (4.88 and 8.24), so this was only ever
+       wrong for the half of visitors whose OS asks for dark.
+
+       The fix is a deletion, and the design's own logic is what chooses it: the
+       PAD dims on a dark desk, but a printed diagram is printed — it is the same
+       bulletin either way, lying on a darker surface. So the square overrides go,
+       and the diagram's pens are pinned to their paper values rather than
+       following the sheet's pens, which still lighten (correctly) for dark stock.
+       Restores 8.24 / 5.62 for the pen marks and 4.88 / 3.33 for the red, on both
+       square colours, identical in both themes and clear of 1.4.11's 3:1. */
+    --board-pen: #23407e;
+    --board-mark: #bc2e24;
     --shadow: 0 14px 34px -16px rgba(0, 0, 0, 0.75);
     --shadow-bril: 0 0 0 1px var(--rule), 0 14px 34px -16px rgba(0, 0, 0, 0.75);
   }
@@ -604,7 +632,7 @@ button {
   content: "";
   position: absolute;
   inset: 14%;
-  border: 1.5px dashed var(--pen);
+  border: 1.5px dashed var(--board-pen);
   opacity: 0.55;
   z-index: 1;
 }
@@ -615,7 +643,7 @@ button {
   content: "";
   position: absolute;
   inset: 10%;
-  border: 2px solid var(--pen);
+  border: 2px solid var(--board-pen);
   z-index: 3;
 }
 
@@ -626,7 +654,7 @@ button {
   content: "";
   position: absolute;
   inset: 6%;
-  border: 2px solid var(--mark);
+  border: 2px solid var(--board-mark);
   border-radius: 50%;
   z-index: 3;
 }
@@ -651,7 +679,7 @@ button {
   font-size: clamp(15px, 3vw, 26px);
   line-height: 1;
   letter-spacing: -0.03em;
-  color: var(--mark);
+  color: var(--board-mark);
   pointer-events: none;
   text-shadow: 0 0 3px var(--sq-light), 0 0 6px var(--sq-light);
 }

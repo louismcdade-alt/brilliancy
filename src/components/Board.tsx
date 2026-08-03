@@ -167,7 +167,7 @@ export function Board({
                 refY="1.3"
                 orient="auto"
               >
-                <path d="M0,0 L2.6,1.3 L0,2.6 Z" fill="var(--pen)" />
+                <path d="M0,0 L2.6,1.3 L0,2.6 Z" fill="var(--board-pen)" />
               </marker>
             </defs>
             <line
@@ -175,7 +175,7 @@ export function Board({
               y1={arrowGeo.start.y}
               x2={arrowGeo.end.x}
               y2={arrowGeo.end.y}
-              stroke="var(--pen)"
+              stroke="var(--board-pen)"
               strokeWidth="1.4"
               strokeLinecap="round"
               opacity="0.85"

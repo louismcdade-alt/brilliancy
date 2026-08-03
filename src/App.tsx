@@ -29,11 +29,32 @@ const SCAN_DEPTH = 14;
  * contain none — the scan window is the difference between "you have no
  * brilliancies" and "we didn't look at the games that had them".
  */
+/**
+ * The ceiling on "Everything", and it is a real ceiling rather than a tidy-up.
+ *
+ * This used to be `Infinity`, which chesscom.ts faithfully turned into "walk
+ * every monthly archive". Hikaru has 152 of them (counted against the live API),
+ * so picking Everything on a heavy account meant ~150 sequential requests and
+ * tens of thousands of games fetched before a single move reached the engine —
+ * the exact shape of traffic that earns the rate-limiting RELEASE.md lists as a
+ * launch risk, and all of it spent before the user sees anything happen.
+ *
+ * 1000 is chosen from the other end: at the measured ~50 games/minute it is
+ * about twenty minutes of scanning, which is already far past what anyone will
+ * sit through. A cap that only binds on histories nobody would wait out anyway
+ * costs no real user anything.
+ *
+ * Lichess never had this problem — its adapter caps `max` at 500 because the
+ * value goes into a query string and `Infinity` would have been sent as the
+ * literal text "Infinity".
+ */
+const MAX_SCAN_GAMES = 1000;
+
 const SCOPES = [
   { games: 30, label: "Last 30" },
   { games: 100, label: "Last 100" },
   { games: 250, label: "Last 250" },
-  { games: Infinity, label: "Everything" },
+  { games: MAX_SCAN_GAMES, label: "Everything" },
 ];
 
 /**
@@ -581,9 +602,18 @@ export function App() {
                       ))}
                     </div>
                     <span className="scope-note">
+                      {/* Say when the cap bites. "Everything" that quietly stops
+                          at a thousand games is a small lie, and on a site whose
+                          headline claim is that it only approximates chess.com's
+                          !!, small lies are expensive. Most accounts never reach
+                          it and never see this clause. */}
                       {loadingMore
                         ? "loading games…"
-                        : `Takes ${estimate(scanCount)}. Brilliancies are rare — a single month often has none.`}
+                        : `Takes ${estimate(scanCount)}. ${
+                            scope === MAX_SCAN_GAMES && games.length >= MAX_SCAN_GAMES
+                              ? `Capped at the most recent ${MAX_SCAN_GAMES} games.`
+                              : "Brilliancies are rare — a single month often has none."
+                          }`}
                     </span>
                   </div>
 

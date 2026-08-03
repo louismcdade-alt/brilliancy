@@ -193,6 +193,47 @@ export function reasonLines(b: {
   return lines;
 }
 
+/**
+ * Why a sacrifice was weighed and declined — one clause, in pencil.
+ *
+ * Derived from the RAW NUMBERS, never from `rejectedBy`. That field names the
+ * hand-written gates, and the gates stopped being the shipping verdict at
+ * commit e646382 when a learned scorer replaced them — so printing "rejected by:
+ * necessary" would state something untrue about how the decision was actually
+ * reached. The numbers below are the same ones the model reads, so a reader who
+ * disagrees is disagreeing with the real evidence.
+ *
+ * Ordered by how much a reader can do with it. The quiet alternative comes
+ * first, because naming the move that got the same result for free is the only
+ * line here that teaches anything.
+ */
+export function nearMissLine(c: {
+  quietMove: string | null;
+  quietAlt: number;
+  playedEval: number;
+  evalLoss: number;
+}): string {
+  const margin = isFinite(c.quietAlt) ? c.playedEval - c.quietAlt : null;
+
+  // The interesting case, and the common one: something quieter did as well or
+  // better. Mate-scale margins are near ±100000 and are not a number of pawns,
+  // so they never get printed as one.
+  if (c.quietMove && margin !== null && margin < 0) {
+    return Math.abs(margin) >= 1000
+      ? `${c.quietMove} was far better without giving anything up`
+      : `${c.quietMove} was ${(Math.abs(margin) / 100).toFixed(2)} better, and gives up nothing`;
+  }
+  if (c.quietMove && margin !== null && margin < 50) {
+    return `${c.quietMove} did about as well without giving anything up`;
+  }
+  // No quiet alternative existed to compare against — a gap in what was
+  // measured, and said as such rather than dressed up as a verdict.
+  if (margin === null) return "Nothing quiet to compare it against";
+  if (c.playedEval < 0) return "The position was already lost";
+  if (c.evalLoss > 40) return `Cost ${(c.evalLoss / 100).toFixed(2)} against the engine's best`;
+  return "Close, but not clear enough";
+}
+
 /** Engine cp (player POV) → compact label like "+2.4" / "M3". */
 export function formatEval(cp: number, mate: number | null): string {
   if (mate !== null) return `M${Math.abs(mate)}`;

@@ -1755,3 +1755,102 @@ button {
   color: var(--bril);
   font-weight: 600;
 }
+
+/* ---- the pencil tier -------------------------------------------------------
+
+   Sacrifices the engine weighed and declined.
+
+   The sheet has two voices — the form is PRINTED and the moves are WRITTEN in
+   ballpoint — and the red pen is the annotator's, rationed to the !! alone.
+   A move the annotator considered and did NOT circle is a third thing, and
+   pencil is what it is: on the sheet, legible, obviously not the same claim as
+   ink. Hence the grey-graphite move text and the lighter rule. No red anywhere
+   in here, ever; the moment this borrows the !!'s colour it starts asserting
+   something it has no grounds for. */
+
+.pencil {
+  margin-top: 30px;
+  border-top: 1px solid var(--rule);
+  padding-top: 20px;
+}
+
+.pencil-head h3 {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin: 0 0 4px;
+}
+
+.pencil-head p {
+  font-size: 14px;
+  color: var(--text-dim);
+  margin: 0 0 14px;
+  max-width: 62ch;
+}
+
+.pencil-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+
+.pencil-row {
+  display: grid;
+  grid-template-columns: minmax(88px, auto) 1fr auto;
+  gap: 14px;
+  align-items: baseline;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  padding: 11px 6px;
+  cursor: pointer;
+  font: inherit;
+}
+
+.pencil-row:hover {
+  background: var(--carbon);
+}
+
+/* Graphite, not ballpoint: these were never written down in pen. */
+.pencil-move {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-dim);
+}
+
+.pencil-why {
+  font-size: 13.5px;
+  color: var(--text-dim);
+}
+
+.pencil-vs {
+  font-size: 12px;
+  color: var(--text-faint);
+  white-space: nowrap;
+}
+
+.pencil-more {
+  font-size: 12.5px;
+  color: var(--text-faint);
+  margin: 10px 0 0;
+  font-style: italic;
+}
+
+/* Three columns will not fit a phone. The opponent is the first thing to go —
+   it is the least useful of the three when you are deciding whether to tap. */
+@media (max-width: 560px) {
+  .pencil-row {
+    grid-template-columns: minmax(72px, auto) 1fr;
+  }
+  .pencil-vs {
+    display: none;
+  }
+}

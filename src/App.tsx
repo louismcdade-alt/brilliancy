@@ -5,6 +5,9 @@ import * as chesscom from "./api/chesscom";
 import * as lichess from "./api/lichess";
 import { engine } from "./engine/engine";
 import { scanGame } from "./engine/brilliancy";
+import type { Candidate, NearMiss } from "./engine/brilliancy";
+import { brilliancyScore, SCORE_CUT } from "./engine/score";
+import { NearMissList } from "./components/NearMissList";
 import { SearchBar } from "./components/SearchBar";
 import { ProfileHeader } from "./components/ProfileHeader";
 import { StatsDashboard } from "./components/StatsDashboard";
@@ -147,6 +150,7 @@ export function App() {
    * we do not know — directly under a banner saying the request failed.
    */
   const [gamesFailed, setGamesFailed] = useState(false);
+  const [nearMisses, setNearMisses] = useState<NearMiss[]>([]);
 
   const [scope, setScope] = useState<number>(GAMES_TO_LOAD);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -187,6 +191,15 @@ export function App() {
    * app can have. Two extra characters in a key is a cheap way not to have it.
    */
   const scanCache = useRef(new Map<string, Brilliancy[]>());
+  /**
+   * The declined sacrifices, cached beside the flagged ones under the same key.
+   *
+   * A PARALLEL map rather than widening scanCache's value: that cache's keying
+   * and its cancelled-scan rule are subtle and load-bearing, and there is no
+   * reason to reopen them to add a second payload. Both maps are written and
+   * read together, so they cannot disagree about which games have been scanned.
+   */
+  const nearCache = useRef(new Map<string, NearMiss[]>());
   const cacheKey = (g: Game) => `${g.source}:${g.id}:${g.userColor}`;
 
   /**
@@ -248,6 +261,7 @@ export function App() {
     setError(null);
     setProfile(null);
     setBrilliancies([]);
+    setNearMisses([]);
     setScanState("idle");
     setScanError(null);
     setGamesFailed(false);
@@ -348,11 +362,26 @@ export function App() {
         return;
       }
       await engine.init();
-      const found = await scanGame(game, { depth: SCAN_DEPTH });
+      // Collect near-misses here too. Analysing one game is the path someone
+      // takes when they already believe there is something in it, which is
+      // exactly when "the engine looked at this and here is why it said no" is
+      // the answer they came for.
+      const weighed: NearMiss[] = [];
+      const found = await scanGame(game, {
+        depth: SCAN_DEPTH,
+        onCandidate: (c: Candidate) => {
+          if (c.admitted !== "offer") return;
+          weighed.push({ game, candidate: c, score: brilliancyScore(c) });
+        },
+      });
+      const near = weighed.filter((n) => n.score < SCORE_CUT);
+      scanCache.current.set(cacheKey(game), found);
+      nearCache.current.set(cacheKey(game), near);
       setBrilliancies((prev) => [
         ...prev.filter((b) => b.game.id !== game.id),
         ...found,
       ]);
+      setNearMisses((prev) => [...prev.filter((n) => n.game.id !== game.id), ...near]);
       setGames((prev) => (prev.some((g) => g.id === game.id) ? prev : [game, ...prev]));
       setScanState("done");
       setViewer({ game, brilliancies: found, initialPly: found[0]?.ply });
@@ -375,6 +404,7 @@ export function App() {
     setScanState("running");
     setScanError(null);
     setBrilliancies([]);
+    setNearMisses([]);
     setProgress({ done: 0, total: toScan.length });
     setEngineWarming(true);
 
@@ -393,16 +423,42 @@ export function App() {
       try {
         const game = toScan[i];
         const cached = scanCache.current.get(cacheKey(game));
+        // Every candidate the engine weighed, flagged or not. Collected into a
+        // local array rather than straight into state: onCandidate fires several
+        // times per game and a setState per callback would re-render the gallery
+        // on every rejected move.
+        const weighed: NearMiss[] = [];
         // Re-point `game` on a cache hit: the id is the same but the object came
         // from an earlier fetch, and the UI reads b.game for opponent and date.
         const found = cached
           ? cached.map((b) => ({ ...b, game }))
-          : await scanGame(game, { depth: SCAN_DEPTH }, () => cancelScan.current);
+          : await scanGame(
+              game,
+              {
+                depth: SCAN_DEPTH,
+                onCandidate: (c: Candidate) => {
+                  // Offer candidates only. An `allow` row is outside the model's
+                  // training distribution, so its score is not a confidence in
+                  // anything -- brilliancy.ts refuses to flag one for the same
+                  // reason, and showing it here would launder that.
+                  if (c.admitted !== "offer") return;
+                  weighed.push({ game, candidate: c, score: brilliancyScore(c) });
+                },
+              },
+              () => cancelScan.current,
+            );
         // Never cache a cancelled game: scanGame returns whatever it found
         // before the abort, which is a partial answer wearing a complete one's
         // clothes.
-        if (!cached && !cancelScan.current) scanCache.current.set(cacheKey(game), found);
+        const near = cached
+          ? (nearCache.current.get(cacheKey(game)) ?? []).map((n) => ({ ...n, game }))
+          : weighed.filter((n) => n.score < SCORE_CUT);
+        if (!cached && !cancelScan.current) {
+          scanCache.current.set(cacheKey(game), found);
+          nearCache.current.set(cacheKey(game), near);
+        }
         if (found.length) setBrilliancies((prev) => [...prev, ...found]);
+        if (near.length) setNearMisses((prev) => [...prev, ...near]);
       } catch {
         // skip a game that fails to analyze; keep the scan going
       }
@@ -787,13 +843,31 @@ export function App() {
                       }
                     />
                   </div>
-                ) : scanState === "done" ? (
+                ) : scanState === "done" && nearMisses.length === 0 ? (
+                  // Only the true nothing-at-all case now. When the engine
+                  // weighed something, the pencil tier below says so and this
+                  // paragraph would be contradicting it.
                   <p className="empty-note">
                     No brilliancies in {scanCount === 1 ? "that game" : `these ${scanCount} games`} —
-                    nothing cleared the bar. Brilliant moves are rare, and a short window can easily
-                    hold none: try widening the scan before concluding you've never played one.
+                    nothing even reached the engine. Brilliant moves are rare, and a short window can
+                    easily hold none: try widening the scan before concluding you've never played
+                    one.
                   </p>
                 ) : null)}
+
+              {scanState === "done" && (
+                <NearMissList
+                  nearMisses={nearMisses}
+                  hasBrilliancies={sortedBrilliancies.length > 0}
+                  onOpen={(n) =>
+                    setViewer({
+                      game: n.game,
+                      brilliancies: brilliancies.filter((x) => x.game.id === n.game.id),
+                      initialPly: n.candidate.ply,
+                    })
+                  }
+                />
+              )}
             </section>
 
             <section className="wrap section" aria-labelledby="h-games">

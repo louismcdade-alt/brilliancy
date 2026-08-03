@@ -139,9 +139,50 @@ export type OfferShape = "direct" | "discovered" | "promotion";
 const REJECT_SHAPES: readonly OfferShape[] = ["promotion"];
 
 /** Every gate a sacrifice was measured against — for calibration tooling. */
+/**
+ * A sacrifice the engine weighed and declined, kept for display.
+ *
+ * The scan already pays for every one of these — a MultiPV search, a post-move
+ * search and a shallow search each — and until now threw all of it away unless
+ * the move cleared the cut. For most players that meant a scan of thirty games
+ * returned an apology, having done all the work needed to say something far more
+ * interesting.
+ */
+export interface NearMiss {
+  game: Game;
+  candidate: Candidate;
+  /** The learned scorer's confidence, same scale as Brilliancy.score. */
+  score: number;
+}
+
 export interface Candidate {
   moveNumber: number;
   san: string;
+  /**
+   * Enough to RENDER this move, not merely to score it.
+   *
+   * A Candidate used to be a row in a dataset: it carried the numbers the model
+   * reads and nothing you could draw. Everything below is already in scope where
+   * the candidate is built, and adding it is what lets a rejected candidate be
+   * shown to a reader rather than only counted in a harness.
+   */
+  ply: number;
+  from: string;
+  to: string;
+  fenBefore: string;
+  fenAfter: string;
+  sacPiece: string | null;
+  /**
+   * The best QUIET alternative, in SAN — the move that measures `quietAlt`.
+   *
+   * The engine has always computed this line and always thrown the move away,
+   * keeping only its evaluation. It is the most explanatory thing in the whole
+   * scan: "you gave up the knight on f5, and `Rfe1` got the same thing without
+   * it" is a sentence no other free tool produces, and it costs one conversion
+   * from the UCI already in hand. null when MultiPV found no quiet alternative
+   * at all, which is the same condition that makes `quietAlt` non-finite.
+   */
+  quietMove: string | null;
   sacrifice: number;
   sacSquare: string | null;
   playedEval: number;
@@ -417,10 +458,14 @@ export async function scanGame(
     // material. Another winning *tactic* in the list must not demote this one.
     const playedUci = move.from + move.to;
     let quietAlt = -Infinity;
+    let quietUci: string | null = null;
     for (const line of lines) {
       if (!line.move || line.move.startsWith(playedUci)) continue;
       if (isSacrifice(move.fenBefore, line.move, game.userColor, minSac)) continue;
-      if (line.cp > quietAlt) quietAlt = line.cp;
+      if (line.cp > quietAlt) {
+        quietAlt = line.cp;
+        quietUci = line.move;
+      }
     }
 
     // sound (still ≥ roughly equal) AND strong (engine's best or close) AND
@@ -449,6 +494,13 @@ export async function scanGame(
     const candidate: Candidate = {
       moveNumber: move.moveNumber,
       san: move.san,
+      ply,
+      from: move.from,
+      to: move.to,
+      fenBefore: move.fenBefore,
+      fenAfter: move.fenAfter,
+      sacPiece: offered.square ? (after.get(offered.square as Square)?.type ?? null) : null,
+      quietMove: quietUci ? uciToSan(move.fenBefore, quietUci) : null,
       // Deep minus shallow, both from the opponent's side after the move, so the
       // two negations cancel and the difference is clean.
       surprise: shallow ? Math.round(-post.cp - -shallow.cp) : null,
@@ -586,6 +638,21 @@ export function sacrificeValue(
  * pre-filter; used to classify MultiPV alternatives as quiet vs tactical for the
  * "necessary" gate.
  */
+/**
+ * UCI to SAN, for display only. Returns null rather than throwing: a move we
+ * cannot name is a line we simply do not print, and it must never take down a
+ * scan that has otherwise succeeded.
+ */
+function uciToSan(fen: string, uci: string): string | null {
+  try {
+    const c = new Chess(fen);
+    const m = c.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] });
+    return m ? m.san : null;
+  } catch {
+    return null;
+  }
+}
+
 function isSacrifice(
   fen: string,
   uci: string,

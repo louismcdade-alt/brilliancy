@@ -1,4 +1,5 @@
-import type { Game } from "../types";
+import type { Game, Source } from "../types";
+import { SOURCE_LABEL } from "../types";
 import {
   formatTimeControl,
   resultClass,
@@ -11,6 +12,8 @@ import {
 interface GameListProps {
   games: Game[];
   brilliancyCounts: Record<string, number>;
+  /** Only used for the empty-state wording — every row already carries its own. */
+  source: Source;
   onOpen: (game: Game) => void;
 }
 
@@ -55,9 +58,13 @@ function GameRow({
   );
 }
 
-export function GameList({ games, brilliancyCounts, onOpen }: GameListProps) {
+export function GameList({ games, brilliancyCounts, source, onOpen }: GameListProps) {
   if (games.length === 0) {
-    return <p className="empty-note">No standard-chess games found in recent months.</p>;
+    return (
+      <p className="empty-note">
+        No recent standard-chess games on {SOURCE_LABEL[source]} for this player.
+      </p>
+    );
   }
   return (
     <div className="game-list">

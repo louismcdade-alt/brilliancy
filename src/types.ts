@@ -1,8 +1,29 @@
 export type Color = "w" | "b";
 
+/**
+ * Which site a profile or game came from.
+ *
+ * Carried on the data rather than held only in App state because two things
+ * downstream genuinely need it: the scan cache (a chess.com uuid and a Lichess
+ * 8-char id live in the same Map and must not be able to collide) and the UI
+ * copy (a "chess.com game link" field is wrong for a Lichess user). Anything
+ * that has a Game can therefore answer "where did this come from" without being
+ * handed a second argument.
+ */
+export type Source = "chesscom" | "lichess";
+
+/** Display name for a source, for use in copy. */
+export const SOURCE_LABEL: Record<Source, string> = {
+  chesscom: "chess.com",
+  lichess: "Lichess",
+};
+
 export interface Profile {
+  source: Source;
   username: string;
   name?: string;
+  /** Federation title ("GM", "IM", "WFM"…). Both APIs report it; neither always. */
+  title?: string;
   avatar?: string;
   /** Optional: absent when the API returns a URL we won't render (see safeUrl). */
   url?: string;
@@ -20,6 +41,15 @@ export interface RatingRecord {
   win: number;
   loss: number;
   draw: number;
+  /**
+   * Games played at this time class, when the source reports a total but not a
+   * win/draw/loss split. Lichess's `perfs` are exactly that shape — a rating and
+   * a game count and nothing else — so without this the card would have to claim
+   * "0 games" or say nothing about volume at all.
+   */
+  games?: number;
+  /** Lichess `prov`: too few games for the rating to have settled. */
+  provisional?: boolean;
 }
 
 export interface Stats {
@@ -27,14 +57,34 @@ export interface Stats {
   blitz?: RatingRecord;
   rapid?: RatingRecord;
   daily?: RatingRecord;
+  /** Lichess only — chess.com has no classical pool. */
+  classical?: RatingRecord;
+  /** Lichess only — the equivalent of chess.com's "daily", but named honestly. */
+  correspondence?: RatingRecord;
   tacticsHighest?: number;
   fide?: number;
 }
 
-export type TimeClass = "bullet" | "blitz" | "rapid" | "daily";
+/**
+ * The union is the union of BOTH sites' pools, not a lowest common denominator.
+ *
+ * Folding Lichess "classical" into "daily" would print a false label on a real
+ * rating — they are different pools with different meanings (classical is a
+ * long over-the-board-style clock; daily/correspondence is days per move). The
+ * cost of widening is one entry each in StatsDashboard's ORDER; the cost of
+ * squashing would be paid by every Lichess user reading a wrong number.
+ */
+export type TimeClass =
+  | "bullet"
+  | "blitz"
+  | "rapid"
+  | "daily"
+  | "classical"
+  | "correspondence";
 export type GameResult = "win" | "loss" | "draw";
 
 export interface Game {
+  source: Source;
   id: string;
   url: string;
   pgn: string;

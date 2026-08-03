@@ -9,15 +9,22 @@
 #       'wasm-unsafe-eval' is required — Stockfish is a WebAssembly build and
 #       cannot compile without it. It permits WASM compilation ONLY; it does not
 #       re-enable eval() or inline script.
-#   connect-src  the chess.com API, and nothing else. If a dependency were ever
-#       compromised, this is what stops it exfiltrating anything.
+#   connect-src  the chess.com API and the Lichess API, and nothing else. If a
+#       dependency were ever compromised, this is what stops it exfiltrating
+#       anything. Lichess is listed as the whole https://lichess.org origin
+#       rather than a path or an api.* subdomain because it does not have one:
+#       the single-game export this app depends on lives at
+#       /game/export/{id}, OUTSIDE /api, and CSP cannot express a path prefix
+#       for connect-src anyway.
 #   img-src      chess.com's avatar CDN, plus data: for the share card canvas.
+#       No Lichess host is needed: the public Lichess user document carries no
+#       avatar URL, so the app renders no remote Lichess image at all.
 #   frame-ancestors 'none'  — the site is never framed, so clickjacking is out.
 #
 # Deliberately absent: unsafe-inline anywhere, and any font/script CDN.
 
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self' blob:; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://images.chesscomfiles.com; connect-src 'self' https://api.chess.com; form-action 'none'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self' blob:; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://images.chesscomfiles.com; connect-src 'self' https://api.chess.com https://lichess.org; form-action 'none'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'
   X-Content-Type-Options: nosniff
   Referrer-Policy: no-referrer
   Permissions-Policy: geolocation=(), microphone=(), camera=(), payment=(), usb=(), interest-cohort=()

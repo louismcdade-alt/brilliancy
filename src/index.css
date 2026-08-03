@@ -280,6 +280,38 @@ button {
 
 /* ---- search --------------------------------------------------------- */
 
+/* Two stacked lines of one form field: the tick-boxes that say WHICH register,
+   then the line you write the name on. Reads top-to-bottom the way a filled
+   field does, and keeps the input at full width instead of squeezing a picker in
+   beside it. */
+.search-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.source-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* The source picker is the same control as "How far back" (.scope-seg), one
+   notch smaller so it sits under the field rather than competing with it. */
+.scope-seg-sm .scope-opt {
+  font-size: 11px;
+  padding: 4px 11px;
+  letter-spacing: 0.02em;
+}
+
+/* In the topbar there is no room for a printed label, so the segments carry the
+   whole meaning and shrink again to stay on one line with the field. */
+.topbar-search .search-form { gap: 6px; }
+.topbar-search .scope-seg-sm .scope-opt {
+  font-size: 10.5px;
+  padding: 3px 9px;
+}
+
 .search {
   display: flex;
   align-items: center;
@@ -711,6 +743,22 @@ button {
   flex-wrap: wrap;
 }
 
+/* A federation title is printed on the form, not written by the player — so it
+   takes the printed voice (serif, small caps, ink) and sits before the name the
+   way "GM" is printed before a name on a pairing sheet. */
+.profile-title {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--stock);
+  background: var(--text-hi);
+  border-radius: 0;
+  padding: 2px 7px;
+  align-self: center;
+}
+
 .profile-handle {
   font-family: var(--font-mono);
   font-size: 14px;
@@ -794,6 +842,16 @@ button {
   font-family: var(--font-mono);
   font-size: 11px;
   color: var(--gold);
+}
+
+/* A caveat, printed in the margin voice — never the red pen, which belongs to
+   the !! alone. */
+.stat-prov {
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-faint);
 }
 
 .wld {

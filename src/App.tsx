@@ -1,12 +1,8 @@
 import { useMemo, useRef, useState } from "react";
-import type { Brilliancy, Game, Profile, Stats } from "./types";
-import {
-  fetchGameByUrl,
-  fetchProfile,
-  fetchRecentGames,
-  fetchStats,
-  isNotFound,
-} from "./api/chesscom";
+import type { Brilliancy, Game, Profile, Source, Stats } from "./types";
+import { SOURCE_LABEL } from "./types";
+import * as chesscom from "./api/chesscom";
+import * as lichess from "./api/lichess";
 import { engine } from "./engine/engine";
 import { scanGame } from "./engine/brilliancy";
 import { SearchBar } from "./components/SearchBar";
@@ -16,6 +12,14 @@ import { GameList } from "./components/GameList";
 import { BrilliancyGallery } from "./components/BrilliancyGallery";
 import { BoardViewer } from "./components/BoardViewer";
 import { Board } from "./components/Board";
+
+/**
+ * The two adapters expose the same five names, so the whole of the rest of this
+ * file picks a module and then never asks which site it is talking to again.
+ * `isNotFound` has to come from the module too: each adapter has its own private
+ * ApiError class, so chesscom's version would answer `false` to a Lichess 404.
+ */
+const API = { chesscom, lichess } as const;
 
 const GAMES_TO_LOAD = 30; // opening view: enough to render fast, not the scan limit
 const SCAN_DEPTH = 14;
@@ -47,7 +51,40 @@ function estimate(games: number): string {
 // A Greek-gift sacrifice — decorates the hero with a recognizable !! motif.
 const HERO_FEN = "r1bq1rk1/ppp2ppp/2n2n2/3p4/1b1P4/2NB1N2/PPP2PPP/R1BQ1RK1 w - - 0 1";
 
-const EXAMPLES = ["Hikaru", "MagnusCarlsen", "GothamChess"];
+/**
+ * Example handles have to be per-source: "Hikaru" on Lichess is not Nakamura,
+ * and a chip that loads a stranger's games is worse than no chip at all.
+ */
+const EXAMPLES: Record<Source, string[]> = {
+  chesscom: ["Hikaru", "MagnusCarlsen", "GothamChess"],
+  lichess: ["DrNykterstein", "EricRosen", "penguingim1"],
+};
+
+/**
+ * A pasted profile link should just work. Both sites put the handle in a
+ * predictable place, and the URL says which site it is far more reliably than
+ * the handle ever could — so a paste sets the source as well as the name, and
+ * the segmented control follows along rather than silently disagreeing with what
+ * was pasted.
+ */
+function parseQuery(raw: string, fallback: Source): { source: Source; username: string } {
+  const text = raw.trim();
+  const lower = text.toLowerCase();
+
+  if (lower.includes("lichess.org")) {
+    // https://lichess.org/@/EricRosen  ·  lichess.org/@/EricRosen/all
+    const m = text.match(/lichess\.org\/@\/([A-Za-z0-9_-]+)/i);
+    if (m) return { source: "lichess", username: m[1] };
+  }
+  if (lower.includes("chess.com")) {
+    // https://www.chess.com/member/Hikaru  ·  chess.com/member/hikaru/stats
+    const m = text.match(/chess\.com\/(?:member|player)\/([A-Za-z0-9_-]+)/i);
+    if (m) return { source: "chesscom", username: m[1] };
+  }
+  // A bare "@handle" is a handle, not a URL — strip the sigil the field already
+  // prints so pasting "@hikaru" doesn't search for a user literally called that.
+  return { source: fallback, username: text.replace(/^@+/, "") };
+}
 
 type Status = "idle" | "loading" | "loaded" | "error";
 
@@ -59,6 +96,15 @@ interface ViewerState {
 
 export function App() {
   const [query, setQuery] = useState("");
+  /**
+   * The source the SEARCH BOX is set to. Deliberately separate from
+   * `profile.source`, which is the source the loaded player actually came from:
+   * flicking the control to Lichess while a chess.com profile is on screen must
+   * not make "load more games" start asking Lichess for that player's history.
+   * Everything after a successful load reads profile.source; only loadUser reads
+   * this one.
+   */
+  const [source, setSource] = useState<Source>("chesscom");
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
 
@@ -97,14 +143,21 @@ export function App() {
    * the page, and a cache that survives the tab would make that harder to say
    * plainly. It empties on reload, which is the correct trade.
    *
-   * KEYED BY GAME **AND COLOUR**. A scan only judges one side, so the same game
-   * has two different answers depending on whose moves are being looked at — and
-   * both players can be searched in one session, since a game id is shared
-   * between them. Keying on the id alone would serve White's brilliancies to
-   * someone who searched Black.
+   * KEYED BY SOURCE, GAME **AND COLOUR**. A scan only judges one side, so the
+   * same game has two different answers depending on whose moves are being
+   * looked at — and both players can be searched in one session, since a game id
+   * is shared between them. Keying on the id alone would serve White's
+   * brilliancies to someone who searched Black.
+   *
+   * The source prefix guards the same failure across sites. This cache outlives
+   * a search — that is the whole point of it — so a chess.com uuid and a Lichess
+   * 8-character id share one Map, and nothing in either id space rules out a
+   * collision. A collision here would not error; it would quietly show one
+   * player a different game's brilliancies, which is the worst kind of bug this
+   * app can have. Two extra characters in a key is a cheap way not to have it.
    */
   const scanCache = useRef(new Map<string, Brilliancy[]>());
-  const cacheKey = (g: Game) => `${g.id}:${g.userColor}`;
+  const cacheKey = (g: Game) => `${g.source}:${g.id}:${g.userColor}`;
 
   /**
    * Likeliest first, not biggest first.
@@ -125,6 +178,12 @@ export function App() {
     [brilliancies],
   );
 
+  /**
+   * Keyed by bare game id, unlike scanCache: `brilliancies` is cleared by
+   * loadUser on every search, so everything in it belongs to the one profile
+   * currently on screen and therefore to one source. There is no cross-source
+   * lifetime here for a collision to happen in.
+   */
   const brilliancyCounts = useMemo(() => {
     const counts: Record<string, number> = {};
     for (const b of brilliancies) counts[b.game.id] = (counts[b.game.id] ?? 0) + 1;
@@ -146,9 +205,14 @@ export function App() {
     };
   }, [games]);
 
-  async function loadUser(name: string) {
-    const username = name.trim();
+  async function loadUser(name: string, forceSource?: Source) {
+    const parsed = parseQuery(name, forceSource ?? source);
+    const username = parsed.username;
+    const site = parsed.source;
     if (!username) return;
+    // A pasted profile URL can override the picker; reflect that in the control
+    // so it never shows a different site from the one being searched.
+    if (site !== source) setSource(site);
     cancelScan.current = true;
     setStatus("loading");
     setError(null);
@@ -160,21 +224,42 @@ export function App() {
     setGameUrl("");
     setSingleError(null);
 
+    const api = API[site];
     try {
-      const prof = await fetchProfile(username);
+      const prof = await api.fetchProfile(username);
+      /**
+       * Stats and games are each allowed to fail without losing the profile —
+       * but a games failure is NOT allowed to fail silently. It used to be:
+       * `.catch(() => [])` rendered "0 games loaded" identically whether the
+       * player has none or the request was refused, and Lichess makes that
+       * distinction matter, since its export endpoint permits only one request
+       * at a time per IP and answers 429 to the second. "You have no games" is a
+       * conclusion about the player; "wait a minute" is a thing to do.
+       *
+       * Stats keeps its silent catch: a missing rating card is self-evidently a
+       * gap, and there is nothing the reader can act on.
+       */
+      let gamesError: string | null = null;
       const [st, gms] = await Promise.all([
-        fetchStats(username).catch(() => ({}) as Stats),
-        fetchRecentGames(username, GAMES_TO_LOAD).catch(() => [] as Game[]),
+        api.fetchStats(username).catch(() => ({}) as Stats),
+        api.fetchRecentGames(username, GAMES_TO_LOAD).catch((e) => {
+          gamesError =
+            e instanceof Error && e.message
+              ? e.message
+              : `Couldn't load games from ${SOURCE_LABEL[site]}. Try again shortly.`;
+          return [] as Game[];
+        }),
       ]);
       setProfile(prof);
       setStats(st);
       setGames(gms);
+      setScanError(gamesError);
       setStatus("loaded");
     } catch (e) {
       setStatus("error");
       setError(
-        isNotFound(e)
-          ? `No chess.com player called “${username}”. Check the spelling and try again.`
+        api.isNotFound(e)
+          ? `No ${SOURCE_LABEL[site]} player called “${username}”. Check the spelling — and the source, if they play on the other site.`
           : e instanceof Error
             ? e.message
             : "Something went wrong loading that player.",
@@ -189,9 +274,16 @@ export function App() {
     if (next <= games.length) return; // already have them; just scan fewer
     setLoadingMore(true);
     try {
-      setGames(await fetchRecentGames(profile.username, next));
-    } catch {
-      setScanError("Couldn't load more games from chess.com. Try again shortly.");
+      setGames(await API[profile.source].fetchRecentGames(profile.username, next));
+    } catch (e) {
+      // Surface the adapter's own message when it has one — Lichess's 429 tells
+      // the user to wait a minute, which is actionable; a generic "try again
+      // shortly" would throw that away.
+      setScanError(
+        e instanceof Error && e.message
+          ? e.message
+          : `Couldn't load more games from ${SOURCE_LABEL[profile.source]}. Try again shortly.`,
+      );
     } finally {
       setLoadingMore(false);
     }
@@ -208,9 +300,11 @@ export function App() {
     setSingleState("working");
     setSingleError(null);
     try {
-      const game = await fetchGameByUrl(profile.username, raw);
+      const game = await API[profile.source].fetchGameByUrl(profile.username, raw);
       if (!game) {
-        setSingleError(`Couldn't find that game in @${profile.username}'s archives.`);
+        setSingleError(
+          `Couldn't find that ${SOURCE_LABEL[profile.source]} game among @${profile.username}'s games.`,
+        );
         return;
       }
       await engine.init();
@@ -292,6 +386,8 @@ export function App() {
   }
 
   const showHero = !profile;
+  /** The site whose data is on screen — not necessarily the one in the picker. */
+  const activeSite = profile ? SOURCE_LABEL[profile.source] : SOURCE_LABEL[source];
 
   return (
     <div className="shell">
@@ -300,13 +396,15 @@ export function App() {
           <button className="mark" onClick={reset}>
             <span className="mark-glyph">!!</span>
             <span>Brilliancy</span>
-            <span className="mark-sub">for chess.com</span>
+            <span className="mark-sub">chess.com &amp; lichess</span>
           </button>
           {profile && (
             <div className="topbar-search">
               <SearchBar
                 value={query}
                 onChange={setQuery}
+                source={source}
+                onSourceChange={setSource}
                 onSubmit={() => loadUser(query)}
                 loading={status === "loading"}
                 variant="bar"
@@ -332,17 +430,21 @@ export function App() {
                   <span className="hero-bangs" aria-hidden="true">
                     !!
                   </span>
-                  <span className="sr-only">brilliant moves — Brilliancy for chess.com</span>
+                  <span className="sr-only">
+                    brilliant moves — Brilliancy for chess.com and Lichess
+                  </span>
                 </h1>
                 <p className="hero-lede">
-                  Drop in any chess.com username. We pull your recent games and run a chess engine
-                  over them to surface your <strong>brilliant moves</strong> — the sound sacrifices —
-                  next to your ratings and record.
+                  Drop in any chess.com or Lichess username. We pull your recent games and run a
+                  chess engine over them to surface your <strong>brilliant moves</strong> — the
+                  sound sacrifices — next to your ratings and record.
                 </p>
                 <div className="hero-search-wrap">
                   <SearchBar
                     value={query}
                     onChange={setQuery}
+                    source={source}
+                    onSourceChange={setSource}
                     onSubmit={() => loadUser(query)}
                     loading={status === "loading"}
                     variant="hero"
@@ -350,13 +452,17 @@ export function App() {
                   />
                   <div className="hero-hint">
                     <span>Try</span>
-                    {EXAMPLES.map((ex) => (
+                    {EXAMPLES[source].map((ex) => (
                       <button
                         key={ex}
                         className="hero-chip"
                         onClick={() => {
                           setQuery(ex);
-                          loadUser(ex);
+                          // Pass the source explicitly rather than relying on the
+                          // state update above having landed: setSource is
+                          // asynchronous, and a chip that searched the wrong site
+                          // on its first click would be a maddening bug.
+                          loadUser(ex, source);
                         }}
                       >
                         {ex}
@@ -421,7 +527,7 @@ export function App() {
                   <h2>Ratings &amp; record</h2>
                 </div>
               </div>
-              <StatsDashboard stats={stats} />
+              <StatsDashboard stats={stats} source={profile.source} />
             </section>
 
             <section className="wrap section">
@@ -489,9 +595,9 @@ export function App() {
                         value={gameUrl}
                         onChange={(e) => setGameUrl(e.target.value)}
                         onKeyDown={(e) => e.key === "Enter" && scanOneGame()}
-                        placeholder="paste a chess.com game link"
+                        placeholder={`paste a ${activeSite} game link`}
                         spellCheck={false}
-                        aria-label="chess.com game URL"
+                        aria-label={`${activeSite} game URL`}
                       />
                     </label>
                     <button
@@ -578,6 +684,7 @@ export function App() {
               <GameList
                 games={games}
                 brilliancyCounts={brilliancyCounts}
+                source={profile.source}
                 onOpen={(g) =>
                   setViewer({
                     game: g,
@@ -595,13 +702,22 @@ export function App() {
           {/* Attribution here isn't decoration: shipping Stockfish's WASM build to
               every visitor is GPL distribution, and the cburnett pieces are
               CC-BY-SA. Both require credit and a licence link at the point of use. */}
+          {/* This line is a factual claim about where the page sends requests, so
+              it has to list every host it can reach — adding Lichess to
+              connect-src without adding it here would leave the site quietly
+              understating what it talks to. */}
           <p className="footer-line">
-            Data from the public{" "}
+            Games come from whichever site you search: the public{" "}
             <a href="https://www.chess.com/news/view/published-data-api" target="_blank" rel="noreferrer">
               chess.com API
+            </a>{" "}
+            or the public{" "}
+            <a href="https://lichess.org/api" target="_blank" rel="noreferrer">
+              Lichess API
             </a>
-            . Brilliant moves are found in your browser and are an approximation of
-            chess.com's <b>!!</b> — not affiliated with or endorsed by chess.com.
+            . Nothing else is contacted, and no account is needed for either. Brilliant moves are
+            found in your browser and are an approximation of chess.com's <b>!!</b> — not
+            affiliated with or endorsed by chess.com or Lichess.
           </p>
           <p className="footer-line footer-legal">
             Engine:{" "}

@@ -78,8 +78,10 @@ export async function fetchProfile(username: string): Promise<Profile> {
     country = parts[parts.length - 1]; // ".../country/US" -> "US"
   }
   return {
+    source: "chesscom",
     username: raw.username ?? u,
     name: raw.name,
+    title: typeof raw.title === "string" ? raw.title : undefined,
     avatar: safeUrl(raw.avatar),
     url: safeUrl(raw.url),
     country,
@@ -143,6 +145,7 @@ function normalizeGame(raw: any, username: string): Game | null {
   const opp = userColor === "w" ? raw.black : raw.white;
 
   return {
+    source: "chesscom",
     id: raw.uuid ?? raw.url,
     url: safeUrl(raw.url) ?? "",
     pgn: raw.pgn,

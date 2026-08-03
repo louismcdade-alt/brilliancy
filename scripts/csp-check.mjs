@@ -22,7 +22,7 @@ const CSP =
   "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self' blob:; " +
   "style-src 'self' 'unsafe-inline'; font-src 'self'; " +
   "img-src 'self' data: https://images.chesscomfiles.com; " +
-  "connect-src 'self' https://api.chess.com; form-action 'none'; " +
+  "connect-src 'self' https://api.chess.com https://lichess.org; form-action 'none'; " +
   "frame-ancestors 'none'; base-uri 'self'; object-src 'none'";
 
 const TYPES = {

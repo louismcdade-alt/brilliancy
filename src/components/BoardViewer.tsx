@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import type { Brilliancy, Game } from "../types";
 import { parseGame, START_FEN } from "../chess/replay";
 import { shareBrilliancy } from "../lib/shareImage";
+import { shareBrilliancyGif } from "../lib/shareGif";
 import { Board } from "./Board";
 import {
   formatEval,
@@ -22,8 +23,20 @@ interface BoardViewerProps {
   onClose: () => void;
 }
 
+/**
+ * Which share is in flight, if any. One piece of state rather than two booleans
+ * so the two buttons can't both claim to be working — rendering a clip is
+ * ~1 s of main thread and firing a second render on top of it would double the
+ * memory for no benefit.
+ */
+type ShareKind = "png" | "gif";
+type ShareState =
+  | { kind: null }
+  | { kind: ShareKind; phase: "working"; percent: number }
+  | { kind: ShareKind; phase: "done" };
+
 export function BoardViewer({ game, brilliancies, initialPly, username, onClose }: BoardViewerProps) {
-  const [shareState, setShareState] = useState<"idle" | "working" | "done">("idle");
+  const [share, setShare] = useState<ShareState>({ kind: null });
   const moves = useMemo(() => {
     try {
       return parseGame(game.pgn);
@@ -53,18 +66,32 @@ export function BoardViewer({ game, brilliancies, initialPly, username, onClose 
   );
 
   const onShare = useCallback(
-    async (b: Brilliancy) => {
-      setShareState("working");
+    async (b: Brilliancy, kind: ShareKind) => {
+      setShare({ kind, phase: "working", percent: 0 });
       try {
-        const how = await shareBrilliancy(b, username ?? "");
-        setShareState("done");
-        setTimeout(() => setShareState("idle"), how === "downloaded" ? 2200 : 800);
+        // The clip reports progress because it takes ~1 s on desktop and
+        // several times that on a mid-range phone; a button that just says
+        // "Rendering…" for four seconds reads as broken.
+        const how =
+          kind === "png"
+            ? await shareBrilliancy(b, username ?? "")
+            : await shareBrilliancyGif(b, username ?? "", (f) =>
+                setShare({ kind, phase: "working", percent: Math.round(f * 100) }),
+              );
+        setShare({ kind, phase: "done" });
+        setTimeout(() => setShare({ kind: null }), how === "downloaded" ? 2200 : 800);
       } catch {
-        setShareState("idle");
+        setShare({ kind: null });
       }
     },
     [username],
   );
+
+  const shareLabel = (kind: ShareKind, idle: string) => {
+    if (share.kind !== kind) return idle;
+    if (share.phase === "done") return "Saved ✓";
+    return share.percent > 0 ? `${share.percent}%` : "Rendering…";
+  };
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -100,14 +127,18 @@ export function BoardViewer({ game, brilliancies, initialPly, username, onClose 
                 </span>
                 <button
                   className="btn btn-bril btn-share"
-                  onClick={() => onShare(brilNow)}
-                  disabled={shareState === "working"}
+                  onClick={() => onShare(brilNow, "png")}
+                  disabled={share.kind !== null}
                 >
-                  {shareState === "working"
-                    ? "Rendering…"
-                    : shareState === "done"
-                      ? "Saved ✓"
-                      : "Share image"}
+                  {shareLabel("png", "Share image")}
+                </button>
+                <button
+                  className="btn btn-ghost btn-share"
+                  onClick={() => onShare(brilNow, "gif")}
+                  disabled={share.kind !== null}
+                  title="The same card as a looping GIF — the move plays out"
+                >
+                  {shareLabel("gif", "Share clip")}
                 </button>
               </>
             ) : current ? (

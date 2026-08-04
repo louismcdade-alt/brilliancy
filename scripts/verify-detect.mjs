@@ -1,5 +1,9 @@
 import { chromium } from "playwright";
 
+// Override to aim at a second dev server while 5173 is taken by a hand-driven
+// one — vite picks 5174 for the second `npm run dev`. Default unchanged.
+const BASE = process.env.BASE_URL || "http://localhost:5173/";
+
 async function launch() {
   for (const channel of ["msedge", "chrome"]) {
     try {
@@ -15,7 +19,7 @@ const browser = await launch();
 const page = await browser.newPage();
 page.on("pageerror", (e) => console.log("PAGEERROR:", e.message));
 
-await page.goto("http://localhost:5173/", { waitUntil: "networkidle" });
+await page.goto(BASE, { waitUntil: "networkidle" });
 
 // Légal's Mate: 5.Nxe5!! offers the queen (5...Bxd1 6.Bxf7+ Ke7 7.Nd5#).
 const pgn =

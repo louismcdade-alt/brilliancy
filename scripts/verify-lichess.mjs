@@ -16,7 +16,10 @@
 import { chromium } from "playwright";
 
 const USER = process.env.LICHESS_USER || "EricRosen";
-const BASE = process.env.LICHESS_BASE || "http://localhost:5173/";
+// LICHESS_BASE predates the shared BASE_URL and still wins, so any invocation
+// written against it keeps working; BASE_URL is what `npm run verify` sets for
+// all three gates at once. Default unchanged.
+const BASE = process.env.LICHESS_BASE || process.env.BASE_URL || "http://localhost:5173/";
 
 async function launch() {
   for (const channel of ["msedge", "chrome"]) {

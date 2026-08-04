@@ -12,7 +12,9 @@
  */
 import { chromium } from "playwright";
 
-const BASE = "http://localhost:5173/";
+// Override to aim at a second dev server while 5173 is taken by a hand-driven
+// one — vite picks 5174 for the second `npm run dev`. Default unchanged.
+const BASE = process.env.BASE_URL || "http://localhost:5173/";
 const AA = 4.5; // normal-size text
 const AA_UI = 3.0; // non-text / large text
 

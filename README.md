@@ -104,6 +104,7 @@ node scripts/sac-attribution.mjs  # fast: the sacrifice pre-filter, no engine (~
 node scripts/test-harness.mjs     # full calibration — precision/recall on fixtures
 node scripts/smoke.mjs            # renders hero, boots the engine, loads a profile
 node scripts/verify-detect.mjs    # runs the real detector on Légal's Mate (5.Nxe5!!)
+node scripts/verify-scan-announcement.mjs  # the live region describes the scan that just ran
 node scripts/visual.mjs           # screenshots hero, game viewer, and a live scan
 ```
 

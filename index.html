@@ -107,11 +107,19 @@
          The cost is real and worth stating: the hero copy now exists twice,
          here and in App.tsx, and they can drift. The alternative was a
          framework or a build step, which is a much larger cost on a site whose
-         entire deploy is `vite build`.
+         entire deploy is `vite build`. So the drift is GATED instead of
+         designed out: verify-static-hero.mjs loads the page twice, with and
+         without JavaScript, and requires the lines that appear in both files —
+         the h1 and the eyebrow — to still read the same. Edit copy here and
+         you must edit it there, or the check goes red.
          ================================================================ -->
     <div id="root">
       <main>
-        <p>Sound sacrifices, found by an engine</p>
+        <!-- `hero-eyebrow` is not here for styling — index.css only loads once
+             main.tsx runs, by which point this whole subtree is gone. It is the
+             handle verify-static-hero.mjs uses to find the SAME line in both
+             renders, so the two copies of it can be compared word for word. -->
+        <p class="hero-eyebrow">Sound sacrifices, found by an engine</p>
 
         <h1>
           Find your <span aria-hidden="true">!!</span>

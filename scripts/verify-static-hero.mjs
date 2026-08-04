@@ -1,8 +1,11 @@
 /**
- * The static-hero invariant, both directions:
+ * The static-hero invariant, all three parts:
  *   JS on  -> exactly one <h1>, and no leftover static-only headings (otherwise
  *             the page shows its contents twice)
  *   JS off -> the crawler's copy is present inside #root
+ *   both   -> the lines that exist verbatim in BOTH copies still say the same
+ *             thing, so Google is not served different words from the ones
+ *             visitors read
  */
 import { chromium } from "playwright";
 
@@ -21,6 +24,49 @@ const STATIC_H2 = [
   "How Brilliancy finds them",
   "Is this the same as chess.com",
 ];
+
+/**
+ * The lines that are DUPLICATED VERBATIM between index.html and App.tsx, and so
+ * are the ones that can silently drift apart. A small named set, not the whole
+ * document: the two copies are deliberately different lengths — the static lede
+ * is SEO prose and the rendered lede is a shorter sell — so demanding the whole
+ * hero match would be red forever and get ignored, which is worse than no gate.
+ *
+ * The h1 matters most. Its visible half is a glyph, so every word Google has to
+ * rank the page on lives in the .sr-only span, and there is nothing on screen
+ * that would look wrong if the two copies of that span diverged.
+ */
+const SHARED_COPY = [
+  { label: "the h1 (incl. its .sr-only span)", selector: "h1" },
+  { label: "the hero eyebrow", selector: ".hero-eyebrow" },
+];
+
+/**
+ * What the static lede SELLS. Equality is impossible here — that paragraph is
+ * intentionally written twice, longer for the crawler — so instead: anything the
+ * crawler's copy promises has to be a thing the rendered app still mentions.
+ * Drop Lichess from the app and the static copy is left advertising it to
+ * Google; that is the drift this catches. Lowercased before comparing.
+ */
+const SOLD_TERMS = ["chess.com", "lichess", "brilliant moves", "sound sacrifices", "chess engine"];
+
+/** Rendering puts newlines around the absolutely-positioned .sr-only span with
+ *  CSS loaded and not without it, so whitespace can never be part of a match. */
+const norm = (s) => s.replace(/\s+/g, " ").trim();
+
+/**
+ * Case is STYLING here, not copy: .hero-eyebrow is `text-transform: uppercase`,
+ * so the rendered eyebrow reads SOUND SACRIFICES while the file says Sound
+ * sacrifices. index.css never loads for the static copy, so a case-sensitive
+ * compare is red on the very first run for a difference no reader can see —
+ * a gate that fails for a non-reason is one people learn to skip.
+ *
+ * innerText, not textContent, for the same "what does a reader get" reason: the
+ * two <span>s in the h1 have no whitespace between them in App.tsx and a newline
+ * between them in index.html, and only layout resolves that to one space.
+ */
+const sameCopy = (a, b) => a.toLowerCase() === b.toLowerCase();
+
 async function launch() {
   for (const channel of ["msedge", "chrome"]) {
     try { return await chromium.launch({ channel, headless: true }); } catch { /* next */ }
@@ -59,8 +105,15 @@ check(
 
 // Asserted, not just printed: a silent loss of the rendered hero would
 // otherwise pass every check above.
-const words = (await on.locator("body").innerText()).split(/\s+/).filter(Boolean).length;
+const onBody = await on.locator("body").innerText();
+const words = onBody.split(/\s+/).filter(Boolean).length;
 check(words > 80, "JS on: app actually rendered", `${words} words`);
+
+// Kept for the drift comparison below, which needs both renders side by side.
+const onCopy = new Map();
+for (const { selector } of SHARED_COPY) {
+  onCopy.set(selector, norm(await on.locator(selector).first().innerText().catch(() => "")));
+}
 
 // --- JS OFF ---
 const ctx = await browser.newContext({ javaScriptEnabled: false });
@@ -75,6 +128,42 @@ const missing = STATIC_H2.filter((s) => !rootText.includes(s));
 check(missing.length === 0, "JS off: all three Q&A sections present", missing.join(" | ") || "all present");
 const offH1 = await off.locator("h1").count();
 check(offH1 === 1, "JS off: exactly one <h1>", `${offH1}`);
+
+/**
+ * --- BOTH: the two copies still agree ---
+ *
+ * The hero exists twice on purpose (see the comment above #root in index.html)
+ * and the two checks above test the two DIRECTIONS without ever comparing the
+ * words. So editing the headline in one file and not the other passed every
+ * check while serving the crawler a different promise from the visitor's.
+ */
+for (const { label, selector } of SHARED_COPY) {
+  const offCopy = norm(await off.locator(selector).first().innerText().catch(() => ""));
+  const onText = onCopy.get(selector);
+  const agree = offCopy !== "" && sameCopy(offCopy, onText);
+  check(
+    agree,
+    `both: ${label} is word-for-word identical`,
+    agree ? JSON.stringify(offCopy) : `static ${JSON.stringify(offCopy)} vs rendered ${JSON.stringify(onText)}`,
+  );
+}
+
+const onLower = norm(onBody).toLowerCase();
+const unsold = SOLD_TERMS.filter((t) => !onLower.includes(t));
+check(
+  unsold.length === 0,
+  "both: everything the static copy sells is still in the app",
+  unsold.length ? `rendered page never mentions: ${unsold.join(", ")}` : SOLD_TERMS.join(", "),
+);
+// The same terms have to be in the crawler's copy too, or the check above is
+// asserting nothing about the file it is meant to be guarding.
+const offLower = norm(rootText).toLowerCase();
+const unstated = SOLD_TERMS.filter((t) => !offLower.includes(t));
+check(
+  unstated.length === 0,
+  "both: ...and the static copy still says it",
+  unstated.length ? `static copy never mentions: ${unstated.join(", ")}` : SOLD_TERMS.join(", "),
+);
 
 await browser.close();
 console.log(bad === 0 ? "\nSTATIC OK\n" : `\n${bad} FAILED\n`);

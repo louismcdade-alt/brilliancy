@@ -42,9 +42,11 @@ const SCAN_DEPTH = 14;
  * sit through. A cap that only binds on histories nobody would wait out anyway
  * costs no real user anything.
  *
- * Lichess never had this problem — its adapter caps `max` at 500 because the
- * value goes into a query string and `Infinity` would have been sent as the
- * literal text "Infinity".
+ * Lichess never had this problem — its adapter caps `max` at 500 of its own
+ * accord, because the value goes into a query string and `Infinity` would have
+ * been sent as the literal text "Infinity". Which means this number is the
+ * chess.com ceiling only: on Lichess the real one is 500, and the scope note
+ * reads it off the batch rather than off this constant.
  */
 const MAX_SCAN_GAMES = 1000;
 
@@ -175,6 +177,22 @@ export function App() {
   const [scope, setScope] = useState<number>(GAMES_TO_LOAD);
   const [loadingMore, setLoadingMore] = useState(false);
 
+  /**
+   * What the last games fetch had to leave behind, straight from the adapter.
+   *
+   * This used to be inferred here, as `games.length >= MAX_SCAN_GAMES`, and the
+   * inference was wrong on both sources. Lichess never returns more than 500, so
+   * the test could not pass there at all and "Everything" stopped at 500 while
+   * the note underneath said brilliancies were merely rare. And on chess.com it
+   * fired for anyone holding exactly 1000 games, who was told we had cut them
+   * off when we had in fact read their whole history. A length cannot tell those
+   * apart; the adapter can, so it says.
+   */
+  const [loaded, setLoaded] = useState<{ cap: number; truncated: boolean }>({
+    cap: GAMES_TO_LOAD,
+    truncated: false,
+  });
+
   const [gameUrl, setGameUrl] = useState("");
   const [singleState, setSingleState] = useState<"idle" | "working">("idle");
   const [singleError, setSingleError] = useState<string | null>(null);
@@ -300,6 +318,7 @@ export function App() {
     setScanError(null);
     setGamesFailed(false);
     setScope(GAMES_TO_LOAD);
+    setLoaded({ cap: GAMES_TO_LOAD, truncated: false });
     setGameUrl("");
     setSingleError(null);
 
@@ -319,19 +338,23 @@ export function App() {
        * gap, and there is nothing the reader can act on.
        */
       let gamesError: string | null = null;
-      const [st, gms] = await Promise.all([
+      const [st, batch] = await Promise.all([
         api.fetchStats(username).catch(() => ({}) as Stats),
         api.fetchRecentGames(username, GAMES_TO_LOAD).catch((e) => {
           gamesError = humanError(
             e,
             `Couldn't load games from ${SOURCE_LABEL[site]}. Try again shortly.`,
           );
-          return [] as Game[];
+          // A failed fetch truncated nothing — it returned nothing. Claiming a
+          // cap here would put a second, contradictory explanation next to the
+          // banner that already says the request was refused.
+          return { games: [] as Game[], cap: GAMES_TO_LOAD, truncated: false };
         }),
       ]);
       setProfile(prof);
       setStats(st);
-      setGames(gms);
+      setGames(batch.games);
+      setLoaded({ cap: batch.cap, truncated: batch.truncated });
       setScanError(gamesError);
       // Remembered separately from the message, because an empty list means two
       // completely different things and the list is what has to say which.
@@ -356,7 +379,9 @@ export function App() {
     if (next <= games.length) return; // already have them; just scan fewer
     setLoadingMore(true);
     try {
-      setGames(await API[profile.source].fetchRecentGames(profile.username, next));
+      const batch = await API[profile.source].fetchRecentGames(profile.username, next);
+      setGames(batch.games);
+      setLoaded({ cap: batch.cap, truncated: batch.truncated });
     } catch (e) {
       // Surface the adapter's own message when it has one — Lichess's 429 tells
       // the user to wait a minute, which is actionable; a generic "try again
@@ -817,16 +842,19 @@ export function App() {
                       ))}
                     </div>
                     <span className="scope-note">
-                      {/* Say when the cap bites. "Everything" that quietly stops
-                          at a thousand games is a small lie, and on a site whose
+                      {/* Say when the cap bites, and say which cap. "Everything"
+                          that quietly stops is a small lie, and on a site whose
                           headline claim is that it only approximates chess.com's
-                          !!, small lies are expensive. Most accounts never reach
-                          it and never see this clause. */}
+                          !!, small lies are expensive. The number is the
+                          adapter's, not this file's: Lichess stops at 500 where
+                          chess.com stops at MAX_SCAN_GAMES, and naming the wrong
+                          one is the same lie with extra confidence. Most accounts
+                          reach neither and never see this clause. */}
                       {loadingMore
                         ? "loading games…"
                         : `Takes ${estimate(scanCount)}. ${
-                            scope === MAX_SCAN_GAMES && games.length >= MAX_SCAN_GAMES
-                              ? `Capped at the most recent ${MAX_SCAN_GAMES} games.`
+                            scope === MAX_SCAN_GAMES && loaded.truncated
+                              ? `Capped at the most recent ${loaded.cap} games.`
                               : "Brilliancies are rare — a single month often has none."
                           }`}
                     </span>

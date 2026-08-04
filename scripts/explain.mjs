@@ -115,7 +115,7 @@ if (half) {
   targets = await page.evaluate(
     async ({ user, limit }) => {
       const api = await import("/src/api/chesscom.ts");
-      const games = await api.fetchRecentGames(user, limit);
+      const { games } = await api.fetchRecentGames(user, limit);
       return games.map((g) => ({ name: `vs ${g.oppUsername}`, pgn: g.pgn, userColor: g.userColor, url: g.url }));
     },
     { user, limit },

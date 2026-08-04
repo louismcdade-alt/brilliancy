@@ -1,6 +1,7 @@
 import type {
   Color,
   Game,
+  GameBatch,
   GameResult,
   Profile,
   RatingRecord,
@@ -364,6 +365,24 @@ export async function fetchGameByUrl(
 }
 
 /**
+ * The most games one export will ever hand back, whatever the caller asks for.
+ *
+ * It started as a guard against `Infinity` reaching the query string as the
+ * literal text "Infinity", which is what "Everything" in the UI used to send.
+ * It has stayed at 500 because this endpoint is the one Lichess throttles
+ * hardest — one export at a time per IP, measured (see the header) — and at the
+ * app's measured ~50 games/minute a 500-game scan is already ten minutes, which
+ * is past what anyone waits out.
+ *
+ * Callers are told when it bit, and what it was, on the GameBatch this returns
+ * — a cap the UI cannot see is a cap the UI will describe wrongly, and this one
+ * used to stop "Everything" here in silence while the page talked about a
+ * thousand games. The number stays private on purpose: App.tsx should read the
+ * cap off the answer, not hold a constant per source.
+ */
+const MAX_GAMES = 500;
+
+/**
  * Fetch recent games, newest first.
  *
  * One request, not chess.com's month-by-month walk — but the response is
@@ -372,19 +391,28 @@ export async function fetchGameByUrl(
  * read would leave a truncated final line that JSON.parse rejects, and the
  * bodies here are PGN-sized, not video-sized.
  *
- * `max` is capped because `Infinity` is a legal scope in the UI ("Everything")
- * and would go into the URL as the literal string "Infinity". 500 is well past
- * the largest scope a user can pick from the panel.
+ * Asks for one game MORE than it will return. That extra line is the whole
+ * difference between knowing and guessing: an account with exactly `max` games
+ * and an account with fifty thousand both answer a request for `max` with `max`
+ * lines, so a length comparison would tell a 500-game player they had been cut
+ * off. One spare line — a couple of KB against a body already carrying hundreds
+ * of PGNs — turns that into a measurement.
+ *
+ * Count RAW lines, not normalised games, for that measurement. normalizeGame
+ * drops variants and games the searched player isn't in, so a chess960 habit
+ * would make a truncated export look short and hide the cap again.
  */
 export async function fetchRecentGames(
   username: string,
   limit = 40,
-): Promise<Game[]> {
+): Promise<GameBatch> {
   const u = username.trim();
-  const max = Number.isFinite(limit) ? Math.max(1, Math.min(500, Math.floor(limit))) : 500;
+  const max = Number.isFinite(limit)
+    ? Math.max(1, Math.min(MAX_GAMES, Math.floor(limit)))
+    : MAX_GAMES;
   const url =
     `${ORIGIN}/api/games/user/${encodeURIComponent(u)}` +
-    `?max=${max}&pgnInJson=true&clocks=false&evals=false&opening=false&sort=dateDesc`;
+    `?max=${max + 1}&pgnInJson=true&clocks=false&evals=false&opening=false&sort=dateDesc`;
 
   // A 404 from THIS endpoint does not mean "no such player", and treating it as
   // one would be a lie the caller then repeats. Measured against the live API:
@@ -409,18 +437,25 @@ export async function fetchRecentGames(
   const text = await res.text();
 
   const out: Game[] = [];
+  let lines = 0;
   for (const line of text.split("\n")) {
     const trimmed = line.trim();
     if (!trimmed) continue;
+    lines++;
     try {
       const game = normalizeGame(JSON.parse(trimmed), u);
       if (game) out.push(game);
     } catch {
       // One unparseable line shouldn't lose the other 249. Skipping is silent
-      // on purpose: there is nothing a reader could do about it.
+      // on purpose: there is nothing a reader could do about it. It still
+      // counts as a line: a game we couldn't read is still a game that exists.
     }
   }
   // Lichess returns newest-first already, but the sort is what the rest of the
   // app assumes and it costs nothing to guarantee it rather than rely on it.
-  return out.sort((a, b) => b.endTime - a.endTime).slice(0, max);
+  return {
+    games: out.sort((a, b) => b.endTime - a.endTime).slice(0, max),
+    cap: max,
+    truncated: lines > max,
+  };
 }

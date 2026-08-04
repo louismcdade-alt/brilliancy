@@ -86,7 +86,7 @@ async function scan() {
   const games = await page.evaluate(
     async ({ user, limit }) => {
       const api = await import("/src/api/chesscom.ts");
-      const list = await api.fetchRecentGames(user, limit);
+      const { games: list } = await api.fetchRecentGames(user, limit);
       return list.map((g) => ({ id: g.id, url: g.url, userColor: g.userColor, pgn: g.pgn }));
     },
     { user: USER, limit: LIMIT },

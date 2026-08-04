@@ -1,6 +1,7 @@
 import type {
   Color,
   Game,
+  GameBatch,
   GameResult,
   Profile,
   RatingRecord,
@@ -195,14 +196,21 @@ export async function fetchGameByUrl(
 /**
  * Fetch recent games, newest first, walking backwards through monthly archives
  * until we have `limit` standard-chess games (or run out of history).
+ *
+ * Whether the limit BIT is a fact only this loop has: it is the thing that saw
+ * an archive it chose not to open. Reporting it (rather than letting the caller
+ * infer it from `games.length === limit`) is what lets the UI distinguish a
+ * player whose history we cut short from one who happens to have exactly this
+ * many games.
  */
 export async function fetchRecentGames(
   username: string,
   limit = 40,
-): Promise<Game[]> {
+): Promise<GameBatch> {
   const months = await fetchArchiveMonths(username);
   const out: Game[] = [];
-  for (let i = months.length - 1; i >= 0 && out.length < limit; i--) {
+  let i = months.length - 1;
+  for (; i >= 0 && out.length < limit; i--) {
     const monthData = await getJson<{ games: any[] }>(months[i]);
     const games = (monthData.games ?? [])
       .map((g) => normalizeGame(g, username))
@@ -210,5 +218,13 @@ export async function fetchRecentGames(
       .sort((a, b) => b.endTime - a.endTime);
     out.push(...games);
   }
-  return out.slice(0, limit);
+  return {
+    games: out.slice(0, limit),
+    cap: limit,
+    // Two ways history was left on the table: the last month we opened carried
+    // us past the limit, or we stopped with older archives still unopened
+    // (`i >= 0` — the loop only leaves the index non-negative when the length
+    // test, not the month list, ended it).
+    truncated: out.length > limit || i >= 0,
+  };
 }

@@ -103,6 +103,25 @@ export interface Game {
   oppAccuracy?: number;
 }
 
+/**
+ * What a games fetch returned, plus what it had to leave behind.
+ *
+ * `games` alone is not enough to describe the result honestly. Every adapter
+ * stops somewhere, and the two ways it can stop look identical from a length:
+ * an account with exactly as many games as we asked for and an account with ten
+ * times that both come back full. The UI has to tell a reader "there is more we
+ * didn't fetch", and only the adapter is in a position to know — it is the one
+ * that saw the archive it declined to open, or the extra export line it asked
+ * for and got. So it says so rather than leaving the caller to guess.
+ */
+export interface GameBatch {
+  games: Game[];
+  /** The ceiling that actually applied: the caller's limit, or the adapter's own if lower. */
+  cap: number;
+  /** True when the source had more history than `cap` let us take. */
+  truncated: boolean;
+}
+
 /** A move flagged by the brilliancy detector. */
 export interface Brilliancy {
   game: Game;

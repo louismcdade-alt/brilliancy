@@ -257,13 +257,48 @@ export function App() {
   const scanCount = Math.min(scope, games.length);
 
   /**
-   * Games the scan that just FINISHED actually covered. Deliberately separate
-   * from scanCount: analysing a single pasted game leaves scanCount at 30, so
-   * every "in N games" claim after a one-game scan named a number that had
-   * nothing to do with what was examined — including in an assertive live
-   * region, which announces it to a screen reader as the answer.
+   * What the scan that just FINISHED actually did: games covered and moves it
+   * found, both counted in the run itself.
+   *
+   * `games` is deliberately separate from scanCount, because analysing a single
+   * pasted game leaves scanCount at 30, so every "in N games" claim after a
+   * one-game scan named a number that had nothing to do with what was examined.
+   * `moves` exists for the same reason and was the half that got missed:
+   * `brilliancies` ACCUMULATES across a sweep and a later single-game scan, so
+   * the assertive region paired the running total with the one game just
+   * examined and announced "3 brilliant moves found in 1 game" — a sentence
+   * about no scan that ever happened, spoken to a screen reader as the answer.
+   * Counted here rather than read back off state because a scan that re-finds a
+   * game's brilliancies (the cache-hit path, or re-analysing a game already in
+   * the list) changes the total by less than it found.
    */
-  const [scannedCount, setScannedCount] = useState(0);
+  const [lastScan, setLastScan] = useState<{ moves: number; games: number }>({
+    moves: 0,
+    games: 0,
+  });
+
+  /**
+   * The sentence the assertive live region speaks when a scan finishes.
+   *
+   * Two numbers, and they are not always the same one. `lastScan.moves` is what
+   * this run found; `sortedBrilliancies.length` is what is on screen, which
+   * after a single-game scan still includes everything an earlier sweep found —
+   * the gallery and the "Circled" cell deliberately keep showing those. So when
+   * they differ the announcement names both and says which is which, rather than
+   * picking one and contradicting either the scan or the page.
+   */
+  const scanAnnouncement = useMemo(() => {
+    if (scanState !== "done") return "";
+    const { moves, games: n } = lastScan;
+    const where = n === 1 ? "this game" : `${n} games`;
+    const head = moves
+      ? `Scan complete. ${moves} brilliant ${moves === 1 ? "move" : "moves"} found in ${where}.`
+      : `Scan complete. No brilliant moves found in ${where}.`;
+    const shown = sortedBrilliancies.length;
+    return moves === shown
+      ? head
+      : `${head} ${shown} brilliant ${shown === 1 ? "move" : "moves"} shown in total, including earlier scans.`;
+  }, [scanState, lastScan, sortedBrilliancies.length]);
 
   const summary = useMemo(() => {
     const total = games.length;
@@ -415,8 +450,9 @@ export function App() {
       ]);
       setNearMisses((prev) => [...prev.filter((n) => n.game.id !== game.id), ...near]);
       setGames((prev) => (prev.some((g) => g.id === game.id) ? prev : [game, ...prev]));
-      // Exactly one game was examined; every "in N games" claim reads this.
-      setScannedCount(1);
+      // Exactly one game was examined, and `found` is everything in it. Every
+      // "N moves in M games" claim reads this, not the accumulated gallery.
+      setLastScan({ moves: found.length, games: 1 });
       setScanState("done");
       setViewer({ game, brilliancies: found, initialPly: found[0]?.ply });
       if (!found.length) {
@@ -453,8 +489,11 @@ export function App() {
     setEngineWarming(false);
 
     // `scanned` counts games actually reached, so a cancelled scan reports the
-    // window it covered rather than the one it was aiming at.
+    // window it covered rather than the one it was aiming at. `moves` is summed
+    // here rather than read from state after the loop: setBrilliancies is
+    // asynchronous, so state inside and just after the loop is stale.
     let scanned = 0;
+    let moves = 0;
     let failures = 0;
     for (let i = 0; i < toScan.length; i++) {
       if (cancelScan.current) break;
@@ -496,6 +535,7 @@ export function App() {
           scanCache.current.set(cacheKey(game), found);
           nearCache.current.set(cacheKey(game), near);
         }
+        moves += found.length;
         if (found.length) setBrilliancies((prev) => [...prev, ...found]);
         if (near.length) setNearMisses((prev) => [...prev, ...near]);
       } catch {
@@ -510,7 +550,7 @@ export function App() {
       setProgress({ done: i + 1, total: toScan.length });
     }
 
-    setScannedCount(scanned);
+    setLastScan({ moves, games: scanned });
     if (failures > 0 && failures === scanned) {
       // Every single game failed: report the failure, not a result.
       setScanError(
@@ -614,11 +654,7 @@ export function App() {
         {/* Assertive, because this one is the answer to the question the user
             asked and there is nothing left to interrupt. */}
         <div className="sr-only" aria-live="assertive" aria-atomic="true">
-          {scanState === "done"
-            ? sortedBrilliancies.length
-              ? `Scan complete. ${sortedBrilliancies.length} brilliant ${sortedBrilliancies.length === 1 ? "move" : "moves"} found in ${scannedCount} ${scannedCount === 1 ? "game" : "games"}.`
-              : `Scan complete. No brilliant moves found in ${scannedCount} ${scannedCount === 1 ? "game" : "games"}.`
-            : ""}
+          {scanAnnouncement}
         </div>
 
         {showHero && (
@@ -927,7 +963,7 @@ export function App() {
                   // paragraph would be contradicting it.
                   <p className="empty-note">
                     No brilliancies in{" "}
-                    {scannedCount === 1 ? "that game" : `these ${scannedCount} games`} —
+                    {lastScan.games === 1 ? "that game" : `these ${lastScan.games} games`} —
                     nothing even reached the engine. Brilliant moves are rare, and a short window can
                     easily hold none: try widening the scan before concluding you've never played
                     one.

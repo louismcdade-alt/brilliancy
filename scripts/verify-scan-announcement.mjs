@@ -26,11 +26,14 @@ const USER = "testplayer";
 // ever stops flagging it, that test goes red first and explains why.
 const PGN = "1. e4 e5 2. Bc4 d6 3. Nf3 Bg4 4. Nc3 g6 5. Nxe5 Bxd1 6. Bxf7+ Ke7 7. Nd5#";
 const MOVES_PER_GAME = 1;
+// Nothing is offered in six moves of Ruy Lopez, so the prefilter never even
+// calls the engine — this is the "no brilliancies here" branch of the sentence.
+const QUIET_PGN = "1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. O-O Be7 6. Re1 b5";
 
-const rawGame = (id) => ({
+const rawGame = (id, pgn = PGN) => ({
   url: `https://www.chess.com/game/live/${id}`,
   uuid: `uuid-${id}`,
-  pgn: PGN,
+  pgn,
   rules: "chess",
   time_class: "blitz",
   time_control: "300",
@@ -40,7 +43,7 @@ const rawGame = (id) => ({
   black: { username: "opponent", rating: 1500, result: "checkmated" },
 });
 
-const GAMES = [rawGame("101"), rawGame("202")];
+const GAMES = [rawGame("101"), rawGame("202"), rawGame("303", QUIET_PGN)];
 const ARCHIVE = `https://api.chess.com/pub/player/${USER}/games/2023/11`;
 
 const json = (route, body) =>
@@ -72,9 +75,23 @@ await page.route("**/api.chess.com/pub/**", (route) => {
 
 const region = page.locator('.sr-only[aria-live="assertive"]');
 
-/** Wait for the assertive region to say something other than what it said last. */
-async function nextAnnouncement(previous) {
-  await page
+let failed = 0;
+const check = (ok, label, detail) => {
+  console.log(`${ok ? "  ✓" : "  ✗"} ${label}${detail ? ` — ${detail}` : ""}`);
+  if (!ok) failed++;
+};
+
+/**
+ * Wait for the assertive region to say something other than what it said last.
+ *
+ * "Unchanged" is itself a failure worth reporting rather than throwing on:
+ * aria-live only speaks on a CHANGE, so a scan that leaves the sentence byte-
+ * identical is a scan a screen reader is never told finished — which is exactly
+ * what analysing a game with nothing in it used to do, when the sentence was
+ * built from the accumulated total and the total hadn't moved.
+ */
+async function nextAnnouncement(previous, label) {
+  const changed = await page
     .waitForFunction(
       ([prev]) => {
         const el = document.querySelector('.sr-only[aria-live="assertive"]');
@@ -84,17 +101,11 @@ async function nextAnnouncement(previous) {
       [previous],
       { timeout: 180_000 },
     )
-    .catch(() => {
-      throw new Error(`the assertive region never changed from ${JSON.stringify(previous)}`);
-    });
+    .then(() => true)
+    .catch(() => false);
+  check(changed, `${label} is announced at all (the region text changed)`);
   return (await region.textContent()).trim();
 }
-
-let failed = 0;
-const check = (ok, label, detail) => {
-  console.log(`${ok ? "  ✓" : "  ✗"} ${label}${detail ? ` — ${detail}` : ""}`);
-  if (!ok) failed++;
-};
 
 await page.goto(BASE, { waitUntil: "networkidle" });
 
@@ -103,49 +114,56 @@ await page.fill(".search-input", USER);
 await page.click('form.hero-search-row button[type="submit"]');
 await page.waitForSelector(".analyze-panel", { timeout: 20_000 });
 
-// ── 2. scan both games ───────────────────────────────────────────────────────
-console.log("→ scanning both games (real engine, ~20s)…");
+// ── 2. sweep all three ───────────────────────────────────────────────────────
+console.log("→ scanning all three games (real engine, ~20s)…");
 await page.click("button.btn-bril:has-text('Find brilliancies')");
-const afterSweep = await nextAnnouncement("");
+const afterSweep = await nextAnnouncement("", "the sweep");
 console.log(`   region: ${JSON.stringify(afterSweep)}`);
 
-check(
-  /\b2 brilliant moves\b/.test(afterSweep),
-  "sweep announces the 2 moves it found",
-  afterSweep,
-);
-check(/\b2 games\b/.test(afterSweep), "sweep announces the 2 games it covered");
-
-// ── 3. analyse ONE of them again, on its own ─────────────────────────────────
-console.log("→ analysing one pasted game (real engine, ~10s)…");
-await page.fill(".single-input", GAMES[0].url);
-await page.click("button.btn-ghost:has-text('Analyse')");
-const afterSingle = await nextAnnouncement(afterSweep);
-console.log(`   region: ${JSON.stringify(afterSingle)}`);
-
-const shown = await page.locator(".spec-grid .spec").count();
-check(shown === 2, "the gallery still shows both brilliancies", `${shown} cards`);
+check(/\b2 brilliant moves\b/.test(afterSweep), "sweep announces the 2 moves it found", afterSweep);
+check(/\b3 games\b/.test(afterSweep), "sweep announces the 3 games it covered");
 
 /**
  * The defect, precisely: a count attached to a one-game clause that is not the
  * number found in that one game. "3 brilliant moves found in 1 game" is the
  * sentence this exists to stop, whatever the surrounding wording becomes.
  */
-const perGame = afterSingle.match(
-  /(\d+) brilliant (?:move|moves)[^.]*? in (?:this game|1 game)/i,
-);
-check(
-  perGame !== null && Number(perGame[1]) === MOVES_PER_GAME,
-  "the one-game clause names what THIS game had",
-  perGame ? `claims ${perGame[1]}, actually ${MOVES_PER_GAME}` : "no one-game clause at all",
-);
+function checkOneGameScan(text, expected, shown) {
+  const perGame = text.match(/(\d+|no) brilliant (?:move|moves)[^.]*? in (?:this game|1 game)/i);
+  const claimed = perGame ? (/no/i.test(perGame[1]) ? 0 : Number(perGame[1])) : null;
+  check(
+    claimed === expected,
+    "the one-game clause names what THIS game had",
+    perGame ? `claims ${claimed}, actually ${expected}` : "no one-game clause at all",
+  );
+  // ...and it must not contradict the gallery behind it by dropping the total.
+  check(
+    expected === shown ||
+      new RegExp(`\\b${shown}\\b[^.]*total|total[^.]*\\b${shown}\\b`, "i").test(text),
+    "the announcement still accounts for the total on screen",
+    text,
+  );
+}
 
-// ...and it must not contradict the gallery behind it by dropping the total.
-check(
-  new RegExp(`\\b${shown}\\b[^.]*total|total[^.]*\\b${shown}\\b`, "i").test(afterSingle),
-  "the announcement still accounts for the total on screen",
-  afterSingle,
-);
+// ── 3. analyse ONE of them again, on its own ─────────────────────────────────
+console.log("→ analysing one pasted game with a brilliancy in it…");
+await page.fill(".single-input", GAMES[0].url);
+await page.click("button.btn-ghost:has-text('Analyse')");
+const afterSingle = await nextAnnouncement(afterSweep, "the single-game scan");
+console.log(`   region: ${JSON.stringify(afterSingle)}`);
+
+const shown = await page.locator(".spec-grid .spec").count();
+check(shown === 2, "the gallery still shows both brilliancies", `${shown} cards`);
+checkOneGameScan(afterSingle, MOVES_PER_GAME, shown);
+
+// ── 4. ...and one with nothing in it, with the gallery still full ────────────
+await page.keyboard.press("Escape"); // the viewer opens over the page each time
+console.log("→ analysing the quiet game…");
+await page.fill(".single-input", GAMES[2].url);
+await page.click("button.btn-ghost:has-text('Analyse')");
+const afterQuiet = await nextAnnouncement(afterSingle, "the quiet game's scan");
+console.log(`   region: ${JSON.stringify(afterQuiet)}`);
+checkOneGameScan(afterQuiet, 0, await page.locator(".spec-grid .spec").count());
 
 await browser.close();
 console.log(failed ? `\n✗ FAIL — ${failed} check(s)` : "\n✓ PASS — the region describes the scan that just ran");

@@ -134,6 +134,25 @@ function humanError(e: unknown, fallback: string): string {
 
 type Status = "idle" | "loading" | "loaded" | "error";
 
+/**
+ * A stopped scan is NOT an idle one, and that distinction is the whole point of
+ * the Stop button.
+ *
+ * Cancelling used to fall back to "idle", which is the state meaning "no scan
+ * has happened here". Everything that renders a result is gated on the state,
+ * so pressing Stop unrendered the gallery, the near-miss tier and the "Circled"
+ * count — while `brilliancies` stayed in state and the game rows below went on
+ * printing "!! 1" against a game whose brilliancy nothing on the page would
+ * show. Since "I saw one, let me stop and look at it" is why anyone presses
+ * that button, the one action taken to keep a result was the one that threw it
+ * away, and the only way back was rescanning the whole window.
+ *
+ * It is not "done" either: a stopped scan covered part of its window, so the
+ * "nothing even reached the engine" note and the "Scan again" button label
+ * would both be claiming a sweep that never finished.
+ */
+type ScanState = "idle" | "running" | "done" | "stopped";
+
 interface ViewerState {
   game: Game;
   brilliancies: Brilliancy[];
@@ -159,7 +178,7 @@ export function App() {
   const [games, setGames] = useState<Game[]>([]);
 
   const [brilliancies, setBrilliancies] = useState<Brilliancy[]>([]);
-  const [scanState, setScanState] = useState<"idle" | "running" | "done">("idle");
+  const [scanState, setScanState] = useState<ScanState>("idle");
   const [progress, setProgress] = useState({ done: 0, total: 0 });
   const [engineWarming, setEngineWarming] = useState(false);
   const [scanError, setScanError] = useState<string | null>(null);
@@ -296,7 +315,7 @@ export function App() {
   });
 
   /**
-   * The sentence the assertive live region speaks when a scan finishes.
+   * The sentence the assertive live region speaks when a scan ends.
    *
    * Two numbers, and they are not always the same one. `lastScan.moves` is what
    * this run found; `sortedBrilliancies.length` is what is on screen, which
@@ -304,14 +323,25 @@ export function App() {
    * the gallery and the "Circled" cell deliberately keep showing those. So when
    * they differ the announcement names both and says which is which, rather than
    * picking one and contradicting either the scan or the page.
+   *
+   * A stop is an outcome too, and it is the one outcome a screen-reader user
+   * cannot see for themselves: the progress region simply goes quiet. It gets
+   * its own sentence rather than "Scan complete", which would be a lie about a
+   * window that was only partly covered.
    */
   const scanAnnouncement = useMemo(() => {
-    if (scanState !== "done") return "";
+    if (scanState !== "done" && scanState !== "stopped") return "";
     const { moves, games: n } = lastScan;
     const where = n === 1 ? "this game" : `${n} games`;
-    const head = moves
-      ? `Scan complete. ${moves} brilliant ${moves === 1 ? "move" : "moves"} found in ${where}.`
-      : `Scan complete. No brilliant moves found in ${where}.`;
+    const found = moves
+      ? `${moves} brilliant ${moves === 1 ? "move" : "moves"} found`
+      : "No brilliant moves found";
+    const head =
+      scanState === "stopped"
+        ? n === 0
+          ? "Scan stopped before any games were analysed."
+          : `Scan stopped after ${n} ${n === 1 ? "game" : "games"}. ${found} so far.`
+        : `Scan complete. ${found} in ${where}.`;
     const shown = sortedBrilliancies.length;
     return moves === shown
       ? head
@@ -591,8 +621,7 @@ export function App() {
         `${failures} of ${scanned} games couldn't be analysed and were skipped, so this list may be incomplete.`,
       );
     }
-    if (!cancelScan.current) setScanState("done");
-    else setScanState("idle");
+    setScanState(cancelScan.current ? "stopped" : "done");
   }
 
   function stopScan() {
@@ -606,6 +635,34 @@ export function App() {
     setError(null);
     setQuery("");
   }
+
+  /**
+   * The scan is over, however it ended. What it found stands either way — a
+   * brilliancy the engine flagged before the stop was fully judged, not a
+   * partial answer — so everything that displays results reads this rather than
+   * testing for "done" and quietly dropping the interrupted case.
+   */
+  const scanOver = scanState === "done" || scanState === "stopped";
+
+  /**
+   * What a stopped scan reached, said plainly.
+   *
+   * `lastScan.games` is the games the run actually got to and `progress.total`
+   * the window it was aiming at, so this counts work done rather than restating
+   * the scope. The clause about the cache is the useful half: scanning again
+   * does re-run from the top, but every game already analysed comes back out of
+   * scanCache, so it is not the second full wait it looks like — and that is
+   * only true of games that were reached, hence the separate opening line for a
+   * stop during the engine warm-up, where none were.
+   */
+  const stoppedNote =
+    lastScan.games === 0
+      ? "Stopped before any games were analysed."
+      : `Stopped after ${lastScan.games} of ${progress.total} game${progress.total === 1 ? "" : "s"}. ` +
+        (lastScan.moves
+          ? `${lastScan.moves} brilliant ${lastScan.moves === 1 ? "move" : "moves"} found so far — kept below. `
+          : "Nothing found in the part that was scanned. ") +
+        "Scanning again starts from the beginning, but the games already analysed are cached, so it catches up quickly.";
 
   const showHero = !profile;
   /** The site whose data is on screen — not necessarily the one in the picker. */
@@ -806,6 +863,11 @@ export function App() {
                 </div>
                 <div className="summary-cell">
                   <div className="summary-label">Circled</div>
+                  {/* "—" means only "nobody has looked yet". Every other state,
+                      stopped included, has looked at something, and a count of
+                      what it found is the honest answer even when the looking
+                      was cut short — the row badges below print that same count
+                      and there is nothing to be gained by disagreeing with them. */}
                   <div className={`summary-num ${brilliancies.length ? "is-bril" : ""}`}>
                     {scanState === "idle" ? "—" : brilliancies.length}
                   </div>
@@ -854,6 +916,9 @@ export function App() {
                       onClick={runScan}
                       disabled={games.length === 0 || loadingMore}
                     >
+                      {/* "done" only. After a stop this button really does start
+                          the window over from the top, and "Scan again" would
+                          read as an offer to repeat a sweep that finished. */}
                       {scanState === "done" ? "Scan again" : "Find brilliancies"}
                     </button>
                   </div>
@@ -976,7 +1041,13 @@ export function App() {
                 </div>
               )}
 
-              {(scanState === "done" || (scanState === "running" && brilliancies.length > 0)) &&
+              {scanState === "stopped" && (
+                <p className="empty-note" style={{ marginTop: 14 }}>
+                  {stoppedNote}
+                </p>
+              )}
+
+              {(scanOver || (scanState === "running" && brilliancies.length > 0)) &&
                 (sortedBrilliancies.length > 0 ? (
                   <div style={{ marginTop: 18 }}>
                     <BrilliancyGallery
@@ -993,7 +1064,11 @@ export function App() {
                 ) : scanState === "done" && nearMisses.length === 0 ? (
                   // Only the true nothing-at-all case now. When the engine
                   // weighed something, the pencil tier below says so and this
-                  // paragraph would be contradicting it.
+                  // paragraph would be contradicting it. "done" and not
+                  // scanOver, deliberately: this paragraph draws a conclusion
+                  // about a whole window ("try widening the scan"), which is not
+                  // a thing a stopped scan is entitled to say — the stopped note
+                  // above has already said what it did reach.
                   <p className="empty-note">
                     No brilliancies in{" "}
                     {lastScan.games === 1 ? "that game" : `these ${lastScan.games} games`} —
@@ -1003,7 +1078,7 @@ export function App() {
                   </p>
                 ) : null)}
 
-              {scanState === "done" && (
+              {scanOver && (
                 <NearMissList
                   nearMisses={nearMisses}
                   hasBrilliancies={sortedBrilliancies.length > 0}

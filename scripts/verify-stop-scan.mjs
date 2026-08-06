@@ -123,7 +123,7 @@ check(
   `${badgeTotal} in badges, ${cards} in the gallery`,
 );
 check(
-  rowLabels.length > 0 === cards > 0,
+  (rowLabels.length > 0) === (cards > 0),
   "no row announces a brilliant move the page will not render",
   `${rowLabels.length} labelled rows, ${cards} cards`,
 );

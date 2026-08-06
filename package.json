@@ -16,7 +16,7 @@
     "verify:announce": "node scripts/verify-scan-announcement.mjs",
     "verify:stop": "node scripts/verify-stop-scan.mjs",
     "verify:csp": "npm run build && node scripts/csp-check.mjs",
-    "verify": "npm run verify:static && npm run verify:contrast && npm run verify:announce && npm run verify:scope && npm run verify:single && npm run verify:lichess"
+    "verify": "npm run verify:static && npm run verify:contrast && npm run verify:announce && npm run verify:stop && npm run verify:scope && npm run verify:single && npm run verify:lichess"
   },
   "dependencies": {
     "chess.js": "^1.0.0",

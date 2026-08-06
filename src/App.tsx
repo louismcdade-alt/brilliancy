@@ -338,7 +338,9 @@ export function App() {
       : "No brilliant moves found";
     const head =
       scanState === "stopped"
-        ? `Scan stopped after ${n} ${n === 1 ? "game" : "games"}. ${found} so far.`
+        ? n === 0
+          ? "Scan stopped before any games were analysed."
+          : `Scan stopped after ${n} ${n === 1 ? "game" : "games"}. ${found} so far.`
         : `Scan complete. ${found} in ${where}.`;
     const shown = sortedBrilliancies.length;
     return moves === shown
@@ -641,6 +643,26 @@ export function App() {
    * testing for "done" and quietly dropping the interrupted case.
    */
   const scanOver = scanState === "done" || scanState === "stopped";
+
+  /**
+   * What a stopped scan reached, said plainly.
+   *
+   * `lastScan.games` is the games the run actually got to and `progress.total`
+   * the window it was aiming at, so this counts work done rather than restating
+   * the scope. The clause about the cache is the useful half: scanning again
+   * does re-run from the top, but every game already analysed comes back out of
+   * scanCache, so it is not the second full wait it looks like — and that is
+   * only true of games that were reached, hence the separate opening line for a
+   * stop during the engine warm-up, where none were.
+   */
+  const stoppedNote =
+    lastScan.games === 0
+      ? "Stopped before any games were analysed."
+      : `Stopped after ${lastScan.games} of ${progress.total} game${progress.total === 1 ? "" : "s"}. ` +
+        (lastScan.moves
+          ? `${lastScan.moves} brilliant ${lastScan.moves === 1 ? "move" : "moves"} found so far — kept below. `
+          : "Nothing found in the part that was scanned. ") +
+        "Scanning again starts from the beginning, but the games already analysed are cached, so it catches up quickly.";
 
   const showHero = !profile;
   /** The site whose data is on screen — not necessarily the one in the picker. */
@@ -1019,22 +1041,9 @@ export function App() {
                 </div>
               )}
 
-              {/* What a stopped scan reached, said plainly. `lastScan.games` is
-                  the games the run actually got to and progress.total the window
-                  it was aiming at, so this is a count of work done rather than a
-                  restatement of the scope. The line about the cache is the
-                  useful half: scanning again re-runs from the top, but every
-                  game already analysed is served from scanCache, so it is not
-                  the second full wait it looks like. */}
               {scanState === "stopped" && (
                 <p className="empty-note" style={{ marginTop: 14 }}>
-                  Stopped after {lastScan.games} of {progress.total} game
-                  {progress.total === 1 ? "" : "s"}.{" "}
-                  {lastScan.moves
-                    ? `${lastScan.moves} brilliant ${lastScan.moves === 1 ? "move" : "moves"} found so far — kept below.`
-                    : "Nothing found in the part that was scanned."}{" "}
-                  Scanning again starts from the beginning, but the games already analysed are
-                  cached, so it catches up quickly.
+                  {stoppedNote}
                 </p>
               )}
 

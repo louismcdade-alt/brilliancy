@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "verify:static": "node scripts/verify-static-hero.mjs",
+    "verify:static:dist": "npm run build && node scripts/verify-static-hero.mjs",
     "verify:contrast": "node scripts/verify-contrast.mjs",
     "verify:lichess": "node scripts/verify-lichess.mjs",
     "verify:single": "node scripts/verify-single-game.mjs",

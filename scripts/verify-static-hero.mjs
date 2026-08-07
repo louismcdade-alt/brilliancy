@@ -1,17 +1,27 @@
 /**
- * The static-hero invariant, all three parts:
+ * The static-hero invariant, all four parts:
  *   JS on  -> exactly one <h1>, and no leftover static-only headings (otherwise
  *             the page shows its contents twice)
  *   JS off -> the crawler's copy is present inside #root
  *   both   -> the lines that exist verbatim in BOTH copies still say the same
  *             thing, so Google is not served different words from the ones
  *             visitors read
+ *   dist   -> and the same is true of the HTML the build emits, not just the
+ *             one the dev server serves
  */
+import { stat } from "node:fs/promises";
+import { join, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 import { chromium } from "playwright";
+import { serveDist } from "./lib/serve-dist.mjs";
 
 // Override to aim at a second dev server while 5173 is taken by a hand-driven
 // one — vite picks 5174 for the second `npm run dev`. Default unchanged.
 const BASE = process.env.BASE_URL || "http://localhost:5173/";
+
+const here = dirname(fileURLToPath(import.meta.url));
+const SRC_HTML = join(here, "..", "index.html");
+const DIST_HTML = join(here, "..", "dist", "index.html");
 
 /**
  * The headings that exist ONLY in the static crawler copy inside #root. React
@@ -64,6 +74,12 @@ const norm = (s) => s.replace(/\s+/g, " ").trim();
  * innerText, not textContent, for the same "what does a reader get" reason: the
  * two <span>s in the h1 have no whitespace between them in App.tsx and a newline
  * between them in index.html, and only layout resolves that to one space.
+ *
+ * The dist checks at the bottom need this MORE, not less, and for the opposite
+ * reason: vite injects a <link rel=stylesheet> into the built index.html, so with
+ * JS off the shipped static copy DOES get index.css and the eyebrow comes back
+ * SHOUTED where the dev server's comes back in sentence case. Same words, and
+ * that difference is why the two log lines look like they disagree.
  */
 const sameCopy = (a, b) => a.toLowerCase() === b.toLowerCase();
 
@@ -164,6 +180,102 @@ check(
   "both: ...and the static copy still says it",
   unstated.length ? `static copy never mentions: ${unstated.join(", ")}` : SOLD_TERMS.join(", "),
 );
+
+/**
+ * --- dist: AND THE SAME IS TRUE OF WHAT ACTUALLY SHIPS ---
+ *
+ * Everything above reads the dev server. `npm run build` is a gate too, but all
+ * it proves is that the build exits 0 — until this block, no gate read a single
+ * byte of dist/. That matters HERE more than anywhere else, because vite rewrites
+ * index.html on every build: it swaps the module script's src, and its html
+ * transform is free to touch the rest of the document. The gate whose entire job
+ * is noticing that the crawler's copy drifted from the visitor's could not see
+ * the build eating that copy. Verified by hand before this was written: blanking
+ * the eyebrow in dist/index.html left every check above green.
+ *
+ * JS OFF only, and deliberately.
+ *   - The build's effect on the STATIC copy is the whole exposure. The rendered
+ *     copy comes out of App.tsx via the bundle, and vite does not rewrite string
+ *     literals in JSX — so `onCopy`, captured from the dev server above, is the
+ *     same rendered copy dist would produce, and comparing dist's static half
+ *     against it is the comparison that can actually catch drift.
+ *   - A JS-on load of dist means booting the WASM engine, which is ~10s of gate
+ *     time to re-prove something csp-check.mjs already proves under the STRICTER
+ *     production CSP.
+ *
+ * No CSP on this server either: a build that failed to hydrate under the real
+ * policy would fail this gate wearing a copy-drift label, which is exactly the
+ * red-for-a-non-reason problem the comments above keep steering around.
+ * csp-check.mjs owns the policy question.
+ */
+const [distStat, srcStat] = await Promise.all([
+  stat(DIST_HTML).catch(() => null),
+  stat(SRC_HTML).catch(() => null),
+]);
+/**
+ * Skipped rather than failed when dist/ is missing or predates index.html. In
+ * the agent's gate suite `npm run build` runs immediately before this script, so
+ * it is always fresh there and the block always runs; a human who ran `npm run
+ * dev` and nothing else should not get a red gate for a build they never asked
+ * for. The skip prints, so it cannot pass for a check that ran.
+ */
+if (!distStat || !srcStat || distStat.mtimeMs < srcStat.mtimeMs) {
+  console.log(
+    ` skip  dist: ${distStat ? "dist/index.html is older than index.html" : "no dist/index.html"}` +
+      " — run `npm run build` to include the shipped HTML",
+  );
+} else {
+  const distServer = await serveDist();
+  const distBase = `http://localhost:${distServer.address().port}/`;
+  const distCtx = await browser.newContext({ javaScriptEnabled: false });
+  const distPage = await distCtx.newPage();
+  await distPage.goto(distBase, { waitUntil: "domcontentloaded" });
+
+  const distRoot = await distPage.locator("#root").innerText().catch(() => "");
+  const distMissing = STATIC_H2.filter((s) => !distRoot.includes(s));
+  check(
+    distMissing.length === 0,
+    "dist: all three Q&A sections survived the build",
+    distMissing.join(" | ") || "all present",
+  );
+
+  for (const { label, selector } of SHARED_COPY) {
+    const built = norm(await distPage.locator(selector).first().innerText().catch(() => ""));
+    const rendered = onCopy.get(selector);
+    const agree = built !== "" && sameCopy(built, rendered);
+    check(
+      agree,
+      `dist: ${label} is word-for-word identical`,
+      agree ? JSON.stringify(built) : `built ${JSON.stringify(built)} vs rendered ${JSON.stringify(rendered)}`,
+    );
+  }
+
+  const distLower = norm(distRoot).toLowerCase();
+  const distUnstated = SOLD_TERMS.filter((t) => !distLower.includes(t));
+  check(
+    distUnstated.length === 0,
+    "dist: ...and the shipped copy still sells it",
+    distUnstated.length ? `shipped copy never mentions: ${distUnstated.join(", ")}` : SOLD_TERMS.join(", "),
+  );
+
+  /**
+   * The one thing worth asserting about the bundle from here: index.html's
+   * rewritten <script src> has to point at a file that exists. The filename is
+   * content-hashed, so it changes every build, and a stale or half-written dist
+   * ships an HTML file whose entry module 404s — a blank page that typecheck,
+   * build and every check above are all happy with.
+   */
+  const entry = await distPage.locator('script[type="module"]').first().getAttribute("src").catch(() => null);
+  const entryRes = entry ? await distPage.request.get(new URL(entry, distBase).href) : null;
+  check(
+    entryRes?.ok() === true,
+    "dist: the entry bundle it points at is really there",
+    entry ? `${entry} -> ${entryRes ? entryRes.status() : "no response"}` : "no module script in dist/index.html",
+  );
+
+  await distCtx.close();
+  distServer.close();
+}
 
 await browser.close();
 console.log(bad === 0 ? "\nSTATIC OK\n" : `\n${bad} FAILED\n`);

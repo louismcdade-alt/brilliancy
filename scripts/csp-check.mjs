@@ -8,12 +8,9 @@
  *
  *   node scripts/csp-check.mjs
  */
-import { createServer } from "node:http";
-import { readFile } from "node:fs/promises";
-import { extname, join, normalize } from "node:path";
 import { chromium } from "playwright";
+import { serveDist } from "./lib/serve-dist.mjs";
 
-const DIST = new URL("../dist/", import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, "$1");
 const PORT = 4399;
 
 // Kept byte-identical to public/_headers and vercel.json on purpose — if they
@@ -25,28 +22,14 @@ const CSP =
   "connect-src 'self' https://api.chess.com https://lichess.org; form-action 'none'; " +
   "frame-ancestors 'none'; base-uri 'self'; object-src 'none'";
 
-const TYPES = {
-  ".html": "text/html", ".js": "text/javascript", ".css": "text/css",
-  ".wasm": "application/wasm", ".woff2": "font/woff2", ".svg": "image/svg+xml",
-  ".nnue": "application/octet-stream", ".png": "image/png", ".json": "application/json",
-};
-
-const server = createServer(async (req, res) => {
-  const url = (req.url || "/").split("?")[0];
-  const rel = normalize(url === "/" ? "index.html" : url.replace(/^\/+/, ""));
-  try {
-    const buf = await readFile(join(DIST, rel));
-    res.setHeader("Content-Type", TYPES[extname(rel)] || "application/octet-stream");
-    res.setHeader("Content-Security-Policy", CSP);
-    res.setHeader("X-Content-Type-Options", "nosniff");
-    res.setHeader("Referrer-Policy", "no-referrer");
-    res.end(buf);
-  } catch {
-    res.statusCode = 404;
-    res.end("not found");
-  }
+const server = await serveDist({
+  port: PORT,
+  headers: {
+    "Content-Security-Policy": CSP,
+    "X-Content-Type-Options": "nosniff",
+    "Referrer-Policy": "no-referrer",
+  },
 });
-await new Promise((r) => server.listen(PORT, r));
 console.log(`serving dist/ with production CSP on http://localhost:${PORT}\n`);
 
 async function launch() {

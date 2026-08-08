@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import type { Source } from "../types";
 
 /**
@@ -45,6 +46,7 @@ export function SearchBar({
   autoFocus = false,
 }: SearchBarProps) {
   const site = source === "lichess" ? "Lichess" : "chess.com";
+  const input = useRef<HTMLInputElement>(null);
   return (
     // The picker sits OUTSIDE the <form>, not inside it. That is not cosmetic:
     // scripts/csp-check.mjs drives a real session through
@@ -76,12 +78,21 @@ export function SearchBar({
         className="hero-search-row"
         onSubmit={(e) => {
           e.preventDefault();
+          // Empty is not an error worth a message — it's a field nobody has
+          // filled in yet — so the submit puts the caret where the answer goes
+          // instead of refusing. loadUser() also returns early on an empty
+          // name, so nothing downstream depends on the button being disabled.
+          if (!value.trim()) {
+            input.current?.focus();
+            return;
+          }
           onSubmit();
         }}
       >
         <label className="search">
           <span className="search-at">@</span>
           <input
+            ref={input}
             className="search-input"
             value={value}
             onChange={(e) => onChange(e.target.value)}
@@ -96,10 +107,16 @@ export function SearchBar({
         {/* The spinner is an empty span, so swapping the label for it left the
             site's primary control with no accessible name for the whole load.
             aria-label keeps one throughout. */}
+        {/* Disabled ONLY while a request is in flight. It used to be disabled
+            whenever the field was empty, which is its state on every first
+            paint — so the landing page's primary call to action, the one object
+            the hero is built around, was rendered at 50% opacity as a grey slab
+            for every visitor before they touched anything, and offered no
+            explanation of what would un-grey it. */}
         <button
           type="submit"
           className="btn btn-bril"
-          disabled={loading || !value.trim()}
+          disabled={loading}
           aria-label={loading ? `Loading ${site} profile` : undefined}
         >
           {loading ? <span className="spinner" /> : variant === "hero" ? "Reveal" : "Go"}

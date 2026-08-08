@@ -632,6 +632,16 @@ export function App() {
             <span>Brilliancy</span>
             <span className="mark-sub">chess.com &amp; lichess</span>
           </button>
+          {/* The topbar search is hidden below 860px — three controls will not
+              fit beside the masthead on a phone — which left a loaded page with
+              no visible way back to the search at all. The masthead button does
+              it, but a wordmark on a single-page tool does not read as "clear
+              these results", so on a phone that route was invisible. */}
+          {profile && (
+            <button className="btn btn-ghost topbar-reset" onClick={reset}>
+              New search
+            </button>
+          )}
           {profile && (
             <div className="topbar-search">
               <SearchBar

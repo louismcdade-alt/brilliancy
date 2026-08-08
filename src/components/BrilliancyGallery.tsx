@@ -45,7 +45,9 @@ function SpecCard({ b, onOpen }: { b: Brilliancy; onOpen: (b: Brilliancy) => voi
           </span>
           <span className="bangs">!!</span>
         </span>
-        <span className="spec-movenum">{moveLabel(b)}</span>
+        {/* "12…" alone, set in the printed voice, reads as a truncated string
+            rather than as black's twelfth move. The word is what disambiguates. */}
+        <span className="spec-movenum">Move {moveLabel(b)}</span>
       </div>
       <div className="spec-stats">
         <span>

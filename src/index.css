@@ -323,6 +323,11 @@ button {
   width: min(360px, 42vw);
 }
 
+/* The phone-only way back to the search — see the topbar in App.tsx. Above
+   860px the field itself is in the bar and this would be a second route to the
+   same place. */
+.topbar-reset { display: none; }
+
 /* ---- search --------------------------------------------------------- */
 
 /* Two stacked lines of one form field: the tick-boxes that say WHICH register,
@@ -469,6 +474,16 @@ button {
   align-items: center;
 }
 
+/* A `1fr` track floors at its item's automatic minimum size, which is
+   min-content unless the item says otherwise — and the copy column's min-content
+   is set by the username field (see `.hero-search-row .search`). Without this
+   the track simply refused to go below 353px, so the whole hero — headline,
+   lede, field and board — hung off the right edge of any screen narrower than
+   about 330px instead of the field getting shorter. */
+.hero-grid > * {
+  min-width: 0;
+}
+
 /* The rule above the headline is the top of the form. */
 .hero-eyebrow {
   font-size: 10.5px;
@@ -565,8 +580,17 @@ button {
   align-items: stretch;
 }
 
+/* `min-width: 0` is on the INPUT, which lets the input shrink inside its own
+   label — but the label is itself a flex item here, and a flex item's automatic
+   minimum size is its min-content. An <input> with no `size` attribute reports a
+   ~20-character intrinsic width, so the field floored at 243px, the row floored
+   at 353px, and every viewport under about 330px was pushed sideways: at 320px
+   the whole hero column hung 49px off the right edge of the screen, taking the
+   headline, the lede and the board with it. A 320px-wide phone is not exotic —
+   it is an iPhone SE in portrait, and a Galaxy Fold shut. */
 .hero-search-row .search {
   flex: 1;
+  min-width: 0;
 }
 
 .hero-hint {
@@ -587,8 +611,8 @@ button {
   border: 1px solid var(--rule);
   border-radius: 0;
   padding: 3px 10px;
-  font-family: var(--font-mono);
-  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
   transition: border-color 0.15s, color 0.15s, background 0.15s;
 }
 
@@ -768,13 +792,18 @@ button {
   transform: rotate(-8deg);
 }
 
+/* The note beside a section head is a SENTENCE, not a field label, and it was
+   being set in the printed voice — 10.5px, all caps, 0.14em tracking — which is
+   stationery lettering asked to carry three ragged right-aligned lines of prose.
+   All caps removes the word shapes a reader scans by, and tracking that reads as
+   "printed label" at four words reads as shouting at twenty. The printed voice
+   stays for the things that really are pre-printed on the form (.printed,
+   .summary-label, .spec-movenum); annotations take the same quiet serif the
+   other marginal notes on the page already use (.pencil-head p, .analyze-copy p). */
 .section-note {
-  font-size: 10.5px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  font-size: 13px;
   color: var(--text-dim);
-  max-width: 44ch;
+  max-width: 40ch;
   text-align: right;
 }
 
@@ -1123,15 +1152,29 @@ button {
 
 /* ---- brilliancy sheets ----------------------------------------------- */
 
+/* Not a grid, and the reason is worth writing down. `auto-fill` laid down empty
+   tracks for sheets that don't exist, so a scan that found ONE brilliancy —
+   which the panel directly above it says is the ordinary outcome — put a 272px
+   card in the top-left corner of a 1120px band of bare desk, at the exact moment
+   the product is meant to be paying off. `auto-fit` collapses those tracks, but
+   a definite max inside minmax() also caps the repetition count, so a 360px
+   ceiling silently dropped a full gallery from three columns to two — and
+   without a ceiling the lone sheet stretches into a billboard-sized diagram.
+   Flex sizes from the item instead: grow to 360 and no further, wrap at 272,
+   centre whatever is left over. One sheet gets laid on the desk; twelve still
+   file into three columns. */
 .spec-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(272px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 22px;
 }
 
 /* Each brilliancy is a sheet torn off the pad. The perforation is the top edge;
    the tilt is what a sheet does when you drop it on a desk. */
 .spec {
+  flex: 1 1 272px;
+  max-width: 360px;
   position: relative;
   background: var(--stock);
   border: none;
@@ -1404,7 +1447,6 @@ button {
 .progress-fill {
   height: 100%;
   background: linear-gradient(90deg, var(--bril-deep), var(--bril-bright));
-  border-radius: 999px;
   transition: width 0.3s ease;
 }
 
@@ -1485,18 +1527,40 @@ button {
   border-radius: 0;
   box-shadow: 0 30px 60px -24px rgba(20, 16, 10, 0.6);
   width: min(960px, 100%);
-  max-height: 92dvh;
+  /* The 92dvh alone let a tall window stretch the sheet to whatever the move
+     list wanted — 920px for a diagram column that needs about 610 — so the
+     board sat in a lake of blank stock. The list is the only thing that grows,
+     and it is the thing that scrolls, so capping the sheet near the diagram
+     column's natural height costs the list nothing and stops the modal being
+     mostly empty. */
+  max-height: min(92dvh, 760px);
   overflow: hidden;
   display: grid;
   grid-template-columns: minmax(0, 1.05fr) minmax(260px, 0.95fr);
+  /* `.movelist` asks to scroll and `.viewer-side` already carries the
+     `min-height: 0` that lets it, but the implicit grid ROW was `auto` — which
+     sizes to content and is not capped by the container's max-height. So a
+     50-move game made a 1583px row inside a 920px modal with `overflow: hidden`
+     over it: the list never scrolled, and moves 1 to 19 and the top three ranks
+     of the board were clipped off the top with no way to reach them. A row that
+     is explicitly 1fr with a zero floor gives the scroll container the definite
+     height it was waiting for. */
+  grid-template-rows: minmax(0, 1fr);
 }
 
+/* The modal's height is set by the MOVELIST, which for a 40-move game runs to
+   the 92dvh cap — so the diagram column, whose content is a fixed-height group,
+   was pinned to the top with as much as 300px of bare stock hanging under the
+   replay controls. Centring the group turns one large gap under the board into
+   two small ones around it; when the board column is the taller of the two it
+   changes nothing. */
 .viewer-board {
   padding: clamp(16px, 3vw, 26px);
   background: var(--stock);
   border-right: 1px solid var(--rule);
   display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: 14px;
 }
 
@@ -1677,16 +1741,19 @@ button {
 
 /* ---- footer --------------------------------------------------------- */
 
+/* The measure cap belongs to the PARAGRAPHS, not to the footer element. On the
+   footer it also cropped the 2px rule — the same full-bleed rule the topbar, the
+   hero eyebrow and every section head draw across the page — to 70ch, and pulled
+   the whole block out of the column every other row of the page is set in. */
 .footer {
   margin-top: auto;
   padding-block: 34px 26px;
   border-top: 2px solid var(--text-hi);
   color: var(--text-dim);
   font-size: 13.5px;
-  max-width: 70ch;
 }
 
-.footer-line { margin: 0 0 8px; }
+.footer-line { margin: 0 0 8px; max-width: 70ch; }
 .footer-line:last-child { margin-bottom: 0; }
 
 /* The licence notices are an obligation, not a feature — present and legible,
@@ -1700,13 +1767,40 @@ button {
 
 @media (max-width: 860px) {
   .hero-grid { grid-template-columns: 1fr; }
-  .hero-stage { order: -1; max-width: 360px; margin-inline: auto; }
+  /* The diagram used to be pulled ABOVE the headline here (`order: -1`), which
+     on a 390px phone put a 358px-square board between the masthead and the first
+     word of what this site does — and pushed the username field, which is the
+     entire product, to roughly 700px down an 844px screen. The board is the
+     hook, but it is a picture of the payoff, not the offer; it reads better as
+     the thing you see once the offer has been made. Column order now follows the
+     document: eyebrow, headline, lede, field, then the diagram under it. */
+  .hero-stage { max-width: 360px; margin: 8px auto 0; }
   .topbar-search { display: none; }
-  .viewer { grid-template-columns: 1fr; max-height: 94dvh; overflow-y: auto; }
+  .topbar-reset {
+    display: inline-flex;
+    align-items: center;
+    margin-left: auto;
+    padding: 8px 12px;
+    font-size: 11px;
+  }
+  /* Stacked, the modal itself is the scroll container, so the single-row track
+     above would squash both panes into one screen instead. */
+  .viewer {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    max-height: 94dvh;
+    overflow-y: auto;
+  }
   .viewer-side { max-height: 40dvh; }
 }
 
 @media (max-width: 520px) {
+  /* The masthead does not shrink — wordmark and strapline are both nowrap — so
+     once "New search" joined it in the bar the two together ran 3px past the
+     right edge on a 390px phone. The strapline is the part that can go: the
+     hero's first sentence names both sites two lines further down. */
+  .mark-sub { display: none; }
+
   .game-row { grid-template-columns: 48px 1fr; }
   .game-side { grid-column: 1 / -1; justify-content: space-between; }
   .section-note { display: none; }
@@ -1716,6 +1810,62 @@ button {
   .scope-row { align-items: stretch; }
   .scope-seg { width: 100%; }
   .scope-opt { flex: 1; padding-inline: 4px; text-align: center; }
+}
+
+/* Sharing the width is not enough below ~360px: the four labels are nowrap and
+   sum to 285px of text, so on a 320px screen (an SE in portrait, a Fold shut)
+   they broke 39px out of the panel that contains them and pushed the page
+   sideways again. Two rows of two is the same tick-box block, folded — which is
+   what a paper form does with a row of boxes that won't fit the column. */
+@media (max-width: 380px) {
+  .scope-seg { flex-wrap: wrap; }
+
+  .scope-opt {
+    flex: 1 0 45%;
+    border-bottom: 1px solid var(--rule-2);
+  }
+
+  .scope-opt:nth-child(2n) { border-right: none; }
+  .scope-opt:nth-last-child(-n + 2) { border-bottom: none; }
+}
+
+/* ---- touch ------------------------------------------------------------------
+
+   Everything above is sized for a cursor, which is a one-pixel instrument; a
+   fingertip is not. Two things follow, and both are bugs rather than polish:
+
+   1. Type under 16px in a text field makes iOS Safari ZOOM THE PAGE on focus —
+      so tapping the username field, the first thing anyone does here, threw the
+      layout sideways and left the visitor pinched in. The mono field text is
+      15px and the single-game URL field is 13px; both cross that line.
+   2. Every button on the page lands between 24 and 34px tall — the buttons at
+      32, the chips at 24, the four replay controls at 34 sitting in a row.
+      All of them are under the 44px minimum.
+
+   Prose links in the footer are left alone: they are inline text, which the
+   target-size rules exempt, and padding them out would wreck the paragraph. */
+@media (pointer: coarse) {
+  .search-input,
+  .single-input { font-size: 16px; }
+
+  .btn,
+  .scope-opt,
+  .hero-chip,
+  .single-input,
+  .topbar-reset { min-height: 44px; }
+
+  /* The wordmark is the reset control as well as the logo. */
+  .mark { min-height: 44px; }
+
+  .ctrl-btn {
+    min-width: 48px;
+    height: 44px;
+  }
+
+  .viewer-close {
+    width: 44px;
+    height: 44px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
